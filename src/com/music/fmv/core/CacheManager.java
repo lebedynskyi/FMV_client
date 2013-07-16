@@ -18,13 +18,4 @@ public class CacheManager extends Manager{
         super(coreManager);
         mCache = new LruCache<String, Object>(CACHE_SIZE);
     }
-
-    public void putBandSearchResult(List<SearchBandModel> list){
-        mCache.put(CacheConst.BAND_SEARCH_RESULT_KEY, list);
-    }
-
-    public List<SearchBandModel> getBandSearchResult(){
-        return (List<SearchBandModel>) mCache.get(CacheConst.BAND_SEARCH_RESULT_KEY);
-    }
-
 }

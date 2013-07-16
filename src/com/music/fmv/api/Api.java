@@ -24,10 +24,11 @@ import java.util.Map;
 public class Api {
     public static final String API_URL = "http://vetal.romcheg.me/";
     public static final String SEARCH_BAND_COMMAND = "artist.search";
+    public static final String GET_BAND_COMMAND = "artist.get";
 
 
     public List<SearchBandModel> searchBand(String searchQuery, String language, Integer page) throws Exception {
-        if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be null");
+        if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("artist", searchQuery);
         params.put("lan", language);

@@ -1,5 +1,6 @@
 package com.music.fmv.adapters;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,12 +15,14 @@ import java.util.List;
 public class LinkedAdapter<T> extends BaseAdapter{
     private List<T> mList;
     private BaseHolder<T> mHolder;
+    private Context context;
 
-    public LinkedAdapter(List<T> list, BaseHolder<T> holder) {
-        if (mList == null || holder == null){
-            throw new IllegalStateException("List and Holder cannot be null");
+    public LinkedAdapter(List<T> list, BaseHolder<T> holder, Context context) {
+        if (mList == null || holder == null || context == null){
+            throw new IllegalStateException("list, holder, context cannot be null");
         }
 
+        this.context = context;
         this.mList = list;
         this.mHolder = holder;
     }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray">#858585</color>
+    <color name="white">#ffffff</color>
+    <color name="green">#00ff00</color>
+    <color name="black">#000000</color>
+    <color name="blue_button">#ff82cdff</color>
+    <color name="galery_blck_button">#6a000000</color>
+    <color name="galery_blue_button">#3c82cdff</color>
+    <color name="descr_gray">#ff696969</color>
+
+    <color name="bg_start_color">#010000ff</color>
+    <color name="bg_center_color">#060000ff</color>
+    <color name="bg_end_color">#120000ff</color>
+
+    <color name="image_start_color">#00e6e6e6</color>
+    <color name="image_end_color">#ffd7d7d7</color>
+</resources>

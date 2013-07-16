@@ -16,15 +16,22 @@ import java.util.List;
 
 public class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>> {
     private String searchQuery;
+    private Integer page;
 
-    public SearchBandTask(String searchQuery, Context context) {
+    public SearchBandTask(String searchQuery, Integer page, Context context) {
         super(context);
         this.searchQuery = searchQuery;
+        this.page = page;
     }
 
     @Override
     protected List<SearchBandModel> doInBackground(Void... voids) {
         String language = Core.getInstance().getSettingsManager().getResultLanguage(context);
-        return api.searchBand(searchQuery, language);
+        try {
+            return api.searchBand(searchQuery, language, page);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
