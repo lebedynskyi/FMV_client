@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity {
 
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
+        pager.setOffscreenPageLimit(4);
     }
 
     private BaseFragment createSearchTab() {

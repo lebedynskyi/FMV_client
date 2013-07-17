@@ -54,6 +54,7 @@ public class ViewUtils {
     }
 
     public static void setUpKeyBoardHider(View view, final Activity activity){
+        if (view == null) return;
         if(!(view instanceof EditText)) {
 
             view.setOnTouchListener(new View.OnTouchListener() {

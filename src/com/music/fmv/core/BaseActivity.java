@@ -1,11 +1,12 @@
 package com.music.fmv.core;
 
+import android.app.ActivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.widget.Toast;
 import com.music.fmv.R;
+import com.music.fmv.services.PlayerService;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
@@ -25,8 +26,7 @@ public abstract class BaseActivity extends FragmentActivity{
         mCoreManager = Core.getInstance();
         mMediator = new ActivityMediator(this);
         onCreated(savedInstanceState);
-        View background = findViewById(android.R.id.content);
-        ViewUtils.setUpKeyBoardHider(background, this);
+        ViewUtils.setUpKeyBoardHider(findViewById(android.R.id.content), this);
     }
 
     protected boolean runTask(AsyncTask task){
@@ -35,6 +35,17 @@ public abstract class BaseActivity extends FragmentActivity{
             return true;
         }
         Toast.makeText(this, getString(R.string.network_unavailable), Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+
+    protected final boolean isPlayerRunned() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (PlayerService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
         return false;
     }
 

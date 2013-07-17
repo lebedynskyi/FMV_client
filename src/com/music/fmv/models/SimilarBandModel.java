@@ -5,7 +5,7 @@ package com.music.fmv.models;
  * Date: 7/16/13
  * Time: 2:48 PM
  */
-public class SimilarBandModel {
+public class SimilarBandModel extends BaseSerializableModel{
     private String image;
     private String name;
     private String url;

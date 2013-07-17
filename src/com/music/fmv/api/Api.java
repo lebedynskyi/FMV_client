@@ -3,7 +3,6 @@ package com.music.fmv.api;
 import android.text.TextUtils;
 import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.utils.NetworkUtil;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -51,7 +50,7 @@ public class Api {
 
     private void checkError(JSONObject response) {
         if (response.has("error")){
-            throw new ApiErrorException();
+            throw new ApiCaptchaRequiredException();
         }
     }
 

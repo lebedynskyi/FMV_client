@@ -1,6 +1,7 @@
 package com.music.fmv.tasks;
 
 import android.content.Context;
+import com.music.fmv.api.ApiCaptchaRequiredException;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.SearchBandModel;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>> {
+public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>> {
     private String searchQuery;
     private Integer page;
 
@@ -31,6 +32,7 @@ public class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>> {
             return api.searchBand(searchQuery, language, page);
         } catch (Exception e) {
             e.printStackTrace();
+            onError(e instanceof ApiCaptchaRequiredException);
         }
         return null;
     }

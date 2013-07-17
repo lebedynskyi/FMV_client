@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">fMV</string>
     <string name="network_unavailable">Network unavailable. Please check your connection.</string>
+    <string name="request_error">Error during retrieving information.</string>
+    <string name="empty_result">Search returned 0 rows.</string>
+
 </resources>

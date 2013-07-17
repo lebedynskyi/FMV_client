@@ -7,5 +7,5 @@ package com.music.fmv.api;
  * Time: 8:50 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ApiErrorException extends RuntimeException {
+public class ApiCaptchaRequiredException extends RuntimeException {
 }

@@ -1,10 +1,6 @@
 package com.music.fmv.core;
 
-import android.util.LruCache;
-import com.music.fmv.core.utils.CacheConst;
-import com.music.fmv.models.SearchBandModel;
-
-import java.util.List;
+import android.support.v4.util.LruCache;
 
 /**
  * User: vitaliylebedinskiy

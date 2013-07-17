@@ -18,4 +18,6 @@ public abstract class BaseAsyncTask<Result> extends AsyncTask<Void, Void, Result
     protected BaseAsyncTask(Context context) {
         this.context = context;
     }
+
+    protected void onError(boolean isCaptcha){};
 }

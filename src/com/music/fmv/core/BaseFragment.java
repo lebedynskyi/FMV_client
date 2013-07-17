@@ -41,12 +41,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected boolean runTask(AsyncTask task){
-        if (NetworkUtil.isOnline(getActivity())){
-            task.execute();
-            return true;
-        }
-        Toast.makeText(getActivity(), getString(R.string.network_unavailable), Toast.LENGTH_SHORT).show();
-        return false;
+        return baseActivity.runTask(task);
     }
 
     protected abstract void createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
