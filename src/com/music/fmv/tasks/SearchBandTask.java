@@ -32,7 +32,8 @@ public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>
             return api.searchBand(searchQuery, language, page);
         } catch (Exception e) {
             e.printStackTrace();
-            onError(e instanceof ApiCaptchaRequiredException);
+//            onError(e instanceof ApiCaptchaRequiredException);
+            isError = true;
         }
         return null;
     }

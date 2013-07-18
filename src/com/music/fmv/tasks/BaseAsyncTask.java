@@ -14,10 +14,11 @@ import com.music.fmv.api.Api;
 public abstract class BaseAsyncTask<Result> extends AsyncTask<Void, Void, Result>{
     protected Context context;
     protected Api api = new Api();
+    protected boolean isError;
 
     protected BaseAsyncTask(Context context) {
         this.context = context;
     }
 
-    protected void onError(boolean isCaptcha){};
+//    protected void onError(boolean isCaptcha){};
 }

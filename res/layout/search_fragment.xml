@@ -9,8 +9,7 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="50dp" android:id="@+id/top_button_container"
-            android:background="@drawable/Black_Bottom">
+            android:layout_height="50dp" android:id="@+id/top_button_container">
         <com.music.fmv.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

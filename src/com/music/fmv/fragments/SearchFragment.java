@@ -61,7 +61,6 @@ public class SearchFragment  extends BaseFragment{
         if (TextUtils.isEmpty(query)) return;
 
         SearchBandTask task = new SearchBandTask(query, page, baseActivity){
-            private boolean isError;
             @Override
             protected void onPostExecute(List<SearchBandModel> searchBandModels) {
                 if (searchBandModels != null && searchBandModels.size() > 0){
@@ -77,11 +76,6 @@ public class SearchFragment  extends BaseFragment{
                 if (isError || searchBandModels == null){
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            protected void onError(boolean isCaptcha) {
-                isError = true;
             }
         };
         if (runTask(task)){
