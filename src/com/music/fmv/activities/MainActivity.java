@@ -8,17 +8,24 @@ import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.fragments.SearchFragment;
+import com.music.fmv.utils.ViewUtils;
+import com.music.fmv.views.TabButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
     public static final int SEARCH_TAB = 0;
-    public static final int FAVORITE_TAB = 1;
+    public static final int HISTORY_TAB = 1;
     public static final int MUSIC_TAB = 2;
     public static final int SETTINGS_TAB = 3;
 
     private ViewPager pager;
+
+    private TabButton searchBTN;
+    private TabButton historyBTN;
+    private TabButton musicBTN;
+    private TabButton settingsBTN;
 
 
     private List<BaseFragment> fragments;
@@ -28,9 +35,19 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.main_activity);
         pager = (ViewPager) findViewById(R.id.pager);
 
+        searchBTN = (TabButton) findViewById(R.id.search_btn);
+        historyBTN = (TabButton) findViewById(R.id.history_btn);
+        musicBTN = (TabButton) findViewById(R.id.music_btn);
+        settingsBTN = (TabButton) findViewById(R.id.settings_tab);
+
+        searchBTN.setOnClickListener(tabListener);
+        historyBTN.setOnClickListener(tabListener);
+        musicBTN.setOnClickListener(tabListener);
+        settingsBTN.setOnClickListener(tabListener);
+
         fragments = new ArrayList<BaseFragment>();
         fragments.add(SEARCH_TAB, createSearchTab());
-        fragments.add(FAVORITE_TAB, createSearchTab());
+        fragments.add(HISTORY_TAB, createSearchTab());
         fragments.add(MUSIC_TAB, createSearchTab());
         fragments.add(SETTINGS_TAB, createSearchTab());
 
@@ -47,8 +64,36 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-
+                case R.id.search_btn:
+                    break;
+                case R.id.music_btn:
+                    break;
+                case R.id.settings_tab:
+                    break;
+                case R.id.history_btn:
             }
         }
     };
+
+     public void searchTabClicked(){
+         ViewUtils.selectButton(searchBTN, musicBTN, historyBTN, settingsBTN);
+         pager.setCurrentItem(SEARCH_TAB);
+     }
+
+     public void musicTabClicked(){
+         ViewUtils.selectButton(musicBTN, searchBTN, historyBTN, settingsBTN);
+         pager.setCurrentItem(MUSIC_TAB);
+
+     }
+
+     public void settingsTabClicked(){
+         ViewUtils.selectButton(settingsBTN, searchBTN, musicBTN, historyBTN);
+         pager.setCurrentItem(SETTINGS_TAB);
+
+     }
+
+     public void historyClicked(){
+         ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
+         pager.setCurrentItem(HISTORY_TAB);
+     }
 }
