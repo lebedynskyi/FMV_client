@@ -61,7 +61,7 @@ public class TabButton extends RelativeLayout {
         button.setSelected(selected);
 //        textView.setSelected(selected);
         if (selected){
-            view.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.Bottom_Selected));
+            view.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.bottom_selected));
         }else {
             view.setBackgroundDrawable(null);
         }

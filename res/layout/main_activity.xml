@@ -9,14 +9,14 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="50dp" android:id="@+id/tab_container" android:layout_alignParentBottom="true">
-        <view android:layout_width="match_parent"
+        <com.music.fmv.views.TabButton android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:id="@+id/search_btn" android:layout_weight="1"/>
-        <view class="com.music.fmv.views.TabButton" android:layout_width="match_parent"
+        <com.music.fmv.views.TabButton android:layout_width="match_parent"
               android:layout_height="match_parent" android:id="@+id/history_btn" android:layout_weight="1"/>
-        <view class="com.music.fmv.views.TabButton" android:layout_width="match_parent"
+        <com.music.fmv.views.TabButton android:layout_width="match_parent"
               android:layout_height="match_parent" android:id="@+id/music_btn" android:layout_weight="1"/>
-        <view class="com.music.fmv.views.TabButton" android:layout_width="match_parent"
+        <com.music.fmv.views.TabButton android:layout_width="match_parent"
               android:layout_height="match_parent" android:id="@+id/settings_tab" android:layout_weight="1"/>
     </LinearLayout>
 </RelativeLayout>
