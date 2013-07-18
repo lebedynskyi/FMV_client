@@ -4,6 +4,8 @@
     <color name="white">#ffffff</color>
     <color name="green">#00ff00</color>
     <color name="black">#000000</color>
+    <color name="start_background">#fff3f3f3</color>
+    <color name="end_background">#ffe6e6e6</color>
     <color name="blue_button">#ff82cdff</color>
     <color name="galery_blck_button">#6a000000</color>
     <color name="galery_blue_button">#3c82cdff</color>

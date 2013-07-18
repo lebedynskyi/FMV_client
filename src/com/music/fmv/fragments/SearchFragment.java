@@ -154,9 +154,9 @@ public class SearchFragment  extends BaseFragment{
         name_result_list = (ListView) mainView.findViewById(R.id.name_result_list);
         album_result_list = (ListView) mainView.findViewById(R.id.album_result_list);
 
-        artistTab = (GlowButton) mainView.findViewById(R.id.artist_tab);
-        albumTab = (GlowButton) mainView.findViewById(R.id.album_tab);
-        nameTab = (GlowButton) mainView.findViewById(R.id.name_tab);
+        artistTab = (GlowButton) mainView.findViewById(R.id.by_artist);
+        albumTab = (GlowButton) mainView.findViewById(R.id.by_album);
+        nameTab = (GlowButton) mainView.findViewById(R.id.by_name);
 
         artistTab.setOnClickListener(tabListener);
         albumTab.setOnClickListener(tabListener);
@@ -167,13 +167,13 @@ public class SearchFragment  extends BaseFragment{
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.artist_tab:
+                case R.id.by_artist:
                     artistTabClicked();
                     break;
-                case R.id.album_tab:
+                case R.id.by_album:
                     albumTabClicked();
                     break;
-                case R.id.name_tab:
+                case R.id.by_name:
                     nameTabClicked();
 
             }

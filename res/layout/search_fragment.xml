@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="match_parent">
+              xmlns:glow_btn="http://schemas.android.com/apk/res/com.fmv"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="50dp" android:id="@+id/tab_container" android:background="@drawable/black_top">
-        <view android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              class="com.music.fmv.views.GlowButton" android:id="@+id/artist_tab" android:layout_weight="1"/>
-        <view android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              class="com.music.fmv.views.GlowButton" android:id="@+id/album_tab" android:layout_weight="1"/>
-        <view android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              class="com.music.fmv.views.GlowButton" android:id="@+id/name_tab" android:layout_weight="1"/>
+            android:layout_height="50dp" android:id="@+id/top_button_container"
+            android:background="@drawable/Black_Bottom">
+        <com.music.fmv.views.GlowButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/by_artist" android:layout_weight="1"
+                glow_btn:text="@string/by_artist"
+                android:textColor="@color/white"/>
+        <com.music.fmv.views.GlowButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                glow_btn:text="@string/by_album"
+                android:id="@+id/by_album" android:layout_weight="1"
+                android:textColor="@color/white"/>
+        <com.music.fmv.views.GlowButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                glow_btn:text="@string/by_name"
+                android:id="@+id/by_name" android:layout_weight="1"
+                android:textColor="@color/white"/>
     </LinearLayout>
     <ListView
             android:layout_width="match_parent"
