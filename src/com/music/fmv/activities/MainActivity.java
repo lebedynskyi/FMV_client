@@ -40,12 +40,12 @@ public class MainActivity extends BaseActivity {
         musicBTN = (TabButton) findViewById(R.id.music_btn);
         settingsBTN = (TabButton) findViewById(R.id.settings_tab);
 
-        searchBTN.setOnClickListener(tabListener);
-        historyBTN.setOnClickListener(tabListener);
-        musicBTN.setOnClickListener(tabListener);
-        settingsBTN.setOnClickListener(tabListener);
+        searchBTN.initUI(getResources().getDrawable(R.drawable.search_tab_selector), getString(R.string.search), tabListener);
+        historyBTN.initUI(getResources().getDrawable(R.drawable.history_tab_selector), getString(R.string.history), tabListener);
+        musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector), getString(R.string.music), tabListener);
+        settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector), getString(R.string.settings), tabListener);
 
-        fragments = new ArrayList<BaseFragment>();
+        fragments = new ArrayList<BaseFragment>(4);
         fragments.add(SEARCH_TAB, createSearchTab());
         fragments.add(HISTORY_TAB, createSearchTab());
         fragments.add(MUSIC_TAB, createSearchTab());
@@ -54,23 +54,28 @@ public class MainActivity extends BaseActivity {
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(4);
+        searchTabClicked();
     }
 
     private BaseFragment createSearchTab() {
         return new SearchFragment();
     }
 
-    private View.OnClickListener tabListener = new View.OnClickListener() {
+    private TabButton.ClickCallBack tabListener = new TabButton.ClickCallBack() {
         @Override
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.search_btn:
+                    searchTabClicked();
                     break;
                 case R.id.music_btn:
+                    musicTabClicked();
                     break;
                 case R.id.settings_tab:
+                    settingsTabClicked();
                     break;
                 case R.id.history_btn:
+                    historyClicked();
             }
         }
     };

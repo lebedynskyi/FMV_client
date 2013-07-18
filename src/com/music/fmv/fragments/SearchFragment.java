@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.music.fmv.R;
+import com.music.fmv.adapters.SearchBandAdapter;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.tasks.SearchBandTask;
@@ -52,7 +53,7 @@ public class SearchFragment  extends BaseFragment{
     @Override
     public void createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.search_fragment, container, false);
-        initUI();
+        initUI(inflater);
         artistTabClicked();
     }
 
@@ -143,7 +144,7 @@ public class SearchFragment  extends BaseFragment{
         }
     }
 
-    private void initUI() {
+    private void initUI(LayoutInflater inflater) {
         artist_result_list = (ListView) mainView.findViewById(R.id.artist_result_list);
         name_result_list = (ListView) mainView.findViewById(R.id.name_result_list);
         album_result_list = (ListView) mainView.findViewById(R.id.album_result_list);
@@ -155,6 +156,20 @@ public class SearchFragment  extends BaseFragment{
         artistTab.setOnClickListener(tabListener);
         albumTab.setOnClickListener(tabListener);
         nameTab.setOnClickListener(tabListener);
+
+        View headerView = createHeaderView(inflater);
+        artist_result_list.addHeaderView(headerView);
+        name_result_list.addHeaderView(headerView);
+        album_result_list.addHeaderView(headerView);
+
+        artist_result_list.setAdapter(new SearchBandAdapter(searchBandList, baseActivity));
+    }
+
+    private View createHeaderView(LayoutInflater inflater) {
+        View v = inflater.inflate(R.layout.search_header, null, false);
+        EditText ed = (EditText) v.findViewById(R.id.search_field);
+        ed.setOnEditorActionListener(searchListener);
+        return v;
     }
 
     private View.OnClickListener tabListener = new View.OnClickListener() {
@@ -175,16 +190,19 @@ public class SearchFragment  extends BaseFragment{
     };
 
     private void albumTabClicked() {
+        ViewUtils.selectButton(albumTab, nameTab, artistTab);
         ViewUtils.setVisible(album_result_list, View.GONE, name_result_list, artist_result_list);
         searchType = SearchType.ALBUM;
     }
 
     private void nameTabClicked() {
+        ViewUtils.selectButton(nameTab, albumTab, artistTab);
         ViewUtils.setVisible(name_result_list, View.GONE, artist_result_list, album_result_list);
         searchType = SearchType.NAME;
     }
 
     private void artistTabClicked() {
+        ViewUtils.selectButton(artistTab, albumTab, nameTab);
         ViewUtils.setVisible(artist_result_list, View.GONE, name_result_list, album_result_list);
         searchType = SearchType.ARTIST;
     }
@@ -231,4 +249,5 @@ public class SearchFragment  extends BaseFragment{
             return false;
         }
     };
+
 }

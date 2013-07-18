@@ -4,5 +4,14 @@
     <string name="network_unavailable">Network unavailable. Please check your connection.</string>
     <string name="request_error">Error during retrieving information.</string>
     <string name="empty_result">Search returned 0 rows.</string>
+    <string name="search_hint">Enter a search request</string>
 
+    <string name="by_artist">Artists</string>
+    <string name="by_album">Albums</string>
+    <string name="by_name">Songs</string>
+
+    <string name="search">Search</string>
+    <string name="history">History</string>
+    <string name="music">Music</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -20,6 +20,7 @@ public class TabButton extends RelativeLayout {
 //    private TextView textView;
     private ImageView button;
     private ClickCallBack callBack;
+    private Drawable selectedDraw;
 
     public TabButton(Context context) {
         super(context);
@@ -46,6 +47,7 @@ public class TabButton extends RelativeLayout {
 
     private void initComponentsUI(){
 //        textView = (TextView) view.findViewById(R.id.tab_text);
+        selectedDraw = getContext().getResources().getDrawable(R.drawable.bottom_selected);
         button = (ImageView) view.findViewById(R.id.tab_btn);
         setOnClickListener(clickListener);
     }
@@ -58,10 +60,12 @@ public class TabButton extends RelativeLayout {
 
     @Override
     public void setSelected(boolean selected) {
+        super.setSelected(selected);
+
         button.setSelected(selected);
 //        textView.setSelected(selected);
         if (selected){
-            view.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.bottom_selected));
+            view.setBackgroundDrawable(selectedDraw);
         }else {
             view.setBackgroundDrawable(null);
         }
