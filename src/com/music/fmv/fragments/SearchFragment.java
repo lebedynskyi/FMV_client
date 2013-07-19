@@ -53,6 +53,8 @@ public class SearchFragment  extends BaseFragment{
     private View searchHeader;
     private LoadDialog dialog;
 
+    private boolean artistTaskRunned;
+
     public enum SearchType {
         ARTIST, NAME, ALBUM
     }
@@ -66,11 +68,12 @@ public class SearchFragment  extends BaseFragment{
 
     //----------------------------------------------------------------------------------------------------------------//
     private void searchBand(String query, final Integer page){
-        if (TextUtils.isEmpty(query)) return;
+        if (TextUtils.isEmpty(query) || artistTaskRunned) return;
 
         SearchBandTask task = new SearchBandTask(query, page, baseActivity){
             @Override
             protected void onPreExecute() {
+                artistTaskRunned = true;
                 if (page == null) {
                     dialog = new LoadDialog(baseActivity, this);
                     dialog.show();
@@ -81,6 +84,7 @@ public class SearchFragment  extends BaseFragment{
             protected void onPostExecute(List<SearchBandModel> searchBandModels) {
                 if(dialog != null) dialog.dismiss();
                 dialog = null;
+                artistTaskRunned = false;
 
                 if (searchBandModels != null && searchBandModels.size() > 0){
                     updateBandList(searchBandModels, page == null);
