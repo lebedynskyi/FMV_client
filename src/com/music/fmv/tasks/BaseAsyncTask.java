@@ -11,7 +11,7 @@ import com.music.fmv.api.Api;
  * Time: 8:49 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class BaseAsyncTask<Result> extends AsyncTask<Void, Void, Result>{
+public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
     protected Context context;
     protected Api api = new Api();
     protected boolean isError;

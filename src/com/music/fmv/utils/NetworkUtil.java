@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
@@ -31,13 +32,14 @@ public class NetworkUtil {
 
     public static String doRequest(String urlRequest) throws IOException {
         URL url = new URL(urlRequest);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
         String s = null;
         StringBuilder sb  = new StringBuilder();
         while ((s = reader.readLine()) != null){
             sb.append(s);
         }
-        return s.toString();
+        return sb.toString();
     }
 }

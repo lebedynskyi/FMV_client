@@ -17,7 +17,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ApiUtils {
-    public static final String RESPONSE_TAG = "response";
+    public static final String RESPONSE_TAG = "responce";
 
     public static List<SearchBandModel> parseSearchBand(JSONObject response){
         ArrayList<SearchBandModel> result = new ArrayList<SearchBandModel>();

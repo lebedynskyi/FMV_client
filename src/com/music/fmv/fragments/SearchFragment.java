@@ -38,13 +38,21 @@ public class SearchFragment  extends BaseFragment{
 
     private EditText searchField;
 
+    private RelativeLayout artistListContainer;
+    private RelativeLayout albumListContainer;
+    private RelativeLayout namesListContainer;
+
     private String lastArtistRequest;
     private String lastAlbumRequest;
     private String lastNameRequest;
 
     private SearchType searchType;
+    private Integer futurePage = 1;
 
     private ArrayList<SearchBandModel> searchBandList = new ArrayList<SearchBandModel>();
+    private SearchBandAdapter searchBandAdapter;
+    private View rotateFooter;
+    private TextView artistsEmptyView;
 
     public enum SearchType {
         ARTIST, NAME, ALBUM
@@ -58,14 +66,14 @@ public class SearchFragment  extends BaseFragment{
     }
 
     //----------------------------------------------------------------------------------------------------------------//
-    private void searchBand(String query, Integer page){
+    private void searchBand(String query, final Integer page){
         if (TextUtils.isEmpty(query)) return;
 
         SearchBandTask task = new SearchBandTask(query, page, baseActivity){
             @Override
             protected void onPostExecute(List<SearchBandModel> searchBandModels) {
                 if (searchBandModels != null && searchBandModels.size() > 0){
-                    updateBandList(searchBandModels);
+                    updateBandList(searchBandModels, page == null);
                     return;
                 }
 
@@ -85,11 +93,18 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void getNextBandPage(){
-        searchBand(lastArtistRequest, null);
+        searchBand(lastArtistRequest, futurePage);
     }
 
-    private void updateBandList(List<SearchBandModel> searchBandModels){
+    private void updateBandList(List<SearchBandModel> searchBandModels,boolean isClear){
+        if(isClear) searchBandList.clear();
         searchBandList.addAll(searchBandModels);
+        searchBandAdapter.notifyDataSetChanged();
+        futurePage += 1;
+        //TODO CHECK COUNT OF AVAILABLE ITEMS
+        if (searchBandAdapter.getCount() > 0 && artist_result_list.getFooterViewsCount() == 0){
+            artist_result_list.addFooterView(rotateFooter);
+        }
     }
 
     //----------------------------------------------------------------------------------------------------------------//
@@ -119,6 +134,9 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void lastItemVisible() {
+        //Happens on the first creating of fragment
+        if(searchType == null) return;
+
         switch (searchType){
             case ALBUM:
                 getNextAlbumPage();
@@ -145,33 +163,54 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void initUI(LayoutInflater inflater) {
+        artistListContainer= (RelativeLayout) mainView.findViewById(R.id.artist_list_container );
+        albumListContainer = (RelativeLayout) mainView.findViewById(R.id.albums_list_container);
+        namesListContainer = (RelativeLayout) mainView.findViewById(R.id.names_list_container);
+
+        //Initialization of search result lists
         artist_result_list = (ListView) mainView.findViewById(R.id.artist_result_list);
         name_result_list = (ListView) mainView.findViewById(R.id.name_result_list);
         album_result_list = (ListView) mainView.findViewById(R.id.album_result_list);
 
+        //initialization of top tabs
         artistTab = (GlowButton) mainView.findViewById(R.id.by_artist);
         albumTab = (GlowButton) mainView.findViewById(R.id.by_album);
         nameTab = (GlowButton) mainView.findViewById(R.id.by_name);
 
+        //Adding click listeneres to top tabs
         artistTab.setOnClickListener(tabListener);
         albumTab.setOnClickListener(tabListener);
         nameTab.setOnClickListener(tabListener);
 
-        View headerView = createHeaderView(inflater);
-        artist_result_list.addHeaderView(headerView);
-        name_result_list.addHeaderView(headerView);
-        album_result_list.addHeaderView(headerView);
+        //Adding search field as header to lists
+        View searchHeader = initSearchHeader(inflater);
+        artist_result_list.addHeaderView(searchHeader);
+        name_result_list.addHeaderView(searchHeader);
+        album_result_list.addHeaderView(searchHeader);
 
-        artist_result_list.setAdapter(new SearchBandAdapter(searchBandList, baseActivity));
+        //Initialization of empty view for lists
+        artistsEmptyView = (TextView) mainView.findViewById(R.id.empty_list_view);
+
+        artist_result_list.setEmptyView(artistsEmptyView);
+
+        //Initialization of progress footer view
+        rotateFooter = inflater.inflate(R.layout.rotate_footer, null, false);
+
+        //Configuration of artist_result_list
+        searchBandAdapter = new SearchBandAdapter(searchBandList, baseActivity);
+        artist_result_list.setAdapter(searchBandAdapter);
+        artist_result_list.setOnScrollListener(scrollListener);
     }
 
-    private View createHeaderView(LayoutInflater inflater) {
+    //returns view with edit text for search.
+    private View initSearchHeader(LayoutInflater inflater) {
         View v = inflater.inflate(R.layout.search_header, null, false);
-        EditText ed = (EditText) v.findViewById(R.id.search_field);
-        ed.setOnEditorActionListener(searchListener);
+        searchField = (EditText) v.findViewById(R.id.search_field);
+        searchField.setOnEditorActionListener(searchListener);
         return v;
     }
 
+    //Called when tab clicked
     private View.OnClickListener tabListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -184,29 +223,32 @@ public class SearchFragment  extends BaseFragment{
                     break;
                 case R.id.by_name:
                     nameTabClicked();
-
             }
         }
     };
 
+    //Called when album tab clicked
     private void albumTabClicked() {
         ViewUtils.selectButton(albumTab, nameTab, artistTab);
         ViewUtils.setVisible(album_result_list, View.GONE, name_result_list, artist_result_list);
         searchType = SearchType.ALBUM;
     }
 
+    //Called when name tab clicked
     private void nameTabClicked() {
         ViewUtils.selectButton(nameTab, albumTab, artistTab);
         ViewUtils.setVisible(name_result_list, View.GONE, artist_result_list, album_result_list);
         searchType = SearchType.NAME;
     }
 
+    //Called when artist tab clicked
     private void artistTabClicked() {
         ViewUtils.selectButton(artistTab, albumTab, nameTab);
-        ViewUtils.setVisible(artist_result_list, View.GONE, name_result_list, album_result_list);
+        ViewUtils.setVisible(artistListContainer, View.GONE, namesListContainer, albumListContainer);
         searchType = SearchType.ARTIST;
     }
 
+    //Click listener for list with bands.
     private AdapterView.OnItemClickListener bandClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -214,6 +256,7 @@ public class SearchFragment  extends BaseFragment{
         }
     };
 
+    //Click listener for list with albums.
     private AdapterView.OnItemClickListener albumClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -221,6 +264,7 @@ public class SearchFragment  extends BaseFragment{
         }
     };
 
+    //Click listener for list with songs.
     private AdapterView.OnItemClickListener songsClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -228,6 +272,7 @@ public class SearchFragment  extends BaseFragment{
         }
     };
 
+    //Scroll listeners for lists, call method when last item in list is visible
     private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
         @Override public void onScrollStateChanged(AbsListView view, int scrollState) {}
         @Override
@@ -239,6 +284,7 @@ public class SearchFragment  extends BaseFragment{
         }
     };
 
+    //Called when user click search on the soft keyboard
     private TextView.OnEditorActionListener searchListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

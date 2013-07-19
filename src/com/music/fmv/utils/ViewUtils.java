@@ -46,7 +46,7 @@ public class ViewUtils {
         }
     }
 
-    public static void setVisible(View visible, int type,View... invisible) {
+    public static void setVisible(View visible, int type, View... invisible) {
         visible.setVisibility(View.VISIBLE);
         for (View v : invisible) {
             v.setVisibility(type);

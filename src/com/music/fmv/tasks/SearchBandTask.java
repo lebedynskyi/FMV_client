@@ -15,7 +15,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>> {
+public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>>{
     private String searchQuery;
     private Integer page;
 
@@ -26,13 +26,12 @@ public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>
     }
 
     @Override
-    protected List<SearchBandModel> doInBackground(Void... voids) {
+    protected List<SearchBandModel> doInBackground(Object... voids) {
         String language = Core.getInstance().getSettingsManager().getResultLanguage(context);
         try {
             return api.searchBand(searchQuery, language, page);
         } catch (Exception e) {
             e.printStackTrace();
-//            onError(e instanceof ApiCaptchaRequiredException);
             isError = true;
         }
         return null;

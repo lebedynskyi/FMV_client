@@ -5,6 +5,7 @@
     <string name="request_error">Error during retrieving information.</string>
     <string name="empty_result">Search returned 0 rows.</string>
     <string name="search_hint">Enter a search request</string>
+    <string name="empty_list">No items to show</string>
 
     <string name="by_artist">Artists</string>
     <string name="by_album">Albums</string>

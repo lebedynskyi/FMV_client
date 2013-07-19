@@ -2,6 +2,7 @@ package com.music.fmv.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
