@@ -8,6 +8,8 @@ import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 

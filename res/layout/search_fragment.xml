@@ -27,39 +27,18 @@
                 android:id="@+id/by_name" android:layout_weight="1"
                 android:textColor="@color/white"/>
     </LinearLayout>
-    <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_below="@+id/top_button_container"
-            android:id="@+id/artist_list_container" android:visibility="visible">
-        <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/artist_result_list" android:headerDividersEnabled="false"
-                android:visibility="visible"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/empty_list"
-                android:id="@+id/empty_list_view" android:layout_centerInParent="true" android:visibility="visible"/>
-    </RelativeLayout>
-    <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_below="@+id/top_button_container"
-            android:id="@+id/albums_list_container" android:visibility="visible">
-        <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/album_result_list" android:headerDividersEnabled="false"
-                android:visibility="visible"/>
-    </RelativeLayout>
-    <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_below="@+id/top_button_container"
-            android:id="@+id/names_list_container" android:visibility="visible">
-        <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/name_result_list" android:headerDividersEnabled="false"
-                android:visibility="visible"/>
-    </RelativeLayout>
+    <ListView android:layout_width="match_parent" android:layout_height="match_parent"
+              android:id="@+id/artist_result_list" android:headerDividersEnabled="false" android:visibility="visible"
+              android:layout_below="@+id/top_button_container"/>
+    <ListView android:layout_width="match_parent" android:layout_height="match_parent"
+              android:id="@+id/name_result_list" android:headerDividersEnabled="false" android:visibility="visible"
+              android:layout_below="@+id/top_button_container"/>
+    <ListView android:layout_width="match_parent" android:layout_height="match_parent"
+              android:id="@+id/album_result_list" android:headerDividersEnabled="false" android:visibility="visible"
+              android:layout_below="@+id/top_button_container"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/empty_list_view" android:layout_centerInParent="true"/>
 </RelativeLayout>

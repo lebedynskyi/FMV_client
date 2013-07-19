@@ -31,7 +31,7 @@ public abstract class BaseActivity extends FragmentActivity{
 
     protected boolean runTask(AsyncTask task){
         if (NetworkUtil.isOnline(this)){
-            task.execute(null);
+            task.execute();
             return true;
         }
         Toast.makeText(this, getString(R.string.network_unavailable), Toast.LENGTH_SHORT).show();

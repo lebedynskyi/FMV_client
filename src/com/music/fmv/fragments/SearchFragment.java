@@ -15,6 +15,7 @@ import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.tasks.SearchBandTask;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.GlowButton;
+import com.music.fmv.views.LoadDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,6 @@ public class SearchFragment  extends BaseFragment{
 
     private EditText searchField;
 
-    private RelativeLayout artistListContainer;
-    private RelativeLayout albumListContainer;
-    private RelativeLayout namesListContainer;
-
     private String lastArtistRequest;
     private String lastAlbumRequest;
     private String lastNameRequest;
@@ -52,7 +49,9 @@ public class SearchFragment  extends BaseFragment{
     private ArrayList<SearchBandModel> searchBandList = new ArrayList<SearchBandModel>();
     private SearchBandAdapter searchBandAdapter;
     private View rotateFooter;
-    private TextView artistsEmptyView;
+    private TextView empty_list_view;
+    private View searchHeader;
+    private LoadDialog dialog;
 
     public enum SearchType {
         ARTIST, NAME, ALBUM
@@ -71,7 +70,18 @@ public class SearchFragment  extends BaseFragment{
 
         SearchBandTask task = new SearchBandTask(query, page, baseActivity){
             @Override
+            protected void onPreExecute() {
+                if (page == null) {
+                    dialog = new LoadDialog(baseActivity, this);
+                    dialog.show();
+                }
+            }
+
+            @Override
             protected void onPostExecute(List<SearchBandModel> searchBandModels) {
+                if(dialog != null) dialog.dismiss();
+                dialog = null;
+
                 if (searchBandModels != null && searchBandModels.size() > 0){
                     updateBandList(searchBandModels, page == null);
                     return;
@@ -105,6 +115,7 @@ public class SearchFragment  extends BaseFragment{
         if (searchBandAdapter.getCount() > 0 && artist_result_list.getFooterViewsCount() == 0){
             artist_result_list.addFooterView(rotateFooter);
         }
+        checkEmptyView();
     }
 
     //----------------------------------------------------------------------------------------------------------------//
@@ -163,10 +174,6 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void initUI(LayoutInflater inflater) {
-        artistListContainer= (RelativeLayout) mainView.findViewById(R.id.artist_list_container );
-        albumListContainer = (RelativeLayout) mainView.findViewById(R.id.albums_list_container);
-        namesListContainer = (RelativeLayout) mainView.findViewById(R.id.names_list_container);
-
         //Initialization of search result lists
         artist_result_list = (ListView) mainView.findViewById(R.id.artist_result_list);
         name_result_list = (ListView) mainView.findViewById(R.id.name_result_list);
@@ -183,15 +190,13 @@ public class SearchFragment  extends BaseFragment{
         nameTab.setOnClickListener(tabListener);
 
         //Adding search field as header to lists
-        View searchHeader = initSearchHeader(inflater);
+        searchHeader = initSearchHeader(inflater);
         artist_result_list.addHeaderView(searchHeader);
         name_result_list.addHeaderView(searchHeader);
         album_result_list.addHeaderView(searchHeader);
 
         //Initialization of empty view for lists
-        artistsEmptyView = (TextView) mainView.findViewById(R.id.empty_list_view);
-
-        artist_result_list.setEmptyView(artistsEmptyView);
+        empty_list_view = (TextView) mainView.findViewById(R.id.empty_list_view);
 
         //Initialization of progress footer view
         rotateFooter = inflater.inflate(R.layout.rotate_footer, null, false);
@@ -231,22 +236,54 @@ public class SearchFragment  extends BaseFragment{
     private void albumTabClicked() {
         ViewUtils.selectButton(albumTab, nameTab, artistTab);
         ViewUtils.setVisible(album_result_list, View.GONE, name_result_list, artist_result_list);
+
         searchType = SearchType.ALBUM;
+        checkEmptyView();
     }
 
     //Called when name tab clicked
     private void nameTabClicked() {
         ViewUtils.selectButton(nameTab, albumTab, artistTab);
         ViewUtils.setVisible(name_result_list, View.GONE, artist_result_list, album_result_list);
+
         searchType = SearchType.NAME;
+        checkEmptyView();
     }
 
     //Called when artist tab clicked
     private void artistTabClicked() {
         ViewUtils.selectButton(artistTab, albumTab, nameTab);
-        ViewUtils.setVisible(artistListContainer, View.GONE, namesListContainer, albumListContainer);
+        ViewUtils.setVisible(artist_result_list, View.GONE, name_result_list, album_result_list);
+
         searchType = SearchType.ARTIST;
+        checkEmptyView();
     }
+
+    private void checkEmptyView(){
+        if(searchType == null) {
+            empty_list_view.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        boolean hide = false;
+
+        switch (searchType){
+            case ARTIST:
+                if (searchBandAdapter.getCount() > 0) hide = true;
+                break;
+            case NAME:
+//                if (searchBandAdapter.getCount() > 0) hide = true;
+                hide = false;
+                break;
+            case ALBUM:
+                hide = false;
+//                if (searchBandAdapter.getCount() > 0) hide = true;
+        }
+
+        if (hide) empty_list_view.setVisibility(View.GONE);
+        else empty_list_view.setVisibility(View.VISIBLE);
+    }
+
 
     //Click listener for list with bands.
     private AdapterView.OnItemClickListener bandClickListener = new AdapterView.OnItemClickListener() {
