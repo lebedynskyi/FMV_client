@@ -17,4 +17,8 @@ public class SettingsManager extends Manager{
     public String getResultLanguage(Context context){
         return null;
     }
+
+    public String getSongCacheFolder(Context context){
+        return null;
+    }
 }
