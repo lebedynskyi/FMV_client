@@ -8,7 +8,10 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.fragments.HistoryFragment;
+import com.music.fmv.fragments.MusicFragment;
 import com.music.fmv.fragments.SearchFragment;
+import com.music.fmv.fragments.SettingsFragment;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
 
@@ -48,24 +51,62 @@ public class MainActivity extends BaseActivity {
 
         fragments = new ArrayList<BaseFragment>(4);
         fragments.add(SEARCH_TAB, createSearchTab());
-        fragments.add(HISTORY_TAB, createSearchTab());
-        fragments.add(MUSIC_TAB, createSearchTab());
-        fragments.add(SETTINGS_TAB, createSearchTab());
+        fragments.add(HISTORY_TAB, createHistoryTab());
+        fragments.add(MUSIC_TAB, createMusicTab());
+        fragments.add(SETTINGS_TAB, createSettingsTab());
 
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(4);
+        pager.setOnPageChangeListener(pagerListener);
         searchTabClicked();
+    }
+
+    private BaseFragment createHistoryTab() {
+        BaseFragment fragment = new HistoryFragment();
+        return fragment;
+    }
+
+    private BaseFragment createSettingsTab() {
+        BaseFragment fragment = new SettingsFragment();
+        return fragment;
+    }
+
+    private BaseFragment createMusicTab() {
+        BaseFragment fragment = new MusicFragment();
+        return fragment;
     }
 
     private BaseFragment createSearchTab() {
         return new SearchFragment();
     }
 
+    public void searchTabClicked() {
+        ViewUtils.selectButton(searchBTN, musicBTN, historyBTN, settingsBTN);
+        pager.setCurrentItem(SEARCH_TAB);
+    }
+
+    public void musicTabClicked() {
+        ViewUtils.selectButton(musicBTN, searchBTN, historyBTN, settingsBTN);
+        pager.setCurrentItem(MUSIC_TAB);
+
+    }
+
+    public void settingsTabClicked() {
+        ViewUtils.selectButton(settingsBTN, searchBTN, musicBTN, historyBTN);
+        pager.setCurrentItem(SETTINGS_TAB);
+
+    }
+
+    public void historyClicked() {
+        ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
+        pager.setCurrentItem(HISTORY_TAB);
+    }
+
     private TabButton.ClickCallBack tabListener = new TabButton.ClickCallBack() {
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.search_btn:
                     searchTabClicked();
                     break;
@@ -81,25 +122,25 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-     public void searchTabClicked(){
-         ViewUtils.selectButton(searchBTN, musicBTN, historyBTN, settingsBTN);
-         pager.setCurrentItem(SEARCH_TAB);
-     }
+    private ViewPager.OnPageChangeListener pagerListener = new ViewPager.OnPageChangeListener() {
+        @Override public void onPageScrolled(int i, float v, int i2) {}
+        @Override public void onPageScrollStateChanged(int i) {}
 
-     public void musicTabClicked(){
-         ViewUtils.selectButton(musicBTN, searchBTN, historyBTN, settingsBTN);
-         pager.setCurrentItem(MUSIC_TAB);
-
-     }
-
-     public void settingsTabClicked(){
-         ViewUtils.selectButton(settingsBTN, searchBTN, musicBTN, historyBTN);
-         pager.setCurrentItem(SETTINGS_TAB);
-
-     }
-
-     public void historyClicked(){
-         ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
-         pager.setCurrentItem(HISTORY_TAB);
-     }
+        @Override
+        public void onPageSelected(int i) {
+            switch (i){
+                case SETTINGS_TAB:
+                    settingsTabClicked();
+                    break;
+                case HISTORY_TAB:
+                    historyClicked();
+                    break;
+                case MUSIC_TAB:
+                    musicTabClicked();
+                    break;
+                case SEARCH_TAB:
+                    searchTabClicked();
+            }
+        }
+    };
 }

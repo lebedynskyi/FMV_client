@@ -165,6 +165,7 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void processSearch(String query) {
+        ViewUtils.hideSoftKeyboard(getActivity());
         switch (searchType){
             case ALBUM:
                 searchAlbum(query);

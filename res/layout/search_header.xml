@@ -8,6 +8,7 @@
               android:layout_height="wrap_content"
               android:hint="@string/search_hint"
               android:imeOptions="actionSearch"
+              android:background="@drawable/black_textfield_selector"
               android:id="@+id/search_field" android:inputType="text">
     </EditText>
 </LinearLayout>

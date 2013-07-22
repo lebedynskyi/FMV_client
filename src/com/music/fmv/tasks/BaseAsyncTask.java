@@ -21,4 +21,14 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
     }
 
 //    protected void onError(boolean isCaptcha){};
+    protected void onPageCountAvailable(int i){
+
+    }
+
+    protected Api.PageCountcallBack pageCountcallBack = new Api.PageCountcallBack() {
+        @Override
+        public void onPageCountAvailable(int count) {
+            onPageCountAvailable(count);
+        }
+    };
 }
