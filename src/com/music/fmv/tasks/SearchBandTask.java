@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>>{
     private String searchQuery;
     private Integer page;
-    private int countOfPage = 1;
+    protected int countOfPage = 0;
 
     public SearchBandTask(String searchQuery, Integer page, Context context) {
         super(context);

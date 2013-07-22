@@ -44,7 +44,10 @@ public class SearchFragment  extends BaseFragment{
     private String lastNameRequest;
 
     private SearchType searchType;
-    private Integer futurePage = 1;
+
+
+    private Integer futureArtistPage = 1;
+    private int artistsPageAvaialble = 0;
 
     private ArrayList<SearchBandModel> searchBandList = new ArrayList<SearchBandModel>();
     private SearchBandAdapter searchBandAdapter;
@@ -85,6 +88,7 @@ public class SearchFragment  extends BaseFragment{
                 if(dialog != null) dialog.dismiss();
                 dialog = null;
                 artistTaskRunned = false;
+                artistsPageAvaialble = countOfPage;
 
                 if (searchBandModels != null && searchBandModels.size() > 0){
                     updateBandList(searchBandModels, page == null);
@@ -107,16 +111,20 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void getNextBandPage(){
-        searchBand(lastArtistRequest, futurePage);
+        if (artistsPageAvaialble == 0)  return;
+        searchBand(lastArtistRequest, futureArtistPage);
     }
 
     private void updateBandList(List<SearchBandModel> searchBandModels,boolean isClear){
-        if(isClear) searchBandList.clear();
+        if(isClear) {
+            searchBandList.clear();
+            futureArtistPage = 1;
+        }
         searchBandList.addAll(searchBandModels);
         searchBandAdapter.notifyDataSetChanged();
-        futurePage += 1;
+        futureArtistPage += 1;
         //TODO CHECK COUNT OF AVAILABLE ITEMS
-        if (searchBandAdapter.getCount() > 0 && band_result_list.getFooterViewsCount() == 0){
+        if ((artistsPageAvaialble > 0)  && band_result_list.getFooterViewsCount() == 0){
             band_result_list.addFooterView(rotateFooter);
         }
         checkEmptyView();
