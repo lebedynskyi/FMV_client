@@ -5,7 +5,7 @@
               android:layout_height="wrap_content"
               android:padding="5dp">
     <EditText android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="40dp"
               android:hint="@string/search_hint"
               android:imeOptions="actionSearch"
               android:background="@drawable/black_textfield_selector"

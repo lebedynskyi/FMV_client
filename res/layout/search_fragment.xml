@@ -37,8 +37,9 @@
               android:id="@+id/album_result_list" android:headerDividersEnabled="false" android:visibility="visible"
               android:layout_below="@+id/top_button_container"/>
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="@string/empty_list"
-            android:id="@+id/empty_list_view" android:layout_centerInParent="true"/>
+            android:id="@+id/empty_list_view" android:layout_below="@+id/top_button_container"
+            android:gravity="center_vertical|center_horizontal"/>
 </RelativeLayout>
