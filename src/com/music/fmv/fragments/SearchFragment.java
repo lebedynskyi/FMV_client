@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 public class SearchFragment  extends BaseFragment{
-    private ListView artist_result_list;
+    private ListView band_result_list;
     private ListView album_result_list;
     private ListView name_result_list;
 
@@ -116,8 +116,8 @@ public class SearchFragment  extends BaseFragment{
         searchBandAdapter.notifyDataSetChanged();
         futurePage += 1;
         //TODO CHECK COUNT OF AVAILABLE ITEMS
-        if (searchBandAdapter.getCount() > 0 && artist_result_list.getFooterViewsCount() == 0){
-            artist_result_list.addFooterView(rotateFooter);
+        if (searchBandAdapter.getCount() > 0 && band_result_list.getFooterViewsCount() == 0){
+            band_result_list.addFooterView(rotateFooter);
         }
         checkEmptyView();
     }
@@ -148,6 +148,7 @@ public class SearchFragment  extends BaseFragment{
 
     }
 
+    //called when last item on listViews is visible
     private void lastItemVisible() {
         //Happens on the first creating of fragment
         if(searchType == null) return;
@@ -164,6 +165,7 @@ public class SearchFragment  extends BaseFragment{
         }
     }
 
+    //Called when user clicked search btn on soft keyboard.
     private void processSearch(String query) {
         ViewUtils.hideSoftKeyboard(getActivity());
         switch (searchType){
@@ -180,7 +182,7 @@ public class SearchFragment  extends BaseFragment{
 
     private void initUI(LayoutInflater inflater) {
         //Initialization of search result lists
-        artist_result_list = (ListView) mainView.findViewById(R.id.artist_result_list);
+        band_result_list = (ListView) mainView.findViewById(R.id.artist_result_list);
         name_result_list = (ListView) mainView.findViewById(R.id.name_result_list);
         album_result_list = (ListView) mainView.findViewById(R.id.album_result_list);
 
@@ -196,7 +198,7 @@ public class SearchFragment  extends BaseFragment{
 
         //Adding search field as header to lists
         searchHeader = initSearchHeader(inflater);
-        artist_result_list.addHeaderView(searchHeader);
+        band_result_list.addHeaderView(searchHeader);
         name_result_list.addHeaderView(searchHeader);
         album_result_list.addHeaderView(searchHeader);
 
@@ -206,10 +208,11 @@ public class SearchFragment  extends BaseFragment{
         //Initialization of progress footer view
         rotateFooter = inflater.inflate(R.layout.rotate_footer, null, false);
 
-        //Configuration of artist_result_list
+        //Configuration of band_result_list
         searchBandAdapter = new SearchBandAdapter(searchBandList, baseActivity);
-        artist_result_list.setAdapter(searchBandAdapter);
-        artist_result_list.setOnScrollListener(scrollListener);
+        band_result_list.setAdapter(searchBandAdapter);
+        band_result_list.setOnScrollListener(scrollListener);
+        band_result_list.setOnItemClickListener(bandClickListener);
     }
 
     //returns view with edit text for search.
@@ -240,7 +243,7 @@ public class SearchFragment  extends BaseFragment{
     //Called when album tab clicked
     private void albumTabClicked() {
         ViewUtils.selectButton(albumTab, nameTab, artistTab);
-        ViewUtils.setVisible(album_result_list, View.GONE, name_result_list, artist_result_list);
+        ViewUtils.setVisible(album_result_list, View.GONE, name_result_list, band_result_list);
 
         searchType = SearchType.ALBUM;
         checkEmptyView();
@@ -249,7 +252,7 @@ public class SearchFragment  extends BaseFragment{
     //Called when name tab clicked
     private void nameTabClicked() {
         ViewUtils.selectButton(nameTab, albumTab, artistTab);
-        ViewUtils.setVisible(name_result_list, View.GONE, artist_result_list, album_result_list);
+        ViewUtils.setVisible(name_result_list, View.GONE, band_result_list, album_result_list);
 
         searchType = SearchType.NAME;
         checkEmptyView();
@@ -258,7 +261,7 @@ public class SearchFragment  extends BaseFragment{
     //Called when artist tab clicked
     private void artistTabClicked() {
         ViewUtils.selectButton(artistTab, albumTab, nameTab);
-        ViewUtils.setVisible(artist_result_list, View.GONE, name_result_list, album_result_list);
+        ViewUtils.setVisible(band_result_list, View.GONE, name_result_list, album_result_list);
 
         searchType = SearchType.ARTIST;
         checkEmptyView();
@@ -294,7 +297,8 @@ public class SearchFragment  extends BaseFragment{
     private AdapterView.OnItemClickListener bandClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            int pos = position - band_result_list.getHeaderViewsCount();
+            System.err.println("Position !!!!!!!!!    --->  " + pos);
         }
     };
 
@@ -337,5 +341,4 @@ public class SearchFragment  extends BaseFragment{
             return false;
         }
     };
-
 }

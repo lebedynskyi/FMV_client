@@ -25,7 +25,7 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
 
     }
 
-    protected Api.PageCountcallBack pageCountcallBack = new Api.PageCountcallBack() {
+    protected final Api.PageCountCallBack pageCountcallBack = new Api.PageCountCallBack() {
         @Override
         public void onPageCountAvailable(int count) {
             BaseAsyncTask.this.onPageCountAvailable(count);
