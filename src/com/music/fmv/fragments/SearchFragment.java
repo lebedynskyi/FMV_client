@@ -40,8 +40,6 @@ public class SearchFragment  extends BaseFragment{
     private GlowButton albumTab;
     private GlowButton nameTab;
 
-    private EditText searchField;
-
     private String lastArtistRequest;
     private String lastAlbumRequest;
     private String lastNameRequest;
@@ -64,7 +62,6 @@ public class SearchFragment  extends BaseFragment{
 
     private View rotateFooter;
     private TextView empty_list_view;
-    private View searchHeader;
     private LoadDialog dialog;
 
     private boolean artistTaskRunned;
@@ -98,10 +95,12 @@ public class SearchFragment  extends BaseFragment{
         nameTab.setOnClickListener(tabListener);
 
         //Adding search field as header to lists
-        searchHeader = initSearchHeader(inflater);
-        band_result_list.addHeaderView(searchHeader);
-        name_result_list.addHeaderView(searchHeader);
-        album_result_list.addHeaderView(searchHeader);
+        View artistSearchHeader = initSearchHeader(inflater);
+        View albumSearchHeader = initSearchHeader(inflater);
+        View songSearchHeader = initSearchHeader(inflater);
+        band_result_list.addHeaderView(artistSearchHeader);
+        name_result_list.addHeaderView(songSearchHeader);
+        album_result_list.addHeaderView(albumSearchHeader);
 
         //Initialization of empty view for lists
         empty_list_view = (TextView) mainView.findViewById(R.id.empty_list_view);
@@ -187,7 +186,7 @@ public class SearchFragment  extends BaseFragment{
 
         SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page){
             protected void onPreExecute() {
-                artistTaskRunned = true;
+                albumTaskRunned = true;
                 if (page == null) {
                     dialog = new LoadDialog(baseActivity, this);
                     dialog.show();
@@ -281,8 +280,7 @@ public class SearchFragment  extends BaseFragment{
     //returns view with edit text for search.
     private View initSearchHeader(LayoutInflater inflater) {
         View v = inflater.inflate(R.layout.search_header, null, false);
-        searchField = (EditText) v.findViewById(R.id.search_field);
-        searchField.setOnEditorActionListener(searchListener);
+        ((EditText)v.findViewById(R.id.search_field)).setOnEditorActionListener(searchListener);
         return v;
     }
 
@@ -383,7 +381,15 @@ public class SearchFragment  extends BaseFragment{
 
     //Scroll listeners for lists, call method when last item in list is visible
     private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
-        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {}
+        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
+//            if (SCROLL_STATE_TOUCH_SCROLL == scrollState) {
+//                View currentFocus = baseActivity.getCurrentFocus();
+//                if (currentFocus != null) {
+//                    currentFocus.clearFocus();
+//                }
+//            }
+        }
+
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             final int lastItem = firstVisibleItem + visibleItemCount;
@@ -398,7 +404,7 @@ public class SearchFragment  extends BaseFragment{
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                processSearch(searchField.getText().toString());
+                processSearch(v.getText().toString());
                 return true;
             }
             return false;
