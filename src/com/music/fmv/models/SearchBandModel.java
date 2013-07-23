@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Time: 5:49 PM
  */
 public class SearchBandModel extends BaseSerializableModel{
-    public static int availablePageCount = 0;
+    public static int AVAILABLE_PAGES = 0;
 
     private String url;
     private String image;

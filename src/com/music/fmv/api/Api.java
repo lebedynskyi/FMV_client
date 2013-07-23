@@ -35,7 +35,7 @@ public class Api {
 
 
     //returns of List<SearchBandModel>
-    public List<SearchBandModel> searchBand(String searchQuery, String language, Integer page, PageCountCallBack pageCountcallBack) throws Exception {
+    public List<SearchBandModel> searchBand(String searchQuery, String language, Integer page) throws Exception {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("artist", searchQuery);
@@ -52,25 +52,10 @@ public class Api {
         if (!TextUtils.isEmpty(jsonResponse)){
             JSONObject response = new JSONObject(jsonResponse);
             checkError(response);
-            if (pageCountcallBack != null){
-                pageCountcallBack.onPageCountAvailable(checkCountOfPage(response));
-            }
             return ApiUtils.parseSearchBand(response);
         }
 
         return null;
-    }
-
-    //return count of available pages (if Json response has it)
-    private int checkCountOfPage(JSONObject response) {
-        try {
-            if (response.has("pages")){
-                return response.getInt("pages");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     //throws exception if Json response has error
@@ -104,9 +89,5 @@ public class Api {
             e.printStackTrace();
         }
         return s;
-    }
-
-    public interface PageCountCallBack {
-        public void onPageCountAvailable(int count);
     }
 }

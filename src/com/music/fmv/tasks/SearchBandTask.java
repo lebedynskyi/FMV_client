@@ -1,7 +1,6 @@
 package com.music.fmv.tasks;
 
 import android.content.Context;
-import com.music.fmv.api.ApiCaptchaRequiredException;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.SearchBandModel;
 
@@ -18,7 +17,6 @@ import java.util.List;
 public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>>{
     private String searchQuery;
     private Integer page;
-    protected int countOfPage = 0;
 
     public SearchBandTask(String searchQuery, Integer page, Context context) {
         super(context);
@@ -27,19 +25,14 @@ public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>
     }
 
     @Override
-    protected List<SearchBandModel> doInBackground(Object... voids) {
+    protected final List<SearchBandModel> doInBackground(Object... voids) {
         String language = Core.getInstance().getSettingsManager().getResultLanguage(context);
         try {
-            return api.searchBand(searchQuery, language, page, pageCountcallBack);
+            return api.searchBand(searchQuery, language, page);
         } catch (Exception e) {
             e.printStackTrace();
             isError = true;
         }
         return null;
-    }
-
-    @Override
-    protected void onPageCountAvailable(int i) {
-        countOfPage = i;
     }
 }

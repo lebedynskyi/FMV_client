@@ -14,8 +14,6 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 public class PlayerService extends IntentService{
-    private Set<PlayerListener> listeners = new HashSet<PlayerListener>();
-
     public enum PLAY_STATUS{
         PLAYING, PAUSED
     }
@@ -27,14 +25,6 @@ public class PlayerService extends IntentService{
     @Override
     protected void onHandleIntent(Intent intent) {
 
-    }
-
-    public void addListener(PlayerListener listener){
-        if (listeners.contains(listener)){
-            listeners.remove(listener);
-        }
-        listeners.add(listener);
-        notifyState();
     }
 
     private void notifyState() {

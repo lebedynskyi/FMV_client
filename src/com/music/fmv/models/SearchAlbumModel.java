@@ -6,4 +6,5 @@ package com.music.fmv.models;
  * Time: 12:15 PM
  */
 public class SearchAlbumModel {
+    public static int AVAILABLE_PAGES = 0;
 }

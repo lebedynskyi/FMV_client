@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.music.fmv.R;
+import com.music.fmv.adapters.SearchAlbumsAdapter;
 import com.music.fmv.adapters.SearchBandAdapter;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
+import com.music.fmv.tasks.SearchAlbumsTask;
 import com.music.fmv.tasks.SearchBandTask;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.GlowButton;
@@ -49,14 +52,23 @@ public class SearchFragment  extends BaseFragment{
     private Integer futureArtistPage = 1;
     private int artistsPageAvaialble = 0;
 
+    private Integer futureAlbumPage = 1;
+    private int albumPageAvailable = 1;
+
+
     private ArrayList<SearchBandModel> searchBandList = new ArrayList<SearchBandModel>();
+    private ArrayList<SearchAlbumModel> searchAlbumList = new ArrayList<SearchAlbumModel>();
+
     private SearchBandAdapter searchBandAdapter;
+    private SearchAlbumsAdapter searchAlbumsAdapter;
+
     private View rotateFooter;
     private TextView empty_list_view;
     private View searchHeader;
     private LoadDialog dialog;
 
     private boolean artistTaskRunned;
+    private boolean albumTaskRunned;
 
     public enum SearchType {
         ARTIST, NAME, ALBUM
@@ -69,9 +81,51 @@ public class SearchFragment  extends BaseFragment{
         artistTabClicked();
     }
 
+    private void initUI(LayoutInflater inflater) {
+        //Initialization of search result lists
+        band_result_list = (ListView) mainView.findViewById(R.id.artist_result_list);
+        name_result_list = (ListView) mainView.findViewById(R.id.name_result_list);
+        album_result_list = (ListView) mainView.findViewById(R.id.album_result_list);
+
+        //initialization of top tabs
+        artistTab = (GlowButton) mainView.findViewById(R.id.by_artist);
+        albumTab = (GlowButton) mainView.findViewById(R.id.by_album);
+        nameTab = (GlowButton) mainView.findViewById(R.id.by_name);
+
+        //Adding click listeneres to top tabs
+        artistTab.setOnClickListener(tabListener);
+        albumTab.setOnClickListener(tabListener);
+        nameTab.setOnClickListener(tabListener);
+
+        //Adding search field as header to lists
+        searchHeader = initSearchHeader(inflater);
+        band_result_list.addHeaderView(searchHeader);
+        name_result_list.addHeaderView(searchHeader);
+        album_result_list.addHeaderView(searchHeader);
+
+        //Initialization of empty view for lists
+        empty_list_view = (TextView) mainView.findViewById(R.id.empty_list_view);
+
+        //Initialization of progress footer view
+        rotateFooter = inflater.inflate(R.layout.rotate_footer, null, false);
+
+        //Configuration of band_result_list
+        searchBandAdapter = new SearchBandAdapter(searchBandList, baseActivity);
+        band_result_list.setAdapter(searchBandAdapter);
+        band_result_list.setOnScrollListener(scrollListener);
+        band_result_list.setOnItemClickListener(bandClickListener);
+
+        //configuration of albums_result_list
+        searchAlbumsAdapter = new SearchAlbumsAdapter(searchAlbumList, baseActivity);
+        album_result_list.setAdapter(searchAlbumsAdapter);
+        album_result_list.setOnScrollListener(scrollListener);
+        album_result_list.setOnItemClickListener(albumClickListener);
+    }
+
     //----------------------------------------------------------------------------------------------------------------//
     private void searchBand(String query, final Integer page){
         if (TextUtils.isEmpty(query) || artistTaskRunned) return;
+        query = query.trim();
 
         SearchBandTask task = new SearchBandTask(query, page, baseActivity){
             @Override
@@ -88,23 +142,19 @@ public class SearchFragment  extends BaseFragment{
                 if(dialog != null) dialog.dismiss();
                 dialog = null;
                 artistTaskRunned = false;
-                artistsPageAvaialble = countOfPage;
-
-                if (searchBandModels != null && searchBandModels.size() > 0){
-                    updateBandList(searchBandModels, page == null);
-                    return;
-                }
-
-                if (searchBandModels != null && searchBandModels.size() == 0){
-                    Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                artistsPageAvaialble = SearchBandModel.AVAILABLE_PAGES;
 
                 if (isError || searchBandModels == null){
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                if (searchBandModels.size() > 0){
+                    updateBandList(searchBandModels, page == null);
+                }else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
             }
         };
+
         if (runTask(task)){
             lastArtistRequest = query;
         }
@@ -131,16 +181,56 @@ public class SearchFragment  extends BaseFragment{
     }
 
     //----------------------------------------------------------------------------------------------------------------//
-    private void searchAlbum(String query){
+    private void searchAlbum(String query, final Integer page){
+        if (TextUtils.isEmpty(query) || albumTaskRunned) return;
+        query = query.trim();
 
+        SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page){
+            protected void onPreExecute() {
+                artistTaskRunned = true;
+                if (page == null) {
+                    dialog = new LoadDialog(baseActivity, this);
+                    dialog.show();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<SearchAlbumModel> albums) {
+                if(dialog != null) dialog.dismiss();
+                dialog = null;
+                albumTaskRunned = false;
+
+                if (isError || albums == null){
+                    Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (albums.size() > 0){
+                    updateAlbumList(albums, page == null);
+                }else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        if (runTask(task)) albumTaskRunned = true;
     }
 
     private void getNextAlbumPage(){
 
     }
 
-    private void updateAlbumList(){
-
+    private void updateAlbumList(List<SearchAlbumModel> albums, boolean needClear){
+        if(needClear) {
+            searchBandList.clear();
+            futureAlbumPage = 1;
+        }
+        searchAlbumList.addAll(albums);
+        searchAlbumsAdapter.notifyDataSetChanged();
+        futureAlbumPage += 1;
+        //TODO CHECK COUNT OF AVAILABLE ITEMS
+        if ((albumPageAvailable > 0)  && album_result_list.getFooterViewsCount() == 0){
+            album_result_list.addFooterView(rotateFooter);
+        }
+        checkEmptyView();
     }
 
     //----------------------------------------------------------------------------------------------------------------//
@@ -178,7 +268,7 @@ public class SearchFragment  extends BaseFragment{
         ViewUtils.hideSoftKeyboard(getActivity());
         switch (searchType){
             case ALBUM:
-                searchAlbum(query);
+                searchAlbum(query, null);
                 break;
             case NAME:
                 searchSongs(query);
@@ -186,41 +276,6 @@ public class SearchFragment  extends BaseFragment{
             case ARTIST:
                 searchBand(query, null);
         }
-    }
-
-    private void initUI(LayoutInflater inflater) {
-        //Initialization of search result lists
-        band_result_list = (ListView) mainView.findViewById(R.id.artist_result_list);
-        name_result_list = (ListView) mainView.findViewById(R.id.name_result_list);
-        album_result_list = (ListView) mainView.findViewById(R.id.album_result_list);
-
-        //initialization of top tabs
-        artistTab = (GlowButton) mainView.findViewById(R.id.by_artist);
-        albumTab = (GlowButton) mainView.findViewById(R.id.by_album);
-        nameTab = (GlowButton) mainView.findViewById(R.id.by_name);
-
-        //Adding click listeneres to top tabs
-        artistTab.setOnClickListener(tabListener);
-        albumTab.setOnClickListener(tabListener);
-        nameTab.setOnClickListener(tabListener);
-
-        //Adding search field as header to lists
-        searchHeader = initSearchHeader(inflater);
-        band_result_list.addHeaderView(searchHeader);
-        name_result_list.addHeaderView(searchHeader);
-        album_result_list.addHeaderView(searchHeader);
-
-        //Initialization of empty view for lists
-        empty_list_view = (TextView) mainView.findViewById(R.id.empty_list_view);
-
-        //Initialization of progress footer view
-        rotateFooter = inflater.inflate(R.layout.rotate_footer, null, false);
-
-        //Configuration of band_result_list
-        searchBandAdapter = new SearchBandAdapter(searchBandList, baseActivity);
-        band_result_list.setAdapter(searchBandAdapter);
-        band_result_list.setOnScrollListener(scrollListener);
-        band_result_list.setOnItemClickListener(bandClickListener);
     }
 
     //returns view with edit text for search.

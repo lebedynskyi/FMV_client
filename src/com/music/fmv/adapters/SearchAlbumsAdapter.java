@@ -1,10 +1,14 @@
 package com.music.fmv.adapters;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.music.fmv.models.SearchAlbumModel;
+
+import java.util.ArrayList;
 
 /**
  * User: vitaliylebedinskiy
@@ -12,6 +16,14 @@ import android.widget.TextView;
  * Time: 3:45 PM
  */
 public class SearchAlbumsAdapter extends BaseAdapter{
+    private ArrayList<SearchAlbumModel> mData;
+    private Context context;
+
+    public SearchAlbumsAdapter(ArrayList<SearchAlbumModel> mData, Context context) {
+        this.mData = mData;
+        this.context = context;
+    }
+
     @Override
     public int getCount() {
         return 0;
