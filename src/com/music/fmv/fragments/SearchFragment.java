@@ -50,7 +50,7 @@ public class SearchFragment  extends BaseFragment{
 
 
     private Integer futureArtistPage = 1;
-    private int artistsPageAvaialble = 0;
+    private int artistsPageAvailable = 0;
 
     private Integer futureAlbumPage = 1;
     private int albumPageAvailable = 1;
@@ -114,14 +114,12 @@ public class SearchFragment  extends BaseFragment{
         searchBandAdapter = new SearchBandAdapter(searchBandList, baseActivity);
         band_result_list.setAdapter(searchBandAdapter);
         band_result_list.setOnScrollListener(imagePauseListener);
-        band_result_list.setOnScrollListener(scrollListener);
         band_result_list.setOnItemClickListener(bandClickListener);
 
         //configuration of albums_result_list
         searchAlbumsAdapter = new SearchAlbumsAdapter(searchAlbumList, baseActivity);
         album_result_list.setAdapter(searchAlbumsAdapter);
         album_result_list.setOnScrollListener(imagePauseListener);
-        album_result_list.setOnScrollListener(scrollListener);
         album_result_list.setOnItemClickListener(albumClickListener);
     }
 
@@ -145,7 +143,7 @@ public class SearchFragment  extends BaseFragment{
                 if(dialog != null) dialog.dismiss();
                 dialog = null;
                 artistTaskRunned = false;
-                artistsPageAvaialble = SearchBandModel.AVAILABLE_PAGES;
+                artistsPageAvailable = SearchBandModel.AVAILABLE_PAGES;
 
                 if (isError || searchBandModels == null){
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
@@ -173,7 +171,7 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void getNextBandPage(){
-        if (artistsPageAvaialble <= 0)  return;
+        if (artistsPageAvailable <= 0)  return;
         searchBand(lastArtistRequest, futureArtistPage);
     }
 
@@ -186,9 +184,9 @@ public class SearchFragment  extends BaseFragment{
         searchBandAdapter.notifyDataSetChanged();
         futureArtistPage += 1;
 
-        if (artistsPageAvaialble <= 0){
+        if (artistsPageAvailable <= 0){
             band_result_list.removeFooterView(rotateFooter);
-        }else if (artistsPageAvaialble >0 && band_result_list.getFooterViewsCount() == 0){
+        }else if (artistsPageAvailable >0 && band_result_list.getFooterViewsCount() == 0){
             band_result_list.addFooterView(rotateFooter);
         }
 
@@ -375,7 +373,6 @@ public class SearchFragment  extends BaseFragment{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             int pos = position - band_result_list.getHeaderViewsCount();
-            System.err.println("Position !!!!!!!!!    --->  " + pos);
         }
     };
 
@@ -397,14 +394,7 @@ public class SearchFragment  extends BaseFragment{
 
     //Scroll listeners for lists, call method when last item in list is visible
     private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
-        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
-//            if (SCROLL_STATE_TOUCH_SCROLL == scrollState) {
-//                View currentFocus = baseActivity.getCurrentFocus();
-//                if (currentFocus != null) {
-//                    currentFocus.clearFocus();
-//                }
-//            }
-        }
+        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -427,5 +417,5 @@ public class SearchFragment  extends BaseFragment{
         }
     };
 
-    PauseOnScrollListener imagePauseListener = new PauseOnScrollListener(ImageLoader.getInstance(), false, true);
+    PauseOnScrollListener imagePauseListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, scrollListener);
 }

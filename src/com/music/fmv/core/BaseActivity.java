@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.services.PlayerService;
@@ -27,6 +28,19 @@ public abstract class BaseActivity extends FragmentActivity{
         mMediator = new ActivityMediator(this);
         onCreated(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(findViewById(android.R.id.content), this);
+        checkAdvert();
+    }
+
+    private void checkAdvert() {
+        View advertView = findViewById(R.id.advert_layout);
+        if (advertView == null) return;
+        if (NetworkUtil.isOnline(this)){
+            initAdvert(advertView);
+        }else advertView.setVisibility(View.GONE);
+    }
+
+    private void initAdvert(View advertView) {
+
     }
 
     protected boolean runTask(AsyncTask task){
