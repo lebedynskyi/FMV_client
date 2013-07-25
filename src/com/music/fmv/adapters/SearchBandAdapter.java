@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.models.SearchBandModel;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -21,10 +23,19 @@ import java.util.List;
 public class SearchBandAdapter extends BaseAdapter{
     private List<SearchBandModel> mList;
     private Context context;
+    private DisplayImageOptions displayImageOptions;
+    private ImageLoader imageLoader;
+
 
     public SearchBandAdapter(List<SearchBandModel> mList, Context context) {
         this.mList = mList;
         this.context = context;
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .showImageForEmptyUri(R.drawable.empty_band_star)
+                .cacheOnDisc(false)
+                .build();
+        imageLoader = ImageLoader.getInstance();
     }
 
     @Override
@@ -55,6 +66,7 @@ public class SearchBandAdapter extends BaseAdapter{
         }else holder = (ViewHolder) convertView.getTag();
         SearchBandModel model = mList.get(position);
         holder.name.setText(model.getName());
+        imageLoader.displayImage(model.getImage(), holder.icon, displayImageOptions);
         holder.briefDescr.setText(model.getDescr());
         return convertView;
     }

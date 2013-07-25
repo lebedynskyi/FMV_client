@@ -19,6 +19,8 @@ import com.music.fmv.tasks.SearchBandTask;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.GlowButton;
 import com.music.fmv.views.LoadDialog;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,12 +113,14 @@ public class SearchFragment  extends BaseFragment{
         //Configuration of band_result_list
         searchBandAdapter = new SearchBandAdapter(searchBandList, baseActivity);
         band_result_list.setAdapter(searchBandAdapter);
+        band_result_list.setOnScrollListener(imagePauseListener);
         band_result_list.setOnScrollListener(scrollListener);
         band_result_list.setOnItemClickListener(bandClickListener);
 
         //configuration of albums_result_list
         searchAlbumsAdapter = new SearchAlbumsAdapter(searchAlbumList, baseActivity);
         album_result_list.setAdapter(searchAlbumsAdapter);
+        album_result_list.setOnScrollListener(imagePauseListener);
         album_result_list.setOnScrollListener(scrollListener);
         album_result_list.setOnItemClickListener(albumClickListener);
     }
@@ -160,7 +164,7 @@ public class SearchFragment  extends BaseFragment{
     }
 
     private void getNextBandPage(){
-        if (artistsPageAvaialble == 0)  return;
+        if (artistsPageAvaialble <= 0)  return;
         searchBand(lastArtistRequest, futureArtistPage);
     }
 
@@ -175,7 +179,7 @@ public class SearchFragment  extends BaseFragment{
         //TODO CHECK COUNT OF AVAILABLE ITEMS
         if ((artistsPageAvaialble > 0)  && band_result_list.getFooterViewsCount() == 0){
             band_result_list.addFooterView(rotateFooter);
-        }
+        }else band_result_list.removeFooterView(rotateFooter);
         checkEmptyView();
     }
 
@@ -354,7 +358,7 @@ public class SearchFragment  extends BaseFragment{
     }
 
 
-    //Click listener for list with bands.
+    //Click imagePauseListener for list with bands.
     private AdapterView.OnItemClickListener bandClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -363,7 +367,7 @@ public class SearchFragment  extends BaseFragment{
         }
     };
 
-    //Click listener for list with albums.
+    //Click imagePauseListener for list with albums.
     private AdapterView.OnItemClickListener albumClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -371,7 +375,7 @@ public class SearchFragment  extends BaseFragment{
         }
     };
 
-    //Click listener for list with songs.
+    //Click imagePauseListener for list with songs.
     private AdapterView.OnItemClickListener songsClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -410,4 +414,6 @@ public class SearchFragment  extends BaseFragment{
             return false;
         }
     };
+
+    PauseOnScrollListener imagePauseListener = new PauseOnScrollListener(ImageLoader.getInstance(), false, true);
 }

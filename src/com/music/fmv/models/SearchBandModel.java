@@ -15,7 +15,6 @@ public class SearchBandModel extends BaseSerializableModel{
     private String descr;
     private String name;
     private ArrayList<String> genres;
-    private int countOfPage;
 
     public String getUrl() {
         return url;

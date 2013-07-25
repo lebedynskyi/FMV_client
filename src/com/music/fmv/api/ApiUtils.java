@@ -17,7 +17,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ApiUtils {
-    public static final String RESPONSE_TAG = "responce";
+    public static final String RESPONSE_TAG = "response";
 
     public static List<SearchBandModel> parseSearchBand(JSONObject response){
         ArrayList<SearchBandModel> result = new ArrayList<SearchBandModel>();
@@ -30,6 +30,7 @@ public class ApiUtils {
                     model.setName(artistData.optString("name"));
                     model.setDescr(artistData.optString("descr"));
                     model.setUrl(artistData.optString("url"));
+                    model.setImage(artistData.optString("image"));
                     JSONArray genres = artistData.optJSONArray("genres");
 
                     if (genres != null){

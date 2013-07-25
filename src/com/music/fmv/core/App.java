@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import com.nostra13.universalimageloader.cache.disc.impl.FileCountLimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
 
 import java.io.File;
 
@@ -24,18 +24,21 @@ public class App extends Application{
         //Initialization of core Manager
         Core.getInstance();
 
+
         File imageCache = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "fmv/cache_images/");
         imageCache.mkdirs();
 
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(this)
                 .denyCacheImageMultipleSizesInMemory()
-                .discCacheSize(5 * 1024 * 1024)
                 .discCache(new FileCountLimitedDiscCache(imageCache, 50))
                 .discCacheExtraOptions(480, 800, Bitmap.CompressFormat.PNG, 75, null)
                 .denyCacheImageMultipleSizesInMemory()
                 .memoryCache(new LruMemoryCache(4 * 1024 * 1024))
                 .threadPoolSize(3)
+                .enableLogging()
                 .threadPriority(Thread.NORM_PRIORITY)
-                .imageDecoder(new BaseImageDecoder(false)).build();
+                .build();
+
+        ImageLoader.getInstance().init(configuration);
     }
 }
