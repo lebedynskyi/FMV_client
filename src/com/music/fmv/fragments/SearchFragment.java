@@ -154,13 +154,22 @@ public class SearchFragment  extends BaseFragment{
 
                 if (searchBandModels.size() > 0){
                     updateBandList(searchBandModels, page == null);
-                }else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+                    clearArtists();
+                }
             }
         };
 
         if (runTask(task)){
             lastArtistRequest = query;
         }
+    }
+
+    private void clearArtists() {
+        searchBandList.clear();
+        searchBandAdapter.notifyDataSetChanged();
+        checkEmptyView();
     }
 
     private void getNextBandPage(){
@@ -176,10 +185,13 @@ public class SearchFragment  extends BaseFragment{
         searchBandList.addAll(searchBandModels);
         searchBandAdapter.notifyDataSetChanged();
         futureArtistPage += 1;
-        //TODO CHECK COUNT OF AVAILABLE ITEMS
-        if ((artistsPageAvaialble > 0)  && band_result_list.getFooterViewsCount() == 0){
+
+        if (artistsPageAvaialble <= 0){
+            band_result_list.removeFooterView(rotateFooter);
+        }else if (artistsPageAvaialble >0 && band_result_list.getFooterViewsCount() == 0){
             band_result_list.addFooterView(rotateFooter);
-        }else band_result_list.removeFooterView(rotateFooter);
+        }
+
         checkEmptyView();
     }
 
