@@ -139,23 +139,28 @@ public class SearchFragment  extends BaseFragment{
             }
 
             @Override
-            protected void onPostExecute(List<SearchBandModel> searchBandModels) {
+            protected void onPostExecute(List<SearchBandModel> result) {
                 if(dialog != null) dialog.dismiss();
                 dialog = null;
                 artistTaskRunned = false;
-                artistsPageAvailable = SearchBandModel.AVAILABLE_PAGES;
-
-                if (isError || searchBandModels == null){
-                    Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
+                artistsPageAvailable = 0;
+                //empty result
+                if (result != null && result.size() ==0){
+                    Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+                    clearArtists();
                     return;
                 }
 
-                if (searchBandModels.size() > 0){
-                    updateBandList(searchBandModels, page == null);
-                }else {
-                    Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+                //it means that error was occurred during search
+                if (isError || result == null){
+                    Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
                     clearArtists();
+                    return;
                 }
+
+                //normal answer. update list
+                artistsPageAvailable = SearchBandModel.AVAILABLE_PAGES;
+                updateBandList(result, page == null);
             }
         };
 
@@ -166,13 +171,16 @@ public class SearchFragment  extends BaseFragment{
 
     private void clearArtists() {
         searchBandList.clear();
+        band_result_list.removeFooterView(rotateFooter);
+        SearchBandModel.AVAILABLE_PAGES= 0;
         searchBandAdapter.notifyDataSetChanged();
         checkEmptyView();
     }
 
     private void getNextBandPage(){
-        if (artistsPageAvailable <= 0)  return;
-        searchBand(lastArtistRequest, futureArtistPage);
+        if (artistsPageAvailable >0) {
+            searchBand(lastArtistRequest, futureArtistPage);
+        }
     }
 
     private void updateBandList(List<SearchBandModel> searchBandModels,boolean isClear){
@@ -186,7 +194,7 @@ public class SearchFragment  extends BaseFragment{
 
         if (artistsPageAvailable <= 0){
             band_result_list.removeFooterView(rotateFooter);
-        }else if (artistsPageAvailable >0 && band_result_list.getFooterViewsCount() == 0){
+        }else if (artistsPageAvailable > 0 && band_result_list.getFooterViewsCount() == 0){
             band_result_list.addFooterView(rotateFooter);
         }
 
