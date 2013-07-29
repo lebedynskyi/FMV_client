@@ -1,5 +1,9 @@
 package com.music.fmv.core;
 
+import com.music.fmv.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
 /**
  * User: vitaliylebedinskiy
  * Date: 7/12/13
@@ -10,6 +14,7 @@ public class Core {
     private NotificationManager mNotificationManager;
     private CacheManager mCacheManager ;
     private SettingsManager mSettingsManager;
+    private DisplayImageOptions notCachedOptions;
 
     public static Core getInstance() {
         if (instance == null){
@@ -38,5 +43,19 @@ public class Core {
 
     public SettingsManager getSettingsManager(){
         return mSettingsManager;
+    }
+
+    public DisplayImageOptions getNotcachedOptions(){
+        if (notCachedOptions == null){
+            notCachedOptions = new DisplayImageOptions.Builder()
+                    .showStubImage(R.drawable.empty_band_star)
+                    .cacheInMemory(true)
+                    .displayer(new FadeInBitmapDisplayer(500))
+                    .showImageForEmptyUri(R.drawable.empty_band_star)
+                    .cacheOnDisc(false)
+                    .build();
+        }
+
+        return notCachedOptions;
     }
 }

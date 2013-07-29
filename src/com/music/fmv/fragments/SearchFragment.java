@@ -53,7 +53,7 @@ public class SearchFragment  extends BaseFragment{
     private int artistsPageAvailable = 0;
 
     private Integer futureAlbumPage = 1;
-    private int albumPageAvailable = 1;
+    private int albumPageAvailable = 0;
 
 
     private ArrayList<SearchBandModel> searchBandList = new ArrayList<SearchBandModel>();
@@ -219,6 +219,7 @@ public class SearchFragment  extends BaseFragment{
             protected void onPostExecute(List<SearchAlbumModel> albums) {
                 if(dialog != null) dialog.dismiss();
                 dialog = null;
+                albumPageAvailable = SearchAlbumModel.AVAILABLE_PAGES;
                 albumTaskRunned = false;
 
                 if (isError || albums == null){
@@ -241,16 +242,19 @@ public class SearchFragment  extends BaseFragment{
 
     private void updateAlbumList(List<SearchAlbumModel> albums, boolean needClear){
         if(needClear) {
-            searchBandList.clear();
+            searchAlbumList.clear();
             futureAlbumPage = 1;
         }
         searchAlbumList.addAll(albums);
         searchAlbumsAdapter.notifyDataSetChanged();
         futureAlbumPage += 1;
-        //TODO CHECK COUNT OF AVAILABLE ITEMS
-        if ((albumPageAvailable > 0)  && album_result_list.getFooterViewsCount() == 0){
+
+        if (albumPageAvailable <= 0){
+            album_result_list.removeFooterView(rotateFooter);
+        }else if (albumPageAvailable > 0 && album_result_list.getFooterViewsCount() == 0){
             album_result_list.addFooterView(rotateFooter);
         }
+
         checkEmptyView();
     }
 
@@ -368,7 +372,7 @@ public class SearchFragment  extends BaseFragment{
                 break;
             case ALBUM:
                 hide = false;
-//                if (searchBandAdapter.getCount() > 0) hide = true;
+                if (searchAlbumsAdapter.getCount() > 0) hide = true;
         }
 
         if (hide) empty_list_view.setVisibility(View.GONE);

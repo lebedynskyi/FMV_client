@@ -1,9 +1,11 @@
 package com.music.fmv.api;
 
 import com.music.fmv.models.BandInfoModel;
+import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.models.SimilarBandModel;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -84,6 +86,33 @@ public class ApiUtils {
         }
 
         return model;
+    }
+
+    public static List<SearchAlbumModel> parseSearchAlbum(JSONObject response) throws JSONException {
+        ArrayList<SearchAlbumModel> albums = new ArrayList<SearchAlbumModel>();
+        JSONArray albumsArr = response.optJSONArray(RESPONSE_TAG);
+        if (albumsArr == null) {
+            SearchAlbumModel.AVAILABLE_PAGES = -1;
+            return albums;
+        }
+
+        for (int i = 0; i < albumsArr.length(); i++) {
+            try {
+                SearchAlbumModel model = new SearchAlbumModel();
+                JSONObject albumData = albumsArr.getJSONObject(i);
+                model.setAlbumName(albumData.optString("album_name"));
+                model.setAlbumUrl(albumData.optString("album_url"));
+                model.setArtistName(albumData.optString("artist_name"));
+                model.setArtistUrl(albumData.optString("artist_url"));
+                model.setBriefDescr(albumData.optString("biref"));
+                model.setImage(albumData.optString("image"));
+                albums.add(model);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        SearchAlbumModel.AVAILABLE_PAGES = response.optInt("pages");
+        return albums;
     }
 }
 

@@ -1,6 +1,7 @@
 package com.music.fmv.api;
 
 import android.text.TextUtils;
+import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.utils.NetworkUtil;
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ public class Api {
     public static final String SEARCH_ALBUMS_COMMAND = "albums.search";
 
 
-    //returns of List<SearchBandModel>
+    //returns List<SearchBandModel>
     public List<SearchBandModel> searchBand(String searchQuery, String language, Integer page) throws Exception {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
@@ -58,10 +59,35 @@ public class Api {
         return null;
     }
 
+
+    //returns List<SearchAlbumModel>
+    public List<SearchAlbumModel> searchAlbum(String searchQuery, String language, Integer page)throws Exception{
+        if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("album", searchQuery);
+        params.put("lan", language);
+        if(page != null){
+            params.put("page", page.toString());
+        }
+
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append(API_URL).append(SEARCH_ALBUMS_COMMAND).append(generateUrl(params));
+
+        String jsonResponse = NetworkUtil.doRequest(urlBuilder.toString());
+
+        if (!TextUtils.isEmpty(jsonResponse)){
+            JSONObject response =new JSONObject(jsonResponse);
+            checkError(response);
+            return ApiUtils.parseSearchAlbum(response);
+        }
+
+        return null;
+    }
+
     //throws exception if Json response has error
     private void checkError(JSONObject response) {
         if (response.has("error")){
-            throw new RuntimeException();
+            throw new RuntimeException("Error in api response");
         }
     }
 

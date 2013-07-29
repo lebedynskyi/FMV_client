@@ -1,6 +1,7 @@
 package com.music.fmv.tasks;
 
 import android.content.Context;
+import com.music.fmv.core.Core;
 import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
 
@@ -23,6 +24,13 @@ public class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumModel>>{
 
     @Override
     protected final List<SearchAlbumModel> doInBackground(Object... params) {
+        String language = Core.getInstance().getSettingsManager().getResultLanguage(context);
+        try {
+            return api.searchAlbum(searchQuery, language, page);
+        } catch (Exception e) {
+            e.printStackTrace();
+            isError = true;
+        }
         return null;
     }
 }
