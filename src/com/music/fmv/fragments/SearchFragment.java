@@ -131,7 +131,6 @@ public class SearchFragment  extends BaseFragment{
         SearchBandTask task = new SearchBandTask(query, page, baseActivity){
             @Override
             protected void onPreExecute() {
-                artistTaskRunned = true;
                 if (page == null) {
                     dialog = new LoadDialog(baseActivity, this);
                     dialog.show();
@@ -166,6 +165,7 @@ public class SearchFragment  extends BaseFragment{
 
         if (runTask(task)){
             lastArtistRequest = query;
+            artistTaskRunned = true;
         }
     }
 
@@ -233,11 +233,16 @@ public class SearchFragment  extends BaseFragment{
             }
         };
 
-        if (runTask(task)) albumTaskRunned = true;
+        if (runTask(task)) {
+            albumTaskRunned = true;
+            lastAlbumRequest = query;
+        }
     }
 
     private void getNextAlbumPage(){
-
+        if (albumPageAvailable >0) {
+            searchAlbum(lastAlbumRequest, futureAlbumPage);
+        }
     }
 
     private void updateAlbumList(List<SearchAlbumModel> albums, boolean needClear){
