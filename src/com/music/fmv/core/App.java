@@ -16,16 +16,13 @@ import java.io.File;
  * Time: 12:16 PM
  */
 public class App extends Application{
-    public static App APP_CONTEXT;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        APP_CONTEXT = this;
 
         //Initialization of core Manager
         Core.getInstance();
-
 
         File imageCache = new File(SettingsManager.getImageCacheFolder(this));
         imageCache.mkdirs();

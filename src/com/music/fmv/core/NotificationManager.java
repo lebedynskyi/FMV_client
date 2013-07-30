@@ -15,8 +15,8 @@ public class NotificationManager extends Manager{
         super(coreManager);
     }
 
-    public static void notifyProgress(Context c){}
-    public static void removeProgress(Context c){}
-    public static void notifyDownloading(Context c){}
-    public static void removeDownloading(Context c){}
+    public void notifyProgress(Context c){}
+    public void removeProgress(Context c){}
+    public void notifyDownloading(Context c){}
+    public void removeDownloading(Context c){}
 }

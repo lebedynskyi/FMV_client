@@ -63,8 +63,7 @@ public class ActivityMediator {
         context.startActivity(intent);
     }
 
-    private void startActivityForresult(Class clz, Bundle bundle,
-                                        int requestCode) {
+    private void startActivityForresult(Class clz, Bundle bundle,int requestCode) {
         Intent intent = new Intent(context, clz);
         if (bundle != null)
             intent.putExtras(bundle);
