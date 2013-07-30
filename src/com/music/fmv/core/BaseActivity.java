@@ -34,7 +34,7 @@ public abstract class BaseActivity extends FragmentActivity{
     private void checkAdvert() {
         View advertView = findViewById(R.id.advert_layout);
         if (advertView == null) return;
-        if (NetworkUtil.isOnline(this)){
+        if (NetworkUtil.isNetworkAvailable(this)){
             initAdvert(advertView);
         }else advertView.setVisibility(View.GONE);
     }
@@ -44,7 +44,7 @@ public abstract class BaseActivity extends FragmentActivity{
     }
 
     protected boolean runTask(AsyncTask task){
-        if (NetworkUtil.isOnline(this)){
+        if (NetworkUtil.isNetworkAvailable(this)){
             task.execute();
             return true;
         }

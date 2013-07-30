@@ -2,7 +2,6 @@ package com.music.fmv.core;
 
 import android.app.Application;
 import android.graphics.Bitmap;
-import android.os.Environment;
 import com.nostra13.universalimageloader.cache.disc.impl.FileCountLimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;

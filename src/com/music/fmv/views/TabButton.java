@@ -17,7 +17,6 @@ import com.music.fmv.R;
 
 public class TabButton extends RelativeLayout {
     private View view;
-//    private TextView textView;
     private ImageView button;
     private ClickCallBack callBack;
     private Drawable selectedDraw;
@@ -46,24 +45,20 @@ public class TabButton extends RelativeLayout {
     }
 
     private void initComponentsUI(){
-//        textView = (TextView) view.findViewById(R.id.tab_text);
         selectedDraw = getContext().getResources().getDrawable(R.drawable.bottom_selected);
         button = (ImageView) view.findViewById(R.id.tab_btn);
         setOnClickListener(clickListener);
     }
 
-    public void initUI(Drawable imageSelector, String text, ClickCallBack callBack){
+    public void initUI(Drawable imageSelector, ClickCallBack callBack){
         this.callBack = callBack;
-//        textView.setText(text);
         button.setBackgroundDrawable(imageSelector);
     }
 
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
-
         button.setSelected(selected);
-//        textView.setSelected(selected);
         if (selected){
             view.setBackgroundDrawable(selectedDraw);
         }else {

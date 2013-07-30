@@ -38,7 +38,7 @@ public class LoadDialog extends AlertDialog{
     @Override
     public void onBackPressed() {
         try{
-            task.cancel(true);
+            if (task != null) task.cancel(true);
             this.dismiss();
         }catch (Exception e){
             e.printStackTrace();

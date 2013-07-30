@@ -18,23 +18,24 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class NetworkUtil {
-    public static boolean isOnline(Context context) {
+    //returns true if network available
+    public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo nInfo = cm.getActiveNetworkInfo();
         if (nInfo != null && nInfo.isConnected()) {
-            Log.d("NetworkUtil", "ONLINE");
+            Log.d("NetworkUtil", "Network available");
             return true;
         } else {
-            Log.d("NetworkUtil", "OFFLINE");
+            Log.d("NetworkUtil", "Network unavailable");
             return false;
         }
     }
 
+    //Method downloads a string from the url
     public static String doRequest(String urlRequest) throws IOException {
         URL url = new URL(urlRequest);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
         String s = null;
         StringBuilder sb  = new StringBuilder();
         while ((s = reader.readLine()) != null){

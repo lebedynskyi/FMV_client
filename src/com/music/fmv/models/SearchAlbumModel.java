@@ -5,7 +5,7 @@ package com.music.fmv.models;
  * Date: 7/19/13
  * Time: 12:15 PM
  */
-public class SearchAlbumModel {
+public class SearchAlbumModel  extends BaseSerializableModel{
     public static int AVAILABLE_PAGES = 0;
     private String artistName;
     private String albumName;

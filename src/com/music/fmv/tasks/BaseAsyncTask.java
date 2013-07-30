@@ -19,6 +19,4 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
     protected BaseAsyncTask(Context context) {
         this.context = context;
     }
-
-//    protected void onError(boolean isCaptcha){};
 }

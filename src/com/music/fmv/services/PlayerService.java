@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 
-import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.

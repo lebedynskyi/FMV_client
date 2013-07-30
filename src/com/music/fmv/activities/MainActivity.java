@@ -2,7 +2,6 @@ package com.music.fmv.activities;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
 import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
@@ -44,10 +43,10 @@ public class MainActivity extends BaseActivity {
         musicBTN = (TabButton) findViewById(R.id.music_btn);
         settingsBTN = (TabButton) findViewById(R.id.settings_tab);
 
-        searchBTN.initUI(getResources().getDrawable(R.drawable.search_tab_selector), getString(R.string.search), tabListener);
-        historyBTN.initUI(getResources().getDrawable(R.drawable.history_tab_selector), getString(R.string.history), tabListener);
-        musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector), getString(R.string.music), tabListener);
-        settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector), getString(R.string.settings), tabListener);
+        searchBTN.initUI(getResources().getDrawable(R.drawable.search_tab_selector), tabListener);
+        historyBTN.initUI(getResources().getDrawable(R.drawable.history_tab_selector), tabListener);
+        musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector), tabListener);
+        settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector), tabListener);
 
         fragments = new ArrayList<BaseFragment>(4);
         fragments.add(SEARCH_TAB, createSearchTab());

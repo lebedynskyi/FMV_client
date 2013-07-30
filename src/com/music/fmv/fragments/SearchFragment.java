@@ -384,7 +384,6 @@ public class SearchFragment  extends BaseFragment{
         else empty_list_view.setVisibility(View.VISIBLE);
     }
 
-
     //Click imagePauseListener for list with bands.
     private AdapterView.OnItemClickListener bandClickListener = new AdapterView.OnItemClickListener() {
         @Override
