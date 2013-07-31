@@ -11,7 +11,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  */
 public class Core {
     private static Core instance;
-    private NotificationManager mNotificationManager;
+    private NotifyManager mNotificationManager;
     private CacheManager mCacheManager ;
     private SettingsManager mSettingsManager;
     private DisplayImageOptions notCachedOptions;
@@ -28,12 +28,12 @@ public class Core {
     }
 
     private Core(){
-        mNotificationManager = new NotificationManager(this);
+        mNotificationManager = new NotifyManager(this);
         mCacheManager = new CacheManager(this);
         mSettingsManager = new SettingsManager(this);
     }
 
-    public NotificationManager getNotificationManager() {
+    public NotifyManager getNotificationManager() {
         return mNotificationManager;
     }
 
@@ -48,10 +48,10 @@ public class Core {
     public DisplayImageOptions getNotcachedOptions(){
         if (notCachedOptions == null){
             notCachedOptions = new DisplayImageOptions.Builder()
-                    .showStubImage(R.drawable.empty_band_star)
+                    .showStubImage(R.drawable.default_artist_medium)
                     .cacheInMemory(true)
-                    .displayer(new FadeInBitmapDisplayer(500))
-                    .showImageForEmptyUri(R.drawable.empty_band_star)
+                    .displayer(new FadeInBitmapDisplayer(200))
+                    .showImageForEmptyUri(R.drawable.default_artist_medium)
                     .cacheOnDisc(false)
                     .build();
         }

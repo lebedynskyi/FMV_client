@@ -1,9 +1,15 @@
 package com.music.fmv.services;
 
 import android.app.IntentService;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.IBinder;
+import android.widget.Toast;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
 
@@ -18,7 +24,7 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 
-public class PlayerService extends IntentService implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
+public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener {
     public static final String TRACK_KEY = "TRACK_KEY";
     public static final String LIST_KEY = "LIST_KEY";
@@ -36,33 +42,33 @@ public class PlayerService extends IntentService implements MediaPlayer.OnPrepar
     public enum ACTION{
         PlAY, ADD, STOP
     }
-
-    public PlayerService(String name) {
-        super(name);
-    }
+//
+//    public PlayerService(String name) {
+//        super(name);
+//    }
 
     @Override
     public void onCreate() {
+        Toast.makeText(this, "Service created", Toast.LENGTH_SHORT).show();
         super.onCreate();
         playerQueue = new ArrayList<PlayableSong>();
         mPlayer = new MediaPlayer();
         core = Core.getInstance();
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        ACTION act = (ACTION) intent.getExtras().getSerializable(ACTION_KEY);
-        if (act == null) return;
-        if (act == ACTION.STOP){
-            onDestroy();
-        }
+        registerReceiver(receiver, new IntentFilter("test"));
     }
 
     @Override
     public void onDestroy() {
         releasePlayer();
         clearNotify();
+        unregisterReceiver(receiver);
+        Toast.makeText(this, "Service destroyed", Toast.LENGTH_SHORT).show();
         super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     //Clears all notifications linked with player
@@ -102,6 +108,7 @@ public class PlayerService extends IntentService implements MediaPlayer.OnPrepar
 
     }
 
+
     //Players listeners
     @Override
     public void onCompletion(MediaPlayer mp) {
@@ -123,5 +130,11 @@ public class PlayerService extends IntentService implements MediaPlayer.OnPrepar
         return false;
     }
 
-
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(PlayerService.this, "ON RECEIVE", Toast.LENGTH_SHORT).show();
+//            System.out.print("dasdasdasdasdasdasdas");
+        }
+    };
 }

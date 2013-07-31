@@ -1,8 +1,12 @@
 package com.music.fmv.core;
 
 import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -28,7 +32,12 @@ public abstract class BaseActivity extends FragmentActivity{
         mMediator = new ActivityMediator(this);
         onCreated(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(findViewById(android.R.id.content), this);
+        startPlayer();
         checkAdvert();
+    }
+
+    protected void startPlayer(){
+        bindService(new Intent(this, PlayerService.class), mConnection, BIND_AUTO_CREATE);
     }
 
     private void checkAdvert() {
@@ -52,7 +61,6 @@ public abstract class BaseActivity extends FragmentActivity{
         return false;
     }
 
-
     protected final boolean isPlayerRunned() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -62,6 +70,20 @@ public abstract class BaseActivity extends FragmentActivity{
         }
         return false;
     }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+        }
+    };
 
     protected abstract void onCreated(Bundle state);
 }

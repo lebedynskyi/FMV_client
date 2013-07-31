@@ -1,5 +1,6 @@
 package com.music.fmv.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -7,10 +8,12 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.core.Core;
 import com.music.fmv.fragments.HistoryFragment;
 import com.music.fmv.fragments.MusicFragment;
 import com.music.fmv.fragments.SearchFragment;
 import com.music.fmv.fragments.SettingsFragment;
+import com.music.fmv.services.PlayerService;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
 
@@ -29,6 +32,8 @@ public class MainActivity extends BaseActivity {
     private TabButton historyBTN;
     private TabButton musicBTN;
     private TabButton settingsBTN;
+
+    private int backPressed = 0;
 
 
     private List<BaseFragment> fragments;
@@ -142,4 +147,26 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        if (backPressed == 0 ){
+            Core.getInstance().getNotificationManager().notifyProgress(this, 0);
+            backPressed++;
+            return;
+        }
+
+        if (backPressed == 1){
+            Core.getInstance().getNotificationManager().removeProgress(this);
+            backPressed++;
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, PlayerService.class));
+    }
 }
