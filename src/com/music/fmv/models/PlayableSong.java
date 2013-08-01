@@ -42,4 +42,12 @@ public class PlayableSong extends BaseSerializableModel{
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    @Override
+    public String toString() {
+        if (artist == null && title == null) return "";
+        if (artist == null) return title;
+        if (title == null) return artist;
+        return artist + " -" + title;
+    }
 }

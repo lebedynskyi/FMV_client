@@ -1,18 +1,20 @@
 package com.music.fmv.services;
 
-import android.app.IntentService;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Handler;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.widget.Toast;
+import com.music.fmv.R;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -26,35 +28,30 @@ import java.util.ArrayList;
 
 public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener {
-    public static final String TRACK_KEY = "TRACK_KEY";
-    public static final String LIST_KEY = "LIST_KEY";
+    public static final String RECEIVER_ACTION = "RECEIVER_ACTION";
     public static final String ACTION_KEY = "ACTION_KEY";
+
+    public static final String EXTRAS_SONGS_KEY = "EXTRAS_SONGS_KEY";
 
     private MediaPlayer mPlayer;
     private Core core;
-//    private Handler mHandler;
     private ArrayList<PlayableSong> playerQueue;
 
-    public enum PLAYER_STATUS{
+    public enum PLAYER_STATUS {
         PLAYING, PAUSED, STOPPED, STARTED
     }
 
-    public enum ACTION{
-        PlAY, ADD, STOP
+    public enum ACTION {
+        PlAY, ADD, STOP, PAUSE, NEXT, PREV
     }
-//
-//    public PlayerService(String name) {
-//        super(name);
-//    }
 
     @Override
     public void onCreate() {
         Toast.makeText(this, "Service created", Toast.LENGTH_SHORT).show();
         super.onCreate();
         playerQueue = new ArrayList<PlayableSong>();
-        mPlayer = new MediaPlayer();
         core = Core.getInstance();
-        registerReceiver(receiver, new IntentFilter("test"));
+        registerReceiver(receiver, new IntentFilter(RECEIVER_ACTION));
     }
 
     @Override
@@ -73,51 +70,62 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     //Clears all notifications linked with player
     private void clearNotify() {
-        core.getNotificationManager().removeProgress(this);
+        core.getNotificationManager().removePlayer(this);
     }
 
     private void notifyState() {
 
     }
 
-    public void pause(){
+    public void pause() {
 
     }
 
-    public void previous(){
+    public void previous() {
 
     }
 
-    public void next(){
+    public void next() {
 
     }
 
-    public void stop(){
+    public void stop() {
 
     }
 
-    public void playSong(){
-
+    public void playSong(PlayableSong song){
+        try {
+            releasePlayer();
+            mPlayer = new MediaPlayer();
+            mPlayer.setDataSource(song.getUrl());
+            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mPlayer.setOnInfoListener(this);
+            mPlayer.setOnBufferingUpdateListener(this);
+            mPlayer.setOnPreparedListener(this);
+            mPlayer.setOnCompletionListener(this);
+        }catch (Exception e){
+            Toast.makeText(this, getString(R.string.cannot_play_song) + " " + song.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void playByHttp(){
-
-    }
-
-    private void releasePlayer(){
-
+    private void releasePlayer() {
+        playerQueue.clear();
+        if (mPlayer == null) return;
+        mPlayer.stop();
+        mPlayer.release();
     }
 
 
     //Players listeners
     @Override
     public void onCompletion(MediaPlayer mp) {
-
+        notifyState();
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
+        notifyState();
     }
 
     @Override
@@ -130,11 +138,40 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return false;
     }
 
-    public BroadcastReceiver receiver = new BroadcastReceiver() {
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(PlayerService.this, "ON RECEIVE", Toast.LENGTH_SHORT).show();
-//            System.out.print("dasdasdasdasdasdasdas");
+            String action = intent.getAction();
+            if (TextUtils.isEmpty(action) || !action.equals(RECEIVER_ACTION) || intent.getExtras() == null) return;
+            ACTION act = (ACTION) intent.getSerializableExtra(ACTION_KEY);
+
+            if (act == null) return;
+
+            Toast.makeText(context, act.name(), Toast.LENGTH_SHORT).show();
+
+            switch (act){
+                case PREV:
+                    previous();
+                    break;
+                case PAUSE:
+                    pause();
+                    break;
+                case NEXT:
+                    next();
+                    break;
+                case ADD:
+                    ArrayList<PlayableSong> songs = (ArrayList<PlayableSong>) intent.getSerializableExtra(EXTRAS_SONGS_KEY);
+                    playerQueue.addAll(songs);
+                    break;
+                case PlAY:
+                    PlayableSong song = (PlayableSong) intent.getSerializableExtra(EXTRAS_SONGS_KEY);
+                    playerQueue.clear();
+                    playerQueue.add(song);
+                    playSong(song);
+                    break;
+                case STOP:
+                    releasePlayer();
+            }
         }
     };
 }

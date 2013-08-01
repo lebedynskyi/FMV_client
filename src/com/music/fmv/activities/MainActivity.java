@@ -151,13 +151,13 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (backPressed == 0 ){
-            Core.getInstance().getNotificationManager().notifyProgress(this, 0);
+            Core.getInstance().getNotificationManager().notifyPlayer(this);
             backPressed++;
             return;
         }
 
         if (backPressed == 1){
-            Core.getInstance().getNotificationManager().removeProgress(this);
+            Core.getInstance().getNotificationManager().removePlayer(this);
             backPressed++;
             return;
         }
