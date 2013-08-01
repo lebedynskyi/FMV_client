@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.services.PlayerService;
+import com.music.fmv.services.ServiceBus;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
@@ -24,6 +25,7 @@ import com.music.fmv.utils.ViewUtils;
 public abstract class BaseActivity extends FragmentActivity{
     protected Core mCoreManager;
     protected ActivityMediator mMediator;
+    private ServiceBus serviceBus;
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
@@ -32,11 +34,11 @@ public abstract class BaseActivity extends FragmentActivity{
         mMediator = new ActivityMediator(this);
         onCreated(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(findViewById(android.R.id.content), this);
-        startPlayer();
         checkAdvert();
     }
 
-    protected void startPlayer(){
+    protected void onStart(){
+        super.onStart();
         bindService(new Intent(this, PlayerService.class), mConnection, BIND_AUTO_CREATE);
     }
 
@@ -72,11 +74,12 @@ public abstract class BaseActivity extends FragmentActivity{
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
-
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-
+            if (service instanceof ServiceBus){
+                serviceBus = (ServiceBus)service;
+                serviceBus.setActivity(BaseActivity.this);
+            }
         }
 
         @Override
@@ -86,4 +89,14 @@ public abstract class BaseActivity extends FragmentActivity{
     };
 
     protected abstract void onCreated(Bundle state);
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //TODO CHECK STATE. IF NOT PLAYING -> UNBIND
+        if (serviceBus != null) {
+            serviceBus.setActivity(null);
+        }
+        unbindService(mConnection);
+    }
 }

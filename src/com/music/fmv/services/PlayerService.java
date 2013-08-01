@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.widget.Toast;
 import com.music.fmv.R;
+import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
 
@@ -33,6 +34,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     public static final String EXTRAS_SONGS_KEY = "EXTRAS_SONGS_KEY";
 
+    private ServiceBus serviceBus;
     private MediaPlayer mPlayer;
     private Core core;
     private ArrayList<PlayableSong> playerQueue;
@@ -65,7 +67,18 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        if (serviceBus != null){
+            serviceBus.setPlayer(null);
+        }
+        serviceBus = new ServiceBus();
+        serviceBus.setPlayer(this);
+        return serviceBus;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        if (serviceBus != null) serviceBus.setPlayer(null);
+        return super.onUnbind(intent);
     }
 
     //Clears all notifications linked with player

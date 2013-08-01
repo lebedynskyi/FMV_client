@@ -163,10 +163,4 @@ public class MainActivity extends BaseActivity {
         }
         super.onBackPressed();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopService(new Intent(this, PlayerService.class));
-    }
 }
