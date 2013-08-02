@@ -34,7 +34,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     public static final String EXTRAS_SONGS_KEY = "EXTRAS_SONGS_KEY";
 
-    private ServiceBus serviceBus;
     private MediaPlayer mPlayer;
     private Core core;
     private ArrayList<PlayableSong> playerQueue;
@@ -52,7 +51,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         Toast.makeText(this, "Service created", Toast.LENGTH_SHORT).show();
         super.onCreate();
         playerQueue = new ArrayList<PlayableSong>();
-        core = Core.getInstance();
+        core = Core.getInstance(this);
         registerReceiver(receiver, new IntentFilter(RECEIVER_ACTION));
     }
 
@@ -67,18 +66,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public IBinder onBind(Intent intent) {
-        if (serviceBus != null){
-            serviceBus.setPlayer(null);
-        }
-        serviceBus = new ServiceBus();
-        serviceBus.setPlayer(this);
-        return serviceBus;
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        if (serviceBus != null) serviceBus.setPlayer(null);
-        return super.onUnbind(intent);
+        return null;
     }
 
     //Clears all notifications linked with player

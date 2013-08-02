@@ -1,6 +1,5 @@
 package com.music.fmv.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -8,12 +7,10 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.core.Core;
 import com.music.fmv.fragments.HistoryFragment;
 import com.music.fmv.fragments.MusicFragment;
 import com.music.fmv.fragments.SearchFragment;
 import com.music.fmv.fragments.SettingsFragment;
-import com.music.fmv.services.PlayerService;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
 
@@ -107,6 +104,7 @@ public class MainActivity extends BaseActivity {
         pager.setCurrentItem(HISTORY_TAB);
     }
 
+    //Listener for buttons on the bottom of screen (Tabs)
     private TabButton.ClickCallBack tabListener = new TabButton.ClickCallBack() {
         @Override
         public void onClick(View view) {
@@ -126,6 +124,7 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    //Listener for viewpager. OnPageSelected() clicked when page was changed by swiping
     private ViewPager.OnPageChangeListener pagerListener = new ViewPager.OnPageChangeListener() {
         @Override public void onPageScrolled(int i, float v, int i2) {}
         @Override public void onPageScrollStateChanged(int i) {}
@@ -147,20 +146,4 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
-
-    @Override
-    public void onBackPressed() {
-        if (backPressed == 0 ){
-            Core.getInstance().getNotificationManager().notifyPlayer(this);
-            backPressed++;
-            return;
-        }
-
-        if (backPressed == 1){
-            Core.getInstance().getNotificationManager().removePlayer(this);
-            backPressed++;
-            return;
-        }
-        super.onBackPressed();
-    }
 }

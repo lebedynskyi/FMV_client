@@ -22,7 +22,7 @@ public class App extends Application{
         super.onCreate();
 
         //Initialization of core Manager
-        Core.getInstance();
+        Core.getInstance(this);
 
         File imageCache = new File(SettingsManager.getImageCacheFolder(this));
         imageCache.mkdirs();

@@ -107,7 +107,7 @@ public class SearchFragment  extends BaseFragment{
         //Initialization of empty view for lists
         empty_list_view = (TextView) mainView.findViewById(R.id.empty_list_view);
 
-        //Initialization of progress footer view
+        //Initialization of footer view(ProgressBar)
         rotateFooter = inflater.inflate(R.layout.rotate_footer, null, false);
 
         //Configuration of band_result_list

@@ -24,13 +24,13 @@ import java.util.List;
  */
 
 public class SearchBandAdapter extends BaseAdapter{
+    private final LayoutInflater inflater;
     private List<SearchBandModel> mList;
-    private Context context;
     private ImageLoader imageLoader;
 
     public SearchBandAdapter(List<SearchBandModel> mList, Context context) {
         this.mList = mList;
-        this.context = context;
+        this.inflater = LayoutInflater.from(context);
         imageLoader = ImageLoader.getInstance();
     }
 
@@ -54,7 +54,7 @@ public class SearchBandAdapter extends BaseAdapter{
         ViewHolder holder = null;
         if (convertView == null){
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.search_band_row, parent, false);
+            convertView = inflater.inflate(R.layout.search_band_row, parent, false);
             holder.briefDescr = (TextView) convertView.findViewById(R.id.band_descr);
             holder.icon = (ImageView) convertView.findViewById(R.id.band_icon);
             holder.name = (TextView) convertView.findViewById(R.id.band_name);

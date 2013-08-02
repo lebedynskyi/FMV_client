@@ -1,11 +1,13 @@
 package com.music.fmv.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.music.fmv.R;
 import com.music.fmv.models.PlayableSong;
 
 import java.util.ArrayList;
@@ -17,7 +19,12 @@ import java.util.ArrayList;
  */
 public class SearchSongAdapter extends BaseAdapter{
     private ArrayList<PlayableSong>mdata;
-    private Context c;
+    private LayoutInflater inflater;
+
+    public SearchSongAdapter(Context c ,ArrayList<PlayableSong> list){
+        mdata = list;
+        inflater = LayoutInflater.from(c);
+    }
 
     @Override
     public int getCount() {
@@ -36,7 +43,14 @@ public class SearchSongAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        ViewHolder holder = null;
+        if (convertView == null){
+            holder = new ViewHolder();
+            convertView = inflater.inflate(R.layout.search_songs_row, parent, false);
+        }else holder = (ViewHolder) convertView.getTag();
+
+
+        return convertView;
     }
 
     private class ViewHolder{

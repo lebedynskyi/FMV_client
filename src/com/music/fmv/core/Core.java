@@ -1,5 +1,6 @@
 package com.music.fmv.core;
 
+import android.content.Context;
 import com.music.fmv.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -11,23 +12,25 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  */
 public class Core {
     private static Core instance;
+    private final Context app;
     private NotifyManager mNotificationManager;
     private CacheManager mCacheManager ;
     private SettingsManager mSettingsManager;
     private DisplayImageOptions notCachedOptions;
 
-    public static Core getInstance() {
+    public static Core getInstance(Context app) {
         if (instance == null){
             synchronized (Core.class){
                 if(instance == null){
-                    instance = new Core();
+                    instance = new Core(app);
                 }
             }
         }
         return instance;
     }
 
-    private Core(){
+    private Core(Context app){
+        this.app = app;
         mNotificationManager = new NotifyManager(this);
         mCacheManager = new CacheManager(this);
         mSettingsManager = new SettingsManager(this);
@@ -55,7 +58,6 @@ public class Core {
                     .cacheOnDisc(false)
                     .build();
         }
-
         return notCachedOptions;
     }
 }

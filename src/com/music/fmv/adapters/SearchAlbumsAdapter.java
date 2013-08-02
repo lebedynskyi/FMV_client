@@ -20,13 +20,13 @@ import java.util.ArrayList;
  * Time: 3:45 PM
  */
 public class SearchAlbumsAdapter extends BaseAdapter{
+    private final LayoutInflater inflater;
     private ArrayList<SearchAlbumModel> mData;
-    private Context context;
     private ImageLoader imageLoader;
 
     public SearchAlbumsAdapter(ArrayList<SearchAlbumModel> mData, Context context) {
         this.mData = mData;
-        this.context = context;
+        this.inflater = LayoutInflater.from(context);
         imageLoader = ImageLoader.getInstance();
     }
 
@@ -49,7 +49,7 @@ public class SearchAlbumsAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.search_album_row, parent, false);
+            convertView = inflater.inflate(R.layout.search_album_row, parent, false);
             holder = new ViewHolder();
             holder.descr = (TextView) convertView.findViewById(R.id.alum_brief);
             holder.icon = (ImageView) convertView.findViewById(R.id.album_icon);
