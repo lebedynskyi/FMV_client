@@ -12,7 +12,7 @@ import java.util.List;
  * Date: 7/22/13
  * Time: 3:56 PM
  */
-public class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumModel>>{
+public abstract class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumModel>>{
     private String searchQuery;
     private Integer page;
 
@@ -24,7 +24,7 @@ public class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumModel>>{
 
     @Override
     protected final List<SearchAlbumModel> doInBackground(Object... params) {
-        String language = Core.getInstance().getSettingsManager().getResultLanguage(context);
+        String language = Core.getInstance(context).getSettingsManager().getResultLanguage(context);
         try {
             return api.searchAlbum(searchQuery, language, page);
         } catch (Exception e) {

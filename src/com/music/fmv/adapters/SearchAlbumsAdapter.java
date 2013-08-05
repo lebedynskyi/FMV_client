@@ -61,7 +61,7 @@ public class SearchAlbumsAdapter extends BaseAdapter{
         holder.descr.setText(model.getBriefDescr());
         holder.artistName.setText(model.getArtistName());
         holder.name.setText(model.getAlbumName());
-        imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance().getNotcachedOptions());
+        imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance(convertView.getContext()).getNotcachedOptions());
         return convertView;
     }
 

@@ -3,14 +3,13 @@ package com.music.fmv.core;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.utils.ActivityMediator;
-import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
 
 /**
@@ -21,10 +20,11 @@ import com.music.fmv.utils.ViewUtils;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class BaseFragment extends Fragment {
-    protected Core core = Core.getInstance();
+    protected Core core = Core.getInstance(getActivity());
     protected View mainView;
     protected ActivityMediator mMediator;
     protected BaseActivity baseActivity;
+    protected LayoutInflater inflater;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,14 +35,25 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        createView(inflater, container, savedInstanceState);
+        this.inflater = inflater;
+        createView(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(mainView, getActivity());
         return mainView;
     }
 
-    protected boolean runTask(AsyncTask task){
+    protected boolean runTask(AsyncTask task) {
         return baseActivity.runTask(task);
     }
 
-    protected abstract void createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+    protected View inflateView(int id) {
+        return inflater.inflate(id, null, false);
+    }
+
+    protected View createSearchHeader(TextView.OnEditorActionListener searchListener) {
+        View v = inflater.inflate(R.layout.search_header, null, false);
+        ((EditText) v.findViewById(R.id.search_field)).setOnEditorActionListener(searchListener);
+        return v;
+    }
+
+    protected abstract void createView(Bundle savedInstanceState);
 }

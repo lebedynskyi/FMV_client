@@ -7,10 +7,7 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.fragments.HistoryFragment;
-import com.music.fmv.fragments.MusicFragment;
-import com.music.fmv.fragments.SearchFragment;
-import com.music.fmv.fragments.SettingsFragment;
+import com.music.fmv.fragments.*;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
 
@@ -79,7 +76,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private BaseFragment createSearchTab() {
-        return new SearchFragment();
+        return new SearchFragmentNew();
     }
 
     public void searchTabClicked() {

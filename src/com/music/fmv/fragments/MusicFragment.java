@@ -13,7 +13,7 @@ import com.music.fmv.core.BaseFragment;
  */
 public class MusicFragment extends BaseFragment {
     @Override
-    protected void createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mainView = inflater.inflate(R.layout.music_fragment, container, false);
+    protected void createView(Bundle savedInstanceState) {
+        mainView = inflateView(R.layout.music_fragment);
     }
 }

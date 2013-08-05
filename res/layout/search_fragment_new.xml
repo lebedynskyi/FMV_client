@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:glow_btn="http://schemas.android.com/apk/res/com.music.fmv"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp" android:id="@+id/top_button_container">
+        <com.music.fmv.views.GlowButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/artist_tab" android:layout_weight="1"
+                glow_btn:text="@string/by_artist"
+                android:textColor="@color/white"/>
+        <com.music.fmv.views.GlowButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                glow_btn:text="@string/by_album"
+                android:id="@+id/album_tab" android:layout_weight="1"
+                android:textColor="@color/white"/>
+        <com.music.fmv.views.GlowButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                glow_btn:text="@string/by_name"
+                android:id="@+id/song_tab" android:layout_weight="1"
+                android:textColor="@color/white"/>
+    </LinearLayout>
+    <com.music.fmv.widgets.CustomViewPager android:layout_height="match_parent"
+               android:layout_width="match_parent"
+               android:id="@+id/search_pager"/>
+</LinearLayout>

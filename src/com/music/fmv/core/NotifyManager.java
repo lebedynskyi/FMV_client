@@ -64,26 +64,7 @@ public class NotifyManager extends Manager{
         notify(PLAYER_NOTIFY_ID, R.drawable.icon, notificationView, c);
     }
 
-//    //Used to send notification in api level > 15
-//    private void notify15(int id, int iconId, RemoteViews remoteViews, Context c){
-//        // Creates an explicit intent for an PlayerActivity
-//        Intent resultIntent = new Intent(c, BandInfoActivity.class);
-//        PendingIntent resultPendingIntent = PendingIntent.getActivity(c, 0,resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        //Creating of notification
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(c).setSmallIcon(iconId).setContent(remoteViews);
-//        mBuilder.setContentIntent(resultPendingIntent);
-//
-//        //Getting NotificationManager
-//        NotificationManager mNotificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        // show notification with id.
-//        Notification notification = mBuilder.build();
-//        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-//        mNotificationManager.notify(id, notification);
-//    }
-
-    //Used to send notification in api level < 15
+    //Shows notification
     private void notify(int id, int iconId, RemoteViews remoteViews, Context c){
         //Creating notification
         NotificationManager mNotificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);

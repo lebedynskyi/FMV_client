@@ -64,7 +64,6 @@ public class ViewUtils {
                     ViewUtils.hideSoftKeyboard(activity);
                     return false;
                 }
-
             });
         }
 

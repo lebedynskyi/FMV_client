@@ -62,7 +62,7 @@ public class SearchBandAdapter extends BaseAdapter{
         }else holder = (ViewHolder) convertView.getTag();
         SearchBandModel model = mList.get(position);
         holder.name.setText(model.getName());
-        imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance().getNotcachedOptions());
+        imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance(convertView.getContext()).getNotcachedOptions());
         holder.briefDescr.setText(model.getDescr());
         return convertView;
     }

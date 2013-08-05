@@ -14,7 +14,7 @@ import com.music.fmv.core.BaseFragment;
 public class SettingsFragment extends BaseFragment{
 
     @Override
-    protected void createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mainView = inflater.inflate(R.layout.settings_fragment, container, false);
+    protected void createView(Bundle savedInstanceState) {
+        mainView = inflateView(R.layout.settings_fragment);
     }
 }
