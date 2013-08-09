@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +18,7 @@ import java.net.URL;
  * Time: 12:10 PM
  * To change this template use File | Settings | File Templates.
  */
+
 public class NetworkUtil {
     //returns true if network available
     public static boolean isNetworkAvailable(Context context) {
@@ -32,9 +34,11 @@ public class NetworkUtil {
     }
 
     //Method downloads a string from the url
-    public static String doRequest(String urlRequest) throws IOException {
+    public static String doRequest(String urlRequest) throws IOException , TimeoutException{
         URL url = new URL(urlRequest);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setConnectTimeout(10000); // 10 second for timeout
+        connection.setRequestMethod("GET");
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String s = null;
         StringBuilder sb  = new StringBuilder();

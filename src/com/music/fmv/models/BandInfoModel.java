@@ -21,7 +21,7 @@ public class BandInfoModel extends BaseSerializableModel{
         this.images = images;
     }
 
-    public ArrayList<SimilarBandModel> getSimilars() {
+    public ArrayList<SimilarBandModel> getSimilars(){
         return similars;
     }
 

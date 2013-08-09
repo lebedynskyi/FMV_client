@@ -1,17 +1,15 @@
 package com.music.fmv.api;
 
 import android.text.TextUtils;
+import com.music.fmv.models.BandInfoModel;
 import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.utils.NetworkUtil;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import static com.music.fmv.api.ApiUtils.generateUrl;
 
 /**
  * Created with IntelliJ IDEA.
@@ -84,36 +82,14 @@ public class Api {
         return null;
     }
 
+    public BandInfoModel getBandInfo() {
+        return null;
+    }
+
     //throws exception if Json response has error
     private void checkError(JSONObject response) {
         if (response.has("error")){
             throw new RuntimeException("Error in api response");
         }
-    }
-
-    //returns a valid url from Map
-    private String generateUrl(Map<String, String> params){
-        if (params.size() == 0) return "";
-
-        Iterator<String> keys = params.keySet().iterator();
-        StringBuilder urlBuilder = new StringBuilder();
-        int counter = 0;
-
-        while (keys.hasNext()){
-            String key = keys.next();
-            urlBuilder.append(counter++ == 0 ? "?" : "&").append(key).append("=").append(encodeString(params.get(key)));
-        }
-
-        return urlBuilder.toString();
-    }
-
-    public static String encodeString(String s){
-        if (TextUtils.isEmpty(s)) return "";
-        try {
-            return URLEncoder.encode(s, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return s;
     }
 }

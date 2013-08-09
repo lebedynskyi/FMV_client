@@ -10,7 +10,6 @@ import com.music.fmv.core.BaseActivity;
  * Time: 10:33 AM
  */
 public class PlayerActivity extends BaseActivity{
-
     @Override
     protected void onCreated(Bundle state) {
         setContentView(R.layout.band_info_activity);

@@ -5,10 +5,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchAlbumsAdapter;
 import com.music.fmv.core.BaseFragment;
@@ -39,12 +36,15 @@ public class SearchAlbumFragment extends BaseFragment {
     @Override
     protected void createView(Bundle savedInstanceState) {
         mainView =inflateView(R.layout.search_album_fagment);
+        adapter = new SearchAlbumsAdapter(albumsList, baseActivity);
+
         albumsListsView = (ListView) mainView.findViewById(R.id.albums_list);
         albumsListsView.addHeaderView(createSearchHeader(searchListener));
-        adapter = new SearchAlbumsAdapter(albumsList, baseActivity);
         albumsListsView.setAdapter(adapter);
+        albumsListsView.setOnItemClickListener(albumListener);
         albumsListsView.setHeaderDividersEnabled(false);
         albumsListsView.setOnScrollListener(scrollListener);
+
         rotateFooter = inflateView(R.layout.rotate_footer);
     }
 
@@ -94,7 +94,7 @@ public class SearchAlbumFragment extends BaseFragment {
     }
 
     private void getNextAlbumPage(){
-        if (albumPageAvailable >0) {
+        if (albumPageAvailable > 0) {
             searchAlbum(lastRequest, futureAlbumPage);
         }
     }
@@ -138,6 +138,13 @@ public class SearchAlbumFragment extends BaseFragment {
                 return true;
             }
             return false;
+        }
+    };
+
+    private AdapterView.OnItemClickListener albumListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Toast.makeText(baseActivity, "Not implemented", Toast.LENGTH_SHORT).show();
         }
     };
 }

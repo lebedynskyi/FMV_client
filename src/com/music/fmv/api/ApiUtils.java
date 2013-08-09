@@ -1,5 +1,6 @@
 package com.music.fmv.api;
 
+import android.text.TextUtils;
 import com.music.fmv.models.BandInfoModel;
 import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
@@ -8,8 +9,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +25,33 @@ import java.util.List;
  */
 public class ApiUtils {
     public static final String RESPONSE_TAG = "response";
+
+
+    public static String encodeString(String s){
+        if (TextUtils.isEmpty(s)) return "";
+        try {
+            return URLEncoder.encode(s, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    //returns a valid url from Map
+    public static String generateUrl(Map<String, String> params){
+        if (params.size() == 0) return "";
+
+        Iterator<String> keys = params.keySet().iterator();
+        StringBuilder urlBuilder = new StringBuilder();
+        int counter = 0;
+
+        while (keys.hasNext()){
+            String key = keys.next();
+            urlBuilder.append(counter++ == 0 ? "?" : "&").append(key).append("=").append(encodeString(params.get(key)));
+        }
+
+        return urlBuilder.toString();
+    }
 
     public static List<SearchBandModel> parseSearchBand(JSONObject response){
         ArrayList<SearchBandModel> result = new ArrayList<SearchBandModel>();

@@ -20,7 +20,7 @@ import com.music.fmv.utils.ViewUtils;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class BaseFragment extends Fragment {
-    protected Core core = Core.getInstance(getActivity());
+    protected Core core;
     protected View mainView;
     protected ActivityMediator mMediator;
     protected BaseActivity baseActivity;
@@ -29,8 +29,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMediator = new ActivityMediator(getActivity());
         baseActivity = (BaseActivity) getActivity();
+        core = Core.getInstance(baseActivity);
+        mMediator = new ActivityMediator(baseActivity);
     }
 
     @Override

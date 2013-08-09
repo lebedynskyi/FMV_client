@@ -5,14 +5,13 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchBandAdapter;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.models.BandInfoModel;
 import com.music.fmv.models.SearchBandModel;
+import com.music.fmv.tasks.GetBandTask;
 import com.music.fmv.tasks.SearchBandTask;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.LoadDialog;
@@ -36,6 +35,8 @@ public class SearchArtistFragment extends BaseFragment {
     private SearchBandAdapter artistsAdapter;
     private View rotateFooter;
 
+    private boolean getUserTaskRunned;
+
     @Override
     protected void createView(Bundle savedInstanceState) {
         mainView = inflateView(R.layout.search_artist_fragment);
@@ -45,6 +46,7 @@ public class SearchArtistFragment extends BaseFragment {
         artistsListView.setOnScrollListener(scrollListener);
         artistsAdapter = new SearchBandAdapter(artistsList, baseActivity);
         artistsListView.setAdapter(artistsAdapter);
+        artistsListView.setOnItemClickListener(artistClickListener);
         //Initialization of footer view(ProgressBar)
         rotateFooter = inflateView(R.layout.rotate_footer);
     }
@@ -159,6 +161,41 @@ public class SearchArtistFragment extends BaseFragment {
                 return true;
             }
             return false;
+        }
+    };
+
+    private AdapterView.OnItemClickListener artistClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (getUserTaskRunned) return;
+
+            SearchBandModel m = artistsList.get(position - artistsListView.getHeaderViewsCount());
+            GetBandTask task = new GetBandTask(baseActivity) {
+                public LoadDialog dialog;
+
+                @Override
+                protected void onPreExecute() {
+                    if (dialog == null){
+                        dialog = new LoadDialog(baseActivity, this);
+                    }
+                    dialog.show();
+                }
+
+                @Override
+                protected void onPostExecute(BandInfoModel bandInfoModel) {
+                    getUserTaskRunned = false;
+                    if (dialog != null) dialog.dismiss();
+                }
+
+                @Override
+                public void canceledByUser() {
+                    getUserTaskRunned = false;
+                }
+            };
+
+            if (runTask(task)){
+                getUserTaskRunned = true;
+            }
         }
     };
 }
