@@ -43,7 +43,7 @@ public class SearchSongsFragment extends BaseFragment{
     };
 
     private void processSearch(String s) {
-        Toast.makeText(baseActivity, "Not implemented", Toast.LENGTH_SHORT).show();
+
     }
 
     //Called when user click search on the soft keyboard

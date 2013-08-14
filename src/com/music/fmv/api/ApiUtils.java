@@ -1,10 +1,7 @@
 package com.music.fmv.api;
 
 import android.text.TextUtils;
-import com.music.fmv.models.BandInfoModel;
-import com.music.fmv.models.SearchAlbumModel;
-import com.music.fmv.models.SearchBandModel;
-import com.music.fmv.models.SimilarBandModel;
+import com.music.fmv.models.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -145,6 +142,10 @@ public class ApiUtils {
         }
         SearchAlbumModel.AVAILABLE_PAGES = response.optInt("pages");
         return albums;
+    }
+
+    public static ArrayList<PlayableSong> parseSearchSongs(JSONObject response) {
+        return null;
     }
 }
 
