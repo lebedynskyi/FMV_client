@@ -135,7 +135,7 @@ public class MainActivity extends BaseActivity {
         @Override public void onPageScrollStateChanged(int i) {}
 
         @Override
-        public void onPageSelected(int i) {
+        public void onPageSelected(int i){
             switch (i){
                 case SETTINGS_TAB:
                     settingsTabClicked();

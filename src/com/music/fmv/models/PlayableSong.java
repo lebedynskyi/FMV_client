@@ -10,6 +10,15 @@ public class PlayableSong extends BaseSerializableModel{
     private String artist;
     private String title;
     private int duration;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUrl() {
         return url;
@@ -49,5 +58,9 @@ public class PlayableSong extends BaseSerializableModel{
         if (artist == null) return title;
         if (title == null) return artist;
         return artist + " -" + title;
+    }
+
+    public boolean isPlayable(){
+        return url != null;
     }
 }

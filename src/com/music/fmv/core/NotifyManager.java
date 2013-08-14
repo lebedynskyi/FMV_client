@@ -25,80 +25,88 @@ public class NotifyManager extends Manager{
 
     public NotifyManager(Core coreManager) {
         super(coreManager);
+        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void notifyPlayer(Context c){
+    @Override
+    protected void finish() {
+        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(PLAYER_NOTIFY_ID);
+        mNotificationManager.cancel(DOWNLOAD_NOTIFY_ID);
+    }
+
+    public void notifyPlayer(){
         if (android.os.Build.VERSION.SDK_INT  < 15 ){
-            show8ApiPlayerProgress(c);
-        }else show15ApiPlayerProgress(c);
+            show8ApiPlayerProgress();
+        }else show15ApiPlayerProgress();
     }
 
-    public void removePlayer(Context c){
-        NotificationManager mNotificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+    public void removePlayer(){
+        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(PLAYER_NOTIFY_ID);
     }
-    public void notifyDownloading(Context c){
+    public void notifyDownloading(){
 
     }
 
-    public void removeDownloading(Context c){
+    public void removeDownloading(){
 
     }
 
-    private void show8ApiPlayerProgress(Context c) {
-        RemoteViews remoteView = new RemoteViews(c.getPackageName(), R.layout.simple_player_notification);
-        notify(PLAYER_NOTIFY_ID, R.drawable.icon, remoteView, c);
+    private void show8ApiPlayerProgress() {
+        RemoteViews remoteView = new RemoteViews(core.getContext().getPackageName(), R.layout.simple_player_notification);
+        notify(PLAYER_NOTIFY_ID, R.drawable.icon, remoteView);
     }
 
-    private void show15ApiPlayerProgress(Context c) {
-        RemoteViews notificationView = new RemoteViews(c.getPackageName(), R.layout.progress_notification);
+    private void show15ApiPlayerProgress() {
+        RemoteViews notificationView = new RemoteViews(core.getContext().getPackageName(), R.layout.progress_notification);
 
-        if(prevPendIntent == null) createPrevPending(c);
-        if(nextPendIntent == null) createNextPending(c);
-        if(pausePendIntent == null) createPausePending(c);
+        if(prevPendIntent == null) createPrevPending();
+        if(nextPendIntent == null) createNextPending();
+        if(pausePendIntent == null) createPausePending();
 
         notificationView.setOnClickPendingIntent(R.id.prev_notify_button, prevPendIntent);
         notificationView.setOnClickPendingIntent(R.id.next_notify_button, nextPendIntent);
         notificationView.setOnClickPendingIntent(R.id.play_pause_notify_button, pausePendIntent);
 
-        notify(PLAYER_NOTIFY_ID, R.drawable.icon, notificationView, c);
+        notify(PLAYER_NOTIFY_ID, R.drawable.icon, notificationView);
     }
 
     //Shows notification
-    private void notify(int id, int iconId, RemoteViews remoteViews, Context c){
+    private void notify(int id, int iconId, RemoteViews remoteViews){
         //Creating notification
-        NotificationManager mNotificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         long when = System.currentTimeMillis();
         Notification notification = new Notification(iconId, "Playing", when);
         notification.contentView = remoteViews;
 
         //set pending intent to notification
-        Intent notificationIntent = new Intent(c, PlayerActivity.class);
-        notification.contentIntent = PendingIntent.getActivity(c, 0, notificationIntent, 0);
+        Intent notificationIntent = new Intent(core.getContext(), PlayerActivity.class);
+        notification.contentIntent = PendingIntent.getActivity(core.getContext(), 0, notificationIntent, 0);
 
         //adding flag, that will disable cancel of notification
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
         mNotificationManager.notify(id, notification);
     }
 
-    private void createPausePending(Context c) {
+    private void createPausePending() {
         Intent intent = new Intent();
         intent.setAction(PlayerService.RECEIVER_ACTION);
         intent.putExtra(PlayerService.ACTION_KEY, PlayerService.ACTION.PAUSE);
-        pausePendIntent = PendingIntent.getBroadcast(c, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pausePendIntent = PendingIntent.getBroadcast(core.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void createNextPending(Context c) {
+    private void createNextPending() {
         Intent intent = new Intent();
         intent.setAction(PlayerService.RECEIVER_ACTION);
         intent.putExtra(PlayerService.ACTION_KEY, PlayerService.ACTION.NEXT);
-        nextPendIntent = PendingIntent.getBroadcast(c, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        nextPendIntent = PendingIntent.getBroadcast(core.getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void createPrevPending(Context c) {
+    private void createPrevPending() {
         Intent intent = new Intent();
         intent.setAction(PlayerService.RECEIVER_ACTION);
         intent.putExtra(PlayerService.ACTION_KEY, PlayerService.ACTION.PREV);
-        prevPendIntent = PendingIntent.getBroadcast(c, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        prevPendIntent = PendingIntent.getBroadcast(core.getContext(), 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

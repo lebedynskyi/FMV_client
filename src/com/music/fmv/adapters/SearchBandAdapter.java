@@ -1,7 +1,6 @@
 package com.music.fmv.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,7 @@ import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.SearchBandModel;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.List;
 
@@ -62,7 +59,7 @@ public class SearchBandAdapter extends BaseAdapter{
         }else holder = (ViewHolder) convertView.getTag();
         SearchBandModel model = mList.get(position);
         holder.name.setText(model.getName());
-        imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance(convertView.getContext()).getNotcachedOptions());
+        imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance(convertView.getContext()).getNotCachedOptions());
         holder.briefDescr.setText(model.getDescr());
         return convertView;
     }

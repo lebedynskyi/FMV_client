@@ -12,6 +12,15 @@ public class BandInfoModel extends BaseSerializableModel{
     private ArrayList<String> images;
     private ArrayList<SimilarBandModel> similars;
     private String descr;
+    private String name;
+    private ArrayList<String> genres;
+    private String url;
+
+    public void obtainSearchModel(SearchBandModel searchBandModel) {
+        this.name = searchBandModel.getName();
+        this.genres = searchBandModel.getGenres();
+        this.url = searchBandModel.getUrl();
+    }
 
     public ArrayList<String> getImages() {
         return images;

@@ -5,9 +5,11 @@ package com.music.fmv.core;
  * Date: 7/12/13
  * Time: 5:58 PM
  */
-public class Manager {
-    protected Core mManager;
+public abstract class Manager {
+    protected Core core;
     protected Manager(Core coreManager){
-        mManager = coreManager;
+        core = coreManager;
     }
+
+    protected abstract void finish();
 }

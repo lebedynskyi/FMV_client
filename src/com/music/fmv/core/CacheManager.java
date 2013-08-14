@@ -17,6 +17,11 @@ public class CacheManager extends Manager{
         mCache = new HashMap<String, WeakReference<Object>>();
     }
 
+    @Override
+    protected void finish() {
+
+    }
+
     public Map<String, WeakReference<Object>> getAllCache(){
         return mCache;
     }

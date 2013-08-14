@@ -44,4 +44,7 @@ public class SettingsManager extends Manager{
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value).commit();
     }
+
+    //not used
+    @Override protected void finish() {}
 }

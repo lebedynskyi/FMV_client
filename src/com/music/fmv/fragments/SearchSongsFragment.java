@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.models.SearchSongModel;
+import com.music.fmv.models.PlayableSong;
 
 import java.util.ArrayList;
 
@@ -20,12 +20,9 @@ import java.util.ArrayList;
  * Time: 12:32 PM
  */
 public class SearchSongsFragment extends BaseFragment{
-    private int availableSongsCount = 0;
-
     private ListView songsListView;
-    private ArrayList<SearchSongModel> reserveSongs;
-    private ArrayList<SearchSongModel> songsInAdapter = new ArrayList<SearchSongModel>();
-
+    private ArrayList<PlayableSong> reserveSongs;
+    private ArrayList<PlayableSong> songsInAdapter = new ArrayList<PlayableSong>();
 
     @Override
     protected void createView(Bundle savedInstanceState) {
@@ -34,6 +31,7 @@ public class SearchSongsFragment extends BaseFragment{
         songsListView.setOnItemClickListener(songsListener);
         songsListView.addHeaderView(createSearchHeader(searchListener));
         songsListView.setHeaderDividersEnabled(false);
+        songsListView.setOnItemClickListener(songClickListener);
         songsListView.setAdapter(null);
     }
 
@@ -57,6 +55,13 @@ public class SearchSongsFragment extends BaseFragment{
                 return true;
             }
             return false;
+        }
+    };
+
+    private AdapterView.OnItemClickListener songClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         }
     };
 }

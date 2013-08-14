@@ -6,4 +6,5 @@ package com.music.fmv.models;
  * Time: 12:16 PM
  */
 public class BandAlbumModel extends BaseSerializableModel{
+
 }

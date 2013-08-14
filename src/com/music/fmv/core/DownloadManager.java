@@ -14,4 +14,9 @@ public class DownloadManager extends Manager {
     protected DownloadManager(Core coreManager) {
         super(coreManager);
     }
+
+    @Override
+    protected void finish() {
+
+    }
 }

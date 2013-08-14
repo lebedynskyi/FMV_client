@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.music.fmv.R;
+import com.music.fmv.models.Captcha;
 import com.music.fmv.services.PlayerService;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
+import com.music.fmv.widgets.CaptchaDialog;
 import com.smaato.soma.AdType;
 import com.smaato.soma.BannerView;
 
@@ -27,7 +29,7 @@ public abstract class BaseActivity extends FragmentActivity{
     protected Handler handler;
 
     @Override
-    protected final void onCreate(Bundle savedInstanceState) {
+    protected final void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         mCore = Core.getInstance(this);
         mMediator = new ActivityMediator(this);
@@ -51,7 +53,7 @@ public abstract class BaseActivity extends FragmentActivity{
         try {
             ViewGroup advertView = (ViewGroup)findViewById(R.id.advert_layout);
             if (advertView == null) return;
-            if (NetworkUtil.isNetworkAvailable(this)){
+            if (NetworkUtil.isNetworkAvailable(this) && false){
                 initAdvert(advertView);
             }else advertView.setVisibility(View.GONE);
         }catch (Exception e){
@@ -89,5 +91,11 @@ public abstract class BaseActivity extends FragmentActivity{
         return false;
     }
 
+    public void showCaptchaDialog(Captcha c, CaptchaDialog.CaptchaCallBack callBack){
+        CaptchaDialog dialog = new CaptchaDialog();
+        dialog.setCaptcha(c);
+        dialog.setCaptchaCallBack(callBack);
+        dialog.show(getSupportFragmentManager(), c.getUrl());
+    }
     protected abstract void onCreated(Bundle state);
 }

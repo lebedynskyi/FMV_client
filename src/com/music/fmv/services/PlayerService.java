@@ -28,7 +28,7 @@ import java.util.ArrayList;
  */
 
 public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
-        MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener {
+        MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener, Player {
     public static final String RECEIVER_ACTION = "RECEIVER_ACTION";
     public static final String ACTION_KEY = "ACTION_KEY";
 
@@ -71,7 +71,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     //Clears all notifications linked with player
     private void clearNotify() {
-        core.getNotificationManager().removePlayer(this);
+        core.getNotificationManager().removePlayer();
     }
 
     private void notifyState() {
