@@ -4,20 +4,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp" android:padding="5dp">
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/song_name" android:singleLine="true" android:ellipsize="end"/>
+            android:id="@+id/song_owner" android:singleLine="true" android:ellipsize="end"
+            android:layout_toLeftOf="@+id/song_duration" android:layout_below="@+id/song_name"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/song_owner" android:layout_below="@+id/song_name"
+            android:id="@+id/song_name"
             android:textColor="#000000" android:textSize="20sp" android:singleLine="true" android:ellipsize="end"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/song_duration" android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            />
+    <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imageView" android:layout_alignParentRight="true" android:layout_alignParentBottom="true"/>
 </RelativeLayout>

@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.SearchAlbumModel;
 
 import java.util.ArrayList;
 
@@ -19,10 +21,15 @@ import java.util.ArrayList;
 public class SearchSongAdapter extends BaseAdapter{
     private ArrayList<PlayableSong> mData;
     private LayoutInflater inflater;
+    private AdapterCallback callback;
 
     public SearchSongAdapter(Context c ,ArrayList<PlayableSong> list){
         mData = list;
         inflater = LayoutInflater.from(c);
+    }
+
+    public void setCallback(AdapterCallback callback) {
+        this.callback = callback;
     }
 
     @Override
@@ -61,5 +68,30 @@ public class SearchSongAdapter extends BaseAdapter{
         TextView name;
         TextView owner;
         TextView duration;
+
+        Button play;
+        Button addToQueue;
+        Button download;
+    }
+
+    private class ButtonListener implements View.OnClickListener{
+        private PlayableSong model;
+
+        private ButtonListener(PlayableSong model) {
+            this.model = model;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+
+            }
+        }
+    }
+
+    public interface AdapterCallback{
+        public void playClicked(PlayableSong model);
+        public void addToQueueClicked(PlayableSong model);
+        public void downloadClicked(PlayableSong model);
     }
 }

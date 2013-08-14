@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchAlbumsAdapter;
 import com.music.fmv.core.BaseFragment;
@@ -28,7 +29,7 @@ public class SearchAlbumFragment extends BaseFragment {
     private int albumPageAvailable = 0;
     private String lastRequest;
 
-    private ListView albumsListsView;
+    private SwipeListView albumsListsView;
     private ArrayList<SearchAlbumModel> albumsList = new ArrayList<SearchAlbumModel>(21);
     private SearchAlbumsAdapter adapter;
     private View rotateFooter;
@@ -38,13 +39,12 @@ public class SearchAlbumFragment extends BaseFragment {
         mainView =inflateView(R.layout.search_album_fagment);
         adapter = new SearchAlbumsAdapter(albumsList, baseActivity);
 
-        albumsListsView = (ListView) mainView.findViewById(R.id.albums_list);
+        albumsListsView = (SwipeListView) mainView.findViewById(R.id.albums_list);
         albumsListsView.addHeaderView(createSearchHeader(searchListener));
         albumsListsView.setAdapter(adapter);
-        albumsListsView.setOnItemClickListener(albumListener);
         albumsListsView.setHeaderDividersEnabled(false);
         albumsListsView.setOnScrollListener(scrollListener);
-
+        albumsListsView.setOnItemClickListener(itemClickListener);
         rotateFooter = inflateView(R.layout.rotate_footer);
     }
 
@@ -55,7 +55,7 @@ public class SearchAlbumFragment extends BaseFragment {
         SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page){
             public LoadDialog dialog;
 
-            protected void onPreExecute() {
+            protected void onPreExecute(){
                 albumTaskRunned = true;
                 if (page == null) {
                     dialog = new LoadDialog(baseActivity, this);
@@ -140,11 +140,12 @@ public class SearchAlbumFragment extends BaseFragment {
             return false;
         }
     };
-
-    private AdapterView.OnItemClickListener albumListener = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(baseActivity, "Not implemented", Toast.LENGTH_SHORT).show();
+            if (albumsListsView.isChecked(position)){
+                  albumsListsView.closeAnimate(position);
+            }else albumsListsView.openAnimate(position);
         }
     };
 }

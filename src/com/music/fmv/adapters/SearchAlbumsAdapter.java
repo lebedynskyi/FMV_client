@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.fmv.R;
@@ -23,11 +24,16 @@ public class SearchAlbumsAdapter extends BaseAdapter{
     private final LayoutInflater inflater;
     private ArrayList<SearchAlbumModel> mData;
     private ImageLoader imageLoader;
+    private AdapterCallback callback;
 
     public SearchAlbumsAdapter(ArrayList<SearchAlbumModel> mData, Context context) {
         this.mData = mData;
         this.inflater = LayoutInflater.from(context);
-        imageLoader = ImageLoader.getInstance();
+        this.imageLoader = ImageLoader.getInstance();
+    }
+
+    public void setCallback(AdapterCallback callback) {
+        this.callback = callback;
     }
 
     @Override
@@ -70,5 +76,32 @@ public class SearchAlbumsAdapter extends BaseAdapter{
         TextView name;
         TextView descr;
         ImageView icon;
+
+        Button play;
+        Button addToQueue;
+        Button show;
+        Button download;
+    }
+
+    private class ButtonListener implements View.OnClickListener{
+        private SearchAlbumModel model;
+
+        private ButtonListener(SearchAlbumModel model) {
+            this.model = model;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+
+            }
+        }
+    }
+
+    public interface AdapterCallback{
+        public void playClicked(SearchAlbumModel model);
+        public void addToQueueClicked(SearchAlbumModel model);
+        public void showClicked(SearchAlbumModel mdel);
+        public void downloadClicked(SearchAlbumModel model);
     }
 }
