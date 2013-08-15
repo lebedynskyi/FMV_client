@@ -94,7 +94,7 @@ public class SearchAlbumFragment extends BaseFragment {
     }
 
     private void getNextAlbumPage(){
-        if (albumPageAvailable > 0) {
+        if (albumPageAvailable > 0 && futureAlbumPage <= albumPageAvailable) {
             searchAlbum(lastRequest, futureAlbumPage);
         }
     }
@@ -135,8 +135,9 @@ public class SearchAlbumFragment extends BaseFragment {
     private TextView.OnEditorActionListener searchListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            ViewUtils.hideSoftKeyboard(baseActivity);
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                ViewUtils.hideSoftKeyboard(baseActivity);
+                String text = v.getText().toString();
                 searchAlbum(v.getText().toString(), null);
                 return true;
             }

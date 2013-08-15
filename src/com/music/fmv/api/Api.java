@@ -30,6 +30,8 @@ public class Api {
     private static final String TEST_URL = "http://vetal.romcheg.me/";
     private static final String REAL_URL = "http://vetal.romcheg.me/";
 
+    private static final String GET_SONG_URl = "http://pleer.com/site_api/files/get_url?id=";
+
     //this url will used for requests
     public static final String API_URL = TEST_URL;
 
@@ -111,8 +113,23 @@ public class Api {
         return null;
     }
 
+    public String getUrlOfSong(String id) throws Exception{
+        if (TextUtils.isEmpty(id)) throw new IllegalArgumentException("searchQuery cannot be empty");
+        String resp = NetworkUtil.doRequest(GET_SONG_URl + id);
+        if (resp!=null){
+            JSONObject response = new JSONObject(resp);
+            return response.getString("track_link");
+        }
+
+        return null;
+    }
+
     public BandInfoModel getBandInfo() {
         return null;
+    }
+
+    public synchronized void downloadSong(){
+
     }
 
     //throws exception if Json response has error

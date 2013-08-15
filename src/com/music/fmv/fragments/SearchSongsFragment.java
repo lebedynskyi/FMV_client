@@ -14,6 +14,7 @@ import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.tasks.SearchSongsTask;
+import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.LoadDialog;
 
 import java.util.ArrayList;
@@ -94,7 +95,9 @@ public class SearchSongsFragment extends BaseFragment{
             }
         };
 
-        if (runTask(task)) lastQuery = query;
+        if (runTask(task)){
+            lastQuery = query;
+        }
     }
 
     private void updateSongsList(ArrayList<PlayableSong> songs, boolean isClear) {
@@ -114,15 +117,19 @@ public class SearchSongsFragment extends BaseFragment{
     }
 
     private void getNextSongsPage() {
-
+        if (songsPageAvailable > 0 && futureSongPage <= songsPageAvailable) {
+            processSearch(lastQuery, futureSongPage);
+        }
     }
 
     //Called when user click search on the soft keyboard
     private TextView.OnEditorActionListener searchListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            ViewUtils.hideSoftKeyboard(baseActivity);
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                processSearch(v.getText().toString(), null);
+                String text = v.getText().toString();
+                processSearch(text, null);
                 return true;
             }
             return false;
@@ -156,5 +163,4 @@ public class SearchSongsFragment extends BaseFragment{
             songsListView.openAnimate(position);
         }
     };
-
 }

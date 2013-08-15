@@ -1,9 +1,9 @@
 package com.music.fmv.core;
 
+import android.text.TextUtils;
+
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: vitaliylebedinskiy
@@ -12,9 +12,12 @@ import java.util.Set;
  */
 public class CacheManager extends Manager{
     Map<String, WeakReference<Object>>  mCache;
+    private ArrayList<String> autocompleteWords;
+
     public CacheManager(Core coreManager) {
         super(coreManager);
         mCache = new HashMap<String, WeakReference<Object>>();
+        autocompleteWords = new ArrayList<String>();
     }
 
     @Override

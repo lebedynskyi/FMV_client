@@ -52,7 +52,6 @@ public class SearchArtistFragment extends BaseFragment {
     }
 
     private void processSearch(String s) {
-        ViewUtils.hideSoftKeyboard(baseActivity);
         searchBand(s, null);
     }
 
@@ -66,6 +65,7 @@ public class SearchArtistFragment extends BaseFragment {
             @Override
             protected void onPreExecute() {
                 //If page == null it means that it is new request, else its updating of list (adding new page)
+                artistTaskRunned = true;
                 if (page == null) {
                     dialog = new LoadDialog(baseActivity, this);
                     dialog.show();
@@ -106,7 +106,6 @@ public class SearchArtistFragment extends BaseFragment {
 
         if (runTask(task)){
             lastRequest = query;
-            artistTaskRunned = true;
         }
     }
 
@@ -156,8 +155,10 @@ public class SearchArtistFragment extends BaseFragment {
     private TextView.OnEditorActionListener searchListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            ViewUtils.hideSoftKeyboard(baseActivity);
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                processSearch(v.getText().toString());
+                String text = v.getText().toString() ;
+                processSearch(text);
                 return true;
             }
             return false;

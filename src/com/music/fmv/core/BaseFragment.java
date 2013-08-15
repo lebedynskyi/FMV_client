@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
+import com.music.fmv.views.LoadDialog;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +28,7 @@ public abstract class BaseFragment extends Fragment {
     protected ActivityMediator mMediator;
     protected BaseActivity baseActivity;
     protected LayoutInflater inflater;
+    private LoadDialog dialog;
 
     public BaseFragment(){
 
@@ -56,7 +60,8 @@ public abstract class BaseFragment extends Fragment {
 
     protected View createSearchHeader(TextView.OnEditorActionListener searchListener) {
         View v = inflater.inflate(R.layout.search_header, null, false);
-        ((EditText) v.findViewById(R.id.search_field)).setOnEditorActionListener(searchListener);
+        EditText tv = ((AutoCompleteTextView) v.findViewById(R.id.search_field));
+        tv.setOnEditorActionListener(searchListener);
         return v;
     }
 

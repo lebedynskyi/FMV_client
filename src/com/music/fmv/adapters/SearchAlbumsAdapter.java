@@ -60,10 +60,15 @@ public class SearchAlbumsAdapter extends BaseAdapter{
             holder.descr = (TextView) convertView.findViewById(R.id.alum_brief);
             holder.icon = (ImageView) convertView.findViewById(R.id.album_icon);
             holder.artistName = (TextView) convertView.findViewById(R.id.album_owner);
+            holder.play = (Button) convertView.findViewById(R.id.album_play);
+            holder.addToQueue= (Button) convertView.findViewById(R.id.album_add_to_queu);
+            holder.show = (Button) convertView.findViewById(R.id.album_show);
+            holder.download = (Button) convertView.findViewById(R.id.album_download);
             holder.name = (TextView) convertView.findViewById(R.id.album_name);
             convertView.setTag(holder);
         }holder = (ViewHolder) convertView.getTag();
         SearchAlbumModel model = mData.get(position);
+        holder.setListener(model);
         holder.descr.setText(model.getBriefDescr());
         holder.artistName.setText(model.getArtistName());
         holder.name.setText(model.getAlbumName());
@@ -81,6 +86,10 @@ public class SearchAlbumsAdapter extends BaseAdapter{
         Button addToQueue;
         Button show;
         Button download;
+
+        void setListener(SearchAlbumModel model){
+            play.setOnClickListener(new ButtonListener(model));
+        }
     }
 
     private class ButtonListener implements View.OnClickListener{

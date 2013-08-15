@@ -8,23 +8,28 @@
             android:layout_height="70dp" android:gravity="center_vertical|right">
         <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="170dp"
+                android:layout_width="80dp"
                 android:layout_height="fill_parent">
             <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/back_start"
-                    android:text="start" android:layout_weight="1"/>
+                    android:id="@+id/album_show"
+                    android:text="S" android:layout_weight="1"/>
             <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/back_end"
-                    android:text="end" android:layout_weight="1"/>
+                    android:id="@+id/album_download"
+                    android:text="D" android:layout_weight="1"/>
             <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/back_center"
-                    android:text="center" android:layout_weight="1"/>
+                    android:id="@+id/album_add_to_queu"
+                    android:text="A" android:layout_weight="1"/>
+            <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/album_play"
+                    android:text="P" android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
