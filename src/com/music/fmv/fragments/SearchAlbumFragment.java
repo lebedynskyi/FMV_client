@@ -44,7 +44,7 @@ public class SearchAlbumFragment extends BaseFragment {
         albumsListsView.addHeaderView(createSearchHeader(searchListener));
         albumsListsView.setAdapter(adapter);
         albumsListsView.setHeaderDividersEnabled(false);
-        albumsListsView.setScrollListener(scrollListener);
+        albumsListsView.setOnScrollListener(scrollListener);
         albumsListsView.setSwipeListViewListener(albumsLIstener);
         rotateFooter = inflateView(R.layout.rotate_footer);
     }
@@ -89,7 +89,6 @@ public class SearchAlbumFragment extends BaseFragment {
         };
 
         if (runTask(task)) {
-            albumTaskRunned = true;
             lastRequest = query;
         }
     }
@@ -119,6 +118,7 @@ public class SearchAlbumFragment extends BaseFragment {
     //Scroll listeners for lists, call method when last item in list is visible
     private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
         @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
+            //TODO Looks like a bug
             albumsListsView.closeOpenedItems();
         }
 

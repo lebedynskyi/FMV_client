@@ -1,16 +1,23 @@
 package com.music.fmv.models;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * User: vitaliylebedinskiy
  * Date: 7/17/13
  * Time: 4:04 PM
  */
 public class PlayableSong extends BaseSerializableModel{
+    public static int PAGE_AVAILABLE = -1;
+    public static final SimpleDateFormat SD = new SimpleDateFormat("mm:ss");
+
     private String url;
     private String artist;
     private String title;
     private int duration;
     private String id;
+    private String rate;
 
     public String getId() {
         return id;
@@ -52,15 +59,21 @@ public class PlayableSong extends BaseSerializableModel{
         this.duration = duration;
     }
 
-    @Override
-    public String toString() {
-        if (artist == null && title == null) return "";
-        if (artist == null) return title;
-        if (title == null) return artist;
-        return artist + " -" + title;
+    public String getNiceDuration(){
+        Date date = new Date(duration * 1000);
+        return SD.format(date);
+
     }
 
     public boolean isPlayable(){
         return url != null;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public String getRate() {
+        return rate;
     }
 }

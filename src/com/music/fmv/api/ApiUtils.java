@@ -117,7 +117,7 @@ public class ApiUtils {
         return model;
     }
 
-    public static List<SearchAlbumModel> parseSearchAlbum(JSONObject response) throws JSONException {
+    public static List<SearchAlbumModel> parseSearchAlbum(JSONObject response) throws Exception {
         ArrayList<SearchAlbumModel> albums = new ArrayList<SearchAlbumModel>();
         JSONObject resp = response.getJSONObject(RESPONSE_TAG);
         JSONArray albumsArr = resp.getJSONArray("albums");
@@ -145,8 +145,31 @@ public class ApiUtils {
         return albums;
     }
 
-    public static ArrayList<PlayableSong> parseSearchSongs(JSONObject response) {
-        return null;
+    public static ArrayList<PlayableSong> parseSearchSongs(JSONObject response)throws Exception{
+        ArrayList<PlayableSong> songs = new ArrayList<PlayableSong>();
+        JSONObject resp = response.getJSONObject(RESPONSE_TAG);
+        JSONArray songsArr = resp.getJSONArray("songs");
+        if (songsArr == null) {
+            PlayableSong.PAGE_AVAILABLE = -1;
+            return songs;
+        }
+
+        for (int i = 0; i < songsArr.length(); i++) {
+            PlayableSong song = new PlayableSong();
+            JSONObject songData = songsArr.getJSONObject(i);
+            try {
+                song.setId(songData.optString("id"));
+                song.setArtist(songData.optString("owner"));
+                song.setDuration(Integer.parseInt(songData.optString("duration")));
+                song.setTitle(songData.optString("name"));
+                song.setRate(songData.optString("rate"));
+                songs.add(song);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        PlayableSong.PAGE_AVAILABLE =  resp.optInt("pages", -1);
+        return songs;
     }
 }
 

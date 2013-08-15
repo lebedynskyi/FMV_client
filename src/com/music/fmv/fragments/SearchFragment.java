@@ -17,7 +17,7 @@ import java.util.List;
  * Date: 8/5/13
  * Time: 12:39 PM
  */
-public class SearchFragmentNew extends BaseFragment {
+public class SearchFragment extends BaseFragment {
     public static int ARTIST_TAB = 0;
     public static int ALBUM_TAB = 1;
     public static int SONG_TAB = 2;
@@ -29,7 +29,7 @@ public class SearchFragmentNew extends BaseFragment {
 
     @Override
     protected void createView(Bundle savedInstanceState) {
-        mainView = inflateView(R.layout.search_fragment_new);
+        mainView = inflateView(R.layout.search_fragment);
         pager = (CustomViewPager) mainView.findViewById(R.id.search_pager);
         pager.setCanScroll(false);
 

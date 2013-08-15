@@ -54,13 +54,14 @@ public class SearchSongAdapter extends BaseAdapter{
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.search_songs_row, parent, false);
             holder.owner = (TextView) convertView.findViewById(R.id.song_owner);
-            holder.duration = (TextView) convertView.findViewById(R.id.song_duration);
+            holder.duration = (TextView) convertView.findViewById(R.id.duration);
             holder.name = (TextView) convertView.findViewById(R.id.song_name);
+            convertView.setTag(holder);
         }else holder = (ViewHolder) convertView.getTag();
         PlayableSong song = mData.get(position);
         holder.owner.setText(song.getArtist());
         holder.name.setText(song.getTitle());
-        holder.duration.setText(song.getDuration());
+        holder.duration.setText(song.getNiceDuration());
         return convertView;
     }
 

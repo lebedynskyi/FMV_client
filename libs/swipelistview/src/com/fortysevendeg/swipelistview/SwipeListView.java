@@ -217,7 +217,7 @@ public class SwipeListView extends ListView {
         swipeListViewController.setSwipeDrawableChecked(swipeDrawableChecked);
         swipeListViewController.setSwipeDrawableUnchecked(swipeDrawableUnchecked);
         setOnTouchListener(swipeListViewController);
-        setOnScrollListener(swipeListViewController.makeScrollListener());
+        super.setOnScrollListener(swipeListViewController.makeScrollListener());
     }
 
     /**
@@ -230,7 +230,7 @@ public class SwipeListView extends ListView {
         swipeListViewController.reloadChoiceStateInView(convertView.findViewById(swipeFrontView), position);
     }
 
-    public void setScrollListener(OnScrollListener listener){
+    public void setOnScrollListener(OnScrollListener listener){
         swipeListViewController.setCustomScrollListener(listener);
     }
 

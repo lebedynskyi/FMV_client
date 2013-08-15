@@ -1,16 +1,20 @@
 package com.music.fmv.fragments;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
+import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
+import com.music.fmv.adapters.SearchSongAdapter;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.tasks.SearchSongsTask;
+import com.music.fmv.views.LoadDialog;
 
 import java.util.ArrayList;
 
@@ -20,19 +24,28 @@ import java.util.ArrayList;
  * Time: 12:32 PM
  */
 public class SearchSongsFragment extends BaseFragment{
-    private ListView songsListView;
-    private ArrayList<PlayableSong> reserveSongs;
+    private SwipeListView songsListView;
     private ArrayList<PlayableSong> songsInAdapter = new ArrayList<PlayableSong>();
+    private SearchSongAdapter adapter;
+    private boolean songTaskRunned;
+    private String lastQuery;
+    private int songsPageAvailable;
+    private int futureSongPage;
+    private View rotateFooter;
+
 
     @Override
     protected void createView(Bundle savedInstanceState) {
         mainView = inflateView(R.layout.search_songs_fragment);
-        songsListView = (ListView) mainView.findViewById(R.id.songs_list);
+        rotateFooter = inflateView(R.layout.rotate_footer);
+        songsListView = (SwipeListView) mainView.findViewById(R.id.songs_list);
         songsListView.setOnItemClickListener(songsListener);
         songsListView.addHeaderView(createSearchHeader(searchListener));
         songsListView.setHeaderDividersEnabled(false);
-        songsListView.setOnItemClickListener(songClickListener);
-        songsListView.setAdapter(null);
+        adapter = new SearchSongAdapter(baseActivity, songsInAdapter);
+        songsListView.setAdapter(adapter);
+        songsListView.setSwipeListViewListener(listViewListener);
+        songsListView.setOnScrollListener(scrollListener);
     }
 
     private AdapterView.OnItemClickListener songsListener = new AdapterView.OnItemClickListener() {
@@ -42,7 +55,65 @@ public class SearchSongsFragment extends BaseFragment{
         }
     };
 
-    private void processSearch(String s) {
+    private void processSearch(String query, final Integer page) {
+        if (TextUtils.isEmpty(query) || songTaskRunned) return;
+        query = query.trim();
+
+        SearchSongsTask task = new SearchSongsTask(baseActivity, query, page) {
+            public LoadDialog dialog;
+            @Override
+            protected void onPreExecute() {
+                songTaskRunned = true;
+                if (page == null) {
+                    dialog = new LoadDialog(baseActivity, this);
+                    dialog.show();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<PlayableSong> songs) {
+                if(dialog != null) dialog.dismiss();
+                dialog = null;
+                songsPageAvailable = PlayableSong.PAGE_AVAILABLE;
+                songTaskRunned = false;
+
+                if (isError || songs == null){
+                    Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (songs.size() > 0){
+                    updateSongsList(songs, page == null);
+                }else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void canceledByUser() {
+                this.cancel(true);
+                songTaskRunned = false;
+            }
+        };
+
+        if (runTask(task)) lastQuery = query;
+    }
+
+    private void updateSongsList(ArrayList<PlayableSong> songs, boolean isClear) {
+        if(isClear) {
+            songsInAdapter.clear();
+            futureSongPage = 1;
+        }
+        songsInAdapter.addAll(songs);
+        adapter.notifyDataSetChanged();
+        futureSongPage += 1;
+
+        if (songsPageAvailable <= 0){
+            songsListView.removeFooterView(rotateFooter);
+        }else if (songsPageAvailable > 0 && songsListView.getFooterViewsCount() == 0){
+            songsListView.addFooterView(rotateFooter);
+        }
+    }
+
+    private void getNextSongsPage() {
 
     }
 
@@ -51,17 +122,39 @@ public class SearchSongsFragment extends BaseFragment{
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                processSearch(v.getText().toString());
+                processSearch(v.getText().toString(), null);
                 return true;
             }
             return false;
         }
     };
 
-    private AdapterView.OnItemClickListener songClickListener = new AdapterView.OnItemClickListener() {
+    private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            //TODO Looks like a bug
+            songsListView.closeOpenedItems();
+        }
 
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            final int lastItem = firstVisibleItem + visibleItemCount;
+            if(lastItem == totalItemCount) {
+                getNextSongsPage();
+            }
         }
     };
+
+    private BaseSwipeListViewListener listViewListener = new BaseSwipeListViewListener(){
+        @Override
+        public void onClickBackView(int position) {
+            songsListView.closeAnimate(position);
+        }
+
+        @Override
+        public void onClickFrontView(int position) {
+            songsListView.openAnimate(position);
+        }
+    };
+
 }

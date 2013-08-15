@@ -1,7 +1,6 @@
 package com.music.fmv.activities;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import com.music.fmv.R;
@@ -77,7 +76,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private BaseFragment createSearchTab() {
-        return new SearchFragmentNew();
+        return new SearchFragment();
     }
 
     public void searchTabClicked() {
