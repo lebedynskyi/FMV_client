@@ -124,7 +124,7 @@ public class SwipeListView extends ListView {
     /**
      * Internal touch listener
      */
-    private SwipeListViewTouchListener touchListener;
+    private SwipeListViewTouchListener swipeListViewController;
 
 
     /**
@@ -203,21 +203,21 @@ public class SwipeListView extends ListView {
 
         final ViewConfiguration configuration = ViewConfiguration.get(getContext());
         touchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
-        touchListener = new SwipeListViewTouchListener(this, swipeFrontView, swipeBackView);
+        swipeListViewController = new SwipeListViewTouchListener(this, swipeFrontView, swipeBackView);
         if (swipeAnimationTime > 0) {
-            touchListener.setAnimationTime(swipeAnimationTime);
+            swipeListViewController.setAnimationTime(swipeAnimationTime);
         }
-        touchListener.setRightOffset(swipeOffsetRight);
-        touchListener.setLeftOffset(swipeOffsetLeft);
-        touchListener.setSwipeActionLeft(swipeActionLeft);
-        touchListener.setSwipeActionRight(swipeActionRight);
-        touchListener.setSwipeMode(swipeMode);
-        touchListener.setSwipeClosesAllItemsWhenListMoves(swipeCloseAllItemsWhenMoveList);
-        touchListener.setSwipeOpenOnLongPress(swipeOpenOnLongPress);
-        touchListener.setSwipeDrawableChecked(swipeDrawableChecked);
-        touchListener.setSwipeDrawableUnchecked(swipeDrawableUnchecked);
-        setOnTouchListener(touchListener);
-        setOnScrollListener(touchListener.makeScrollListener());
+        swipeListViewController.setRightOffset(swipeOffsetRight);
+        swipeListViewController.setLeftOffset(swipeOffsetLeft);
+        swipeListViewController.setSwipeActionLeft(swipeActionLeft);
+        swipeListViewController.setSwipeActionRight(swipeActionRight);
+        swipeListViewController.setSwipeMode(swipeMode);
+        swipeListViewController.setSwipeClosesAllItemsWhenListMoves(swipeCloseAllItemsWhenMoveList);
+        swipeListViewController.setSwipeOpenOnLongPress(swipeOpenOnLongPress);
+        swipeListViewController.setSwipeDrawableChecked(swipeDrawableChecked);
+        swipeListViewController.setSwipeDrawableUnchecked(swipeDrawableUnchecked);
+        setOnTouchListener(swipeListViewController);
+        setOnScrollListener(swipeListViewController.makeScrollListener());
     }
 
     /**
@@ -227,7 +227,11 @@ public class SwipeListView extends ListView {
      * @param position    position in list
      */
     public void recycle(View convertView, int position) {
-        touchListener.reloadChoiceStateInView(convertView.findViewById(swipeFrontView), position);
+        swipeListViewController.reloadChoiceStateInView(convertView.findViewById(swipeFrontView), position);
+    }
+
+    public void setScrollListener(OnScrollListener listener){
+        swipeListViewController.setCustomScrollListener(listener);
     }
 
     /**
@@ -237,7 +241,7 @@ public class SwipeListView extends ListView {
      * @return
      */
     public boolean isChecked(int position) {
-        return touchListener.isChecked(position);
+        return swipeListViewController.isChecked(position);
     }
 
     /**
@@ -246,7 +250,7 @@ public class SwipeListView extends ListView {
      * @return
      */
     public List<Integer> getPositionsSelected() {
-        return touchListener.getPositionsSelected();
+        return swipeListViewController.getPositionsSelected();
     }
 
     /**
@@ -255,14 +259,14 @@ public class SwipeListView extends ListView {
      * @return
      */
     public int getCountSelected() {
-        return touchListener.getCountSelected();
+        return swipeListViewController.getCountSelected();
     }
 
     /**
      * Unselected choice state in item
      */
     public void unselectedChoiceStates() {
-        touchListener.unselectedChoiceStates();
+        swipeListViewController.unselectedChoiceStates();
     }
 
     /**
@@ -271,13 +275,13 @@ public class SwipeListView extends ListView {
     @Override
     public void setAdapter(ListAdapter adapter) {
         super.setAdapter(adapter);
-        touchListener.resetItems();
+        swipeListViewController.resetItems();
         adapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
                 onListChanged();
-                touchListener.resetItems();
+                swipeListViewController.resetItems();
             }
         });
     }
@@ -288,14 +292,14 @@ public class SwipeListView extends ListView {
      * @param position Position that you want open
      */
     public void dismiss(int position) {
-        int height = touchListener.dismiss(position);
+        int height = swipeListViewController.dismiss(position);
         if (height > 0) {
-            touchListener.handlerPendingDismisses(height);
+            swipeListViewController.handlerPendingDismisses(height);
         } else {
             int[] dismissPositions = new int[1];
             dismissPositions[0] = position;
             onDismiss(dismissPositions);
-            touchListener.resetPendingDismisses();
+            swipeListViewController.resetPendingDismisses();
         }
     }
 
@@ -303,24 +307,24 @@ public class SwipeListView extends ListView {
      * Dismiss items selected
      */
     public void dismissSelected() {
-        List<Integer> list = touchListener.getPositionsSelected();
+        List<Integer> list = swipeListViewController.getPositionsSelected();
         int[] dismissPositions = new int[list.size()];
         int height = 0;
         for (int i = 0; i < list.size(); i++) {
             int position = list.get(i);
             dismissPositions[i] = position;
-            int auxHeight = touchListener.dismiss(position);
+            int auxHeight = swipeListViewController.dismiss(position);
             if (auxHeight > 0) {
                 height = auxHeight;
             }
         }
         if (height > 0) {
-            touchListener.handlerPendingDismisses(height);
+            swipeListViewController.handlerPendingDismisses(height);
         } else {
             onDismiss(dismissPositions);
-            touchListener.resetPendingDismisses();
+            swipeListViewController.resetPendingDismisses();
         }
-        touchListener.returnOldActions();
+        swipeListViewController.returnOldActions();
     }
 
     /**
@@ -329,7 +333,7 @@ public class SwipeListView extends ListView {
      * @param position Position that you want open
      */
     public void openAnimate(int position) {
-        touchListener.openAnimate(position);
+        swipeListViewController.openAnimate(position);
     }
 
     /**
@@ -338,7 +342,7 @@ public class SwipeListView extends ListView {
      * @param position Position that you want open
      */
     public void closeAnimate(int position) {
-        touchListener.closeAnimate(position);
+        swipeListViewController.closeAnimate(position);
     }
 
     /**
@@ -521,7 +525,7 @@ public class SwipeListView extends ListView {
      * @param offsetRight Offset
      */
     public void setOffsetRight(float offsetRight) {
-        touchListener.setRightOffset(offsetRight);
+        swipeListViewController.setRightOffset(offsetRight);
     }
 
     /**
@@ -530,7 +534,7 @@ public class SwipeListView extends ListView {
      * @param offsetLeft Offset
      */
     public void setOffsetLeft(float offsetLeft) {
-        touchListener.setLeftOffset(offsetLeft);
+        swipeListViewController.setLeftOffset(offsetLeft);
     }
 
     /**
@@ -539,7 +543,7 @@ public class SwipeListView extends ListView {
      * @param swipeCloseAllItemsWhenMoveList
      */
     public void setSwipeCloseAllItemsWhenMoveList(boolean swipeCloseAllItemsWhenMoveList) {
-        touchListener.setSwipeClosesAllItemsWhenListMoves(swipeCloseAllItemsWhenMoveList);
+        swipeListViewController.setSwipeClosesAllItemsWhenListMoves(swipeCloseAllItemsWhenMoveList);
     }
 
     /**
@@ -548,7 +552,7 @@ public class SwipeListView extends ListView {
      * @param swipeOpenOnLongPress
      */
     public void setSwipeOpenOnLongPress(boolean swipeOpenOnLongPress) {
-        touchListener.setSwipeOpenOnLongPress(swipeOpenOnLongPress);
+        swipeListViewController.setSwipeOpenOnLongPress(swipeOpenOnLongPress);
     }
 
     /**
@@ -557,7 +561,7 @@ public class SwipeListView extends ListView {
      * @param swipeMode
      */
     public void setSwipeMode(int swipeMode) {
-        touchListener.setSwipeMode(swipeMode);
+        swipeListViewController.setSwipeMode(swipeMode);
     }
 
     /**
@@ -566,7 +570,7 @@ public class SwipeListView extends ListView {
      * @return Action
      */
     public int getSwipeActionLeft() {
-        return touchListener.getSwipeActionLeft();
+        return swipeListViewController.getSwipeActionLeft();
     }
 
     /**
@@ -575,7 +579,7 @@ public class SwipeListView extends ListView {
      * @param swipeActionLeft Action
      */
     public void setSwipeActionLeft(int swipeActionLeft) {
-        touchListener.setSwipeActionLeft(swipeActionLeft);
+        swipeListViewController.setSwipeActionLeft(swipeActionLeft);
     }
 
     /**
@@ -584,7 +588,7 @@ public class SwipeListView extends ListView {
      * @return Action
      */
     public int getSwipeActionRight() {
-        return touchListener.getSwipeActionRight();
+        return swipeListViewController.getSwipeActionRight();
     }
 
     /**
@@ -593,7 +597,7 @@ public class SwipeListView extends ListView {
      * @param swipeActionRight Action
      */
     public void setSwipeActionRight(int swipeActionRight) {
-        touchListener.setSwipeActionRight(swipeActionRight);
+        swipeListViewController.setSwipeActionRight(swipeActionRight);
     }
 
     /**
@@ -602,7 +606,7 @@ public class SwipeListView extends ListView {
      * @param animationTime milliseconds
      */
     public void setAnimationTime(long animationTime) {
-        touchListener.setAnimationTime(animationTime);
+        swipeListViewController.setAnimationTime(animationTime);
     }
 
     /**
@@ -614,10 +618,10 @@ public class SwipeListView extends ListView {
         final float x = ev.getX();
         final float y = ev.getY();
 
-        if (isEnabled() && touchListener.isSwipeEnabled()) {
+        if (isEnabled() && swipeListViewController.isSwipeEnabled()) {
 
             if (touchState == TOUCH_STATE_SCROLLING_X) {
-                return touchListener.onTouch(this, ev);
+                return swipeListViewController.onTouch(this, ev);
             }
 
             switch (action) {
@@ -625,7 +629,7 @@ public class SwipeListView extends ListView {
                     checkInMoving(x, y);
                     return touchState == TOUCH_STATE_SCROLLING_Y;
                 case MotionEvent.ACTION_DOWN:
-                    touchListener.onTouch(this, ev);
+                    swipeListViewController.onTouch(this, ev);
                     touchState = TOUCH_STATE_REST;
                     lastMotionX = x;
                     lastMotionY = y;
@@ -634,7 +638,7 @@ public class SwipeListView extends ListView {
                     touchState = TOUCH_STATE_REST;
                     break;
                 case MotionEvent.ACTION_UP:
-                    touchListener.onTouch(this, ev);
+                    swipeListViewController.onTouch(this, ev);
                     return touchState == TOUCH_STATE_SCROLLING_Y;
                 default:
                     break;
@@ -675,7 +679,10 @@ public class SwipeListView extends ListView {
      * Close all opened items
      */
     public void closeOpenedItems() {
-        touchListener.closeOpenedItems();
+        swipeListViewController.closeOpenedItems();
     }
 
+    public boolean isOpened(int position) {
+        return swipeListViewController.isOpened(position);
+    }
 }

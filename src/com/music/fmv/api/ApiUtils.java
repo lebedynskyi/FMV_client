@@ -119,7 +119,8 @@ public class ApiUtils {
 
     public static List<SearchAlbumModel> parseSearchAlbum(JSONObject response) throws JSONException {
         ArrayList<SearchAlbumModel> albums = new ArrayList<SearchAlbumModel>();
-        JSONArray albumsArr = response.optJSONArray(RESPONSE_TAG);
+        JSONObject resp = response.getJSONObject(RESPONSE_TAG);
+        JSONArray albumsArr = resp.getJSONArray("albums");
         if (albumsArr == null) {
             SearchAlbumModel.AVAILABLE_PAGES = -1;
             return albums;
@@ -140,7 +141,7 @@ public class ApiUtils {
                 e.printStackTrace();
             }
         }
-        SearchAlbumModel.AVAILABLE_PAGES = response.optInt("pages");
+        SearchAlbumModel.AVAILABLE_PAGES = resp.optInt("pages", -1);
         return albums;
     }
 

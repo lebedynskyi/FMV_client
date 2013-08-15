@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchAlbumsAdapter;
@@ -43,8 +44,8 @@ public class SearchAlbumFragment extends BaseFragment {
         albumsListsView.addHeaderView(createSearchHeader(searchListener));
         albumsListsView.setAdapter(adapter);
         albumsListsView.setHeaderDividersEnabled(false);
-        albumsListsView.setOnScrollListener(scrollListener);
-        albumsListsView.setOnItemClickListener(itemClickListener);
+        albumsListsView.setScrollListener(scrollListener);
+        albumsListsView.setSwipeListViewListener(albumsLIstener);
         rotateFooter = inflateView(R.layout.rotate_footer);
     }
 
@@ -117,7 +118,9 @@ public class SearchAlbumFragment extends BaseFragment {
 
     //Scroll listeners for lists, call method when last item in list is visible
     private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
-        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {}
+        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
+            albumsListsView.closeOpenedItems();
+        }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -140,11 +143,19 @@ public class SearchAlbumFragment extends BaseFragment {
             return false;
         }
     };
-    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+
+    private BaseSwipeListViewListener albumsLIstener = new BaseSwipeListViewListener(){
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (albumsListsView.isChecked(position)){
-                  albumsListsView.closeAnimate(position);
+        public void onClickFrontView(int position) {
+            if (albumsListsView.isOpened(position)){
+                albumsListsView.closeAnimate(position);
+            }else albumsListsView.openAnimate(position);
+        }
+
+        @Override
+        public void onClickBackView(int position) {
+            if (albumsListsView.isOpened(position)){
+                albumsListsView.closeAnimate(position);
             }else albumsListsView.openAnimate(position);
         }
     };

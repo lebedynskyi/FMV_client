@@ -99,6 +99,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
     private List<Boolean> checked = new ArrayList<Boolean>();
     private int oldSwipeActionRight;
     private int oldSwipeActionLeft;
+    private AbsListView.OnScrollListener customScrollListener;
 
     /**
      * Constructor
@@ -625,6 +626,8 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 
             @Override
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                if (customScrollListener != null) customScrollListener.onScrollStateChanged(absListView, scrollState);
+
                 setEnabled(scrollState != AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
                 if (swipeClosesAllItemsWhenListMoves && scrollState == SCROLL_STATE_TOUCH_SCROLL) {
                     closeOpenedItems();
@@ -647,6 +650,8 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (customScrollListener != null) customScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+
                 if (isFirstItem) {
                     boolean onSecondItemList = firstVisibleItem == 1;
                     if (onSecondItemList) {
@@ -940,6 +945,14 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
         }
     }
 
+    public boolean isOpened(int position) {
+        return opened.get(position);
+    }
+
+    public void setCustomScrollListener(AbsListView.OnScrollListener customScrollListener) {
+        this.customScrollListener = customScrollListener;
+    }
+
     /**
      * Class that saves pending dismiss data
      */
@@ -1031,9 +1044,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 pendingDismiss.view.setLayoutParams(lp);
             }
         }
-
         resetPendingDismisses();
-
     }
 
 }

@@ -59,13 +59,6 @@ public class MainActivity extends BaseActivity {
         pager.setOffscreenPageLimit(4);
         pager.setOnPageChangeListener(pagerListener);
         searchTabClicked();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mMediator.startBandActivity(null);
-            }
-        },1000);
     }
 
     private BaseFragment createHistoryTab() {
