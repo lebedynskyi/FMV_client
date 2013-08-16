@@ -6,10 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.music.fmv.R;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
@@ -22,6 +21,7 @@ import com.music.fmv.views.LoadDialog;
  * Time: 9:03 AM
  * To change this template use File | Settings | File Templates.
  */
+
 public abstract class BaseFragment extends Fragment {
     protected Core core;
     protected View mainView;
@@ -29,10 +29,6 @@ public abstract class BaseFragment extends Fragment {
     protected BaseActivity baseActivity;
     protected LayoutInflater inflater;
     private LoadDialog dialog;
-
-    public BaseFragment(){
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +56,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected View createSearchHeader(TextView.OnEditorActionListener searchListener) {
         View v = inflater.inflate(R.layout.search_header, null, false);
-        EditText tv = ((AutoCompleteTextView) v.findViewById(R.id.search_field));
+        EditText tv = ((EditText) v.findViewById(R.id.search_field));
         tv.setOnEditorActionListener(searchListener);
         return v;
     }

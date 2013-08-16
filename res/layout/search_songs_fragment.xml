@@ -17,6 +17,6 @@
             swipe:swipeMode="right"
             swipe:swipeCloseAllItemsWhenMoveList="true"
             swipe:swipeOpenOnLongPress="false"
-            swipe:swipeAnimationTime="250"
+            swipe:swipeAnimationTime="150"
             swipe:swipeOffsetLeft="170dp"/>
 </LinearLayout>

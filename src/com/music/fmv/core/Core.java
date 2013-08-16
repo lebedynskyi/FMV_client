@@ -13,9 +13,6 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  */
 public final class Core {
     public static final PlayableSong TEST_SONG = new PlayableSong();
-    static {
-        TEST_SONG.setUrl("http://f4.pleer.com/0357fcbeb86a579a7424c8ebcc07b43d90b2a2350a9ea4a4dd371ac6ec79d21f815ed5722175ea811323ce8837/ef58d44f50.mp3");
-    }
 
     private static Core instance;
     private final Context app;
