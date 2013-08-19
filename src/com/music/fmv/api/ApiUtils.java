@@ -3,7 +3,6 @@ package com.music.fmv.api;
 import android.text.TextUtils;
 import com.music.fmv.models.*;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -50,9 +49,10 @@ public class ApiUtils {
         return urlBuilder.toString();
     }
 
-    public static List<SearchBandModel> parseSearchBand(JSONObject response){
+    public static List<SearchBandModel> parseSearchBand(JSONObject response)throws Exception{
         ArrayList<SearchBandModel> result = new ArrayList<SearchBandModel>();
-        JSONArray artists = response.optJSONArray(RESPONSE_TAG);
+        JSONObject resp = response.optJSONObject(RESPONSE_TAG);
+        JSONArray artists = resp.optJSONArray("artists");
         if (artists!= null){
             for (int i = 0; i < artists.length(); i++) {
                 try {
@@ -71,17 +71,14 @@ public class ApiUtils {
                         }
                         model.setGenres(modelGenres);
                     }
-
-                    if (i == 0 && response.has("pages")){
-                        SearchBandModel.AVAILABLE_PAGES = response.getInt("pages");
-                    }
-
                     result.add(model);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
             }
         }
+        SearchBandModel.AVAILABLE_PAGES = resp.optInt("pages", -1);
+
         return result;
     }
 

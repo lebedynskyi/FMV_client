@@ -1,5 +1,7 @@
 package com.music.fmv.models;
 
+import android.text.TextUtils;
+
 /**
  * User: vitaliylebedinskiy
  * Date: 7/19/13
@@ -60,5 +62,12 @@ public class SearchAlbumModel  extends BaseSerializableModel{
 
     public void setArtistName(String artistName) {
         this.artistName = artistName;
+    }
+
+    public String getTitle() {
+        if (TextUtils.isEmpty(artistName) && TextUtils.isEmpty(albumName))  return "Unknown song";
+        if (TextUtils.isEmpty(artistName)) return albumName;
+        if (TextUtils.isEmpty(albumName)) return artistName;
+        return artistName + " - " + albumName;
     }
 }

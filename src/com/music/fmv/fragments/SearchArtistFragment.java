@@ -36,10 +36,12 @@ public class SearchArtistFragment extends BaseFragment {
     private View rotateFooter;
 
     private boolean getUserTaskRunned;
+    private TextView emptyView;
 
     @Override
     protected void createView(Bundle savedInstanceState) {
         mainView = inflateView(R.layout.search_artist_fragment);
+        emptyView = (TextView) mainView.findViewById(R.id.empty_view);
         artistsListView = (ListView) mainView.findViewById(R.id.artists_list);
         artistsListView.addHeaderView(createSearchHeader(searchListener));
         artistsListView.setHeaderDividersEnabled(false);
@@ -110,7 +112,7 @@ public class SearchArtistFragment extends BaseFragment {
     }
 
     private void getNextBandPage(){
-        if (artistsPageAvailable >0 ) {
+        if (artistsPageAvailable > 0 ) {
             searchBand(lastRequest, futureArtistPage);
         }
     }

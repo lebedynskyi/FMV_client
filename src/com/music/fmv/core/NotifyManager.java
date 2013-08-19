@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import com.music.fmv.R;
 import com.music.fmv.activities.PlayerActivity;
@@ -22,10 +24,11 @@ public class NotifyManager extends Manager{
     private static PendingIntent prevPendIntent;
     private static PendingIntent pausePendIntent;
     private static PendingIntent nextPendIntent;
+    private NotificationManager mNotifyManager;
 
     public NotifyManager(Core coreManager) {
         super(coreManager);
-        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotifyManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -45,12 +48,15 @@ public class NotifyManager extends Manager{
         NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(PLAYER_NOTIFY_ID);
     }
-    public void notifyDownloading(){
-
+    public void notifyDownloading(String name, int current, int max){
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
+        mBuilder.setContentTitle(name).setSmallIcon(R.drawable.icon).setOngoing(true).setProgress(max, current, false)
+                .setTicker(core.getContext().getString(R.string.song_downloading));
+        mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
     }
 
     public void removeDownloading(){
-
+        mNotifyManager.cancel(DOWNLOAD_NOTIFY_ID);
     }
 
     private void show8ApiPlayerProgress() {
@@ -75,7 +81,6 @@ public class NotifyManager extends Manager{
     //Shows notification
     private void notify(int id, int iconId, RemoteViews remoteViews){
         //Creating notification
-        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         long when = System.currentTimeMillis();
         Notification notification = new Notification(iconId, "Playing", when);
         notification.contentView = remoteViews;
@@ -86,7 +91,7 @@ public class NotifyManager extends Manager{
 
         //adding flag, that will disable cancel of notification
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        mNotificationManager.notify(id, notification);
+        mNotifyManager.notify(id, notification);
     }
 
     private void createPausePending() {
@@ -108,5 +113,21 @@ public class NotifyManager extends Manager{
         intent.setAction(PlayerService.RECEIVER_ACTION);
         intent.putExtra(PlayerService.ACTION_KEY, PlayerService.ACTION.PREV);
         prevPendIntent = PendingIntent.getBroadcast(core.getContext(), 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public void notifyErrorDownloading(String name) {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
+        mBuilder.setContentTitle(core.getContext().getString(R.string.song_downloading_error))
+                .setContentInfo(name).setSmallIcon(R.drawable.icon).setOngoing(false).setProgress(0, 0, false)
+                .setTicker(core.getContext().getString(R.string.song_downloading_error));
+        mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
+    }
+
+    public void notifySuccessDownloading() {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
+        mBuilder.setContentTitle(core.getContext().getString(R.string.downloading_finish)).setSmallIcon(R.drawable.icon)
+                .setOngoing(false).setProgress(0, 0, false)
+                .setTicker(core.getContext().getString(R.string.downloading_finish));
+        mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
     }
 }

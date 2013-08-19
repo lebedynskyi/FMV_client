@@ -12,4 +12,5 @@ public abstract class Manager {
     }
 
     protected abstract void finish();
+
 }

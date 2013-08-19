@@ -20,7 +20,7 @@ import java.util.List;
  * Time: 6:05 PM
  */
 
-public class SearchBandAdapter extends BaseAdapter{
+public class SearchBandAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     private List<SearchBandModel> mList;
     private ImageLoader imageLoader;
@@ -49,14 +49,14 @@ public class SearchBandAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        if (convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.search_band_row, parent, false);
             holder.briefDescr = (TextView) convertView.findViewById(R.id.band_descr);
             holder.icon = (ImageView) convertView.findViewById(R.id.band_icon);
             holder.name = (TextView) convertView.findViewById(R.id.band_name);
             convertView.setTag(holder);
-        }else holder = (ViewHolder) convertView.getTag();
+        } else holder = (ViewHolder) convertView.getTag();
         SearchBandModel model = mList.get(position);
         holder.name.setText(model.getName());
         imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance(convertView.getContext()).getNotCachedOptions());
@@ -64,7 +64,7 @@ public class SearchBandAdapter extends BaseAdapter{
         return convertView;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         ImageView icon;
         TextView name;
         TextView briefDescr;

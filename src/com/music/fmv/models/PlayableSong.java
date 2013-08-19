@@ -1,5 +1,8 @@
 package com.music.fmv.models;
 
+import android.text.TextUtils;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -75,5 +78,37 @@ public class PlayableSong extends BaseSerializableModel{
 
     public String getRate() {
         return rate;
+    }
+
+    public File getAbsolutheFile(String folder){
+        return  new File(folder, this.getFutureFileName());
+    }
+
+    public File getAbsolutheFile(File folder){
+        return  new File(folder, this.getFutureFileName());
+    }
+
+    public String getFutureFileName() {
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(artist))  return "Unknown song";
+        if (TextUtils.isEmpty(title)) return artist;
+        if (TextUtils.isEmpty(artist)) return title;
+        return artist + " - " + title + ".mp3";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlayableSong that = (PlayableSong) o;
+
+        return !(artist != null ? !artist.equals(that.artist) : that.artist != null) && !(title != null ? !title.equals(that.title) : that.title != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = artist != null ? artist.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        return result;
     }
 }

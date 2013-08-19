@@ -22,9 +22,9 @@ public class App extends Application{
         super.onCreate();
 
         //Initialization of core Manager
-        Core.getInstance(this);
+        Core core = Core.getInstance(this);
 
-        File imageCache = new File(SettingsManager.getImageCacheFolder(this));
+        File imageCache = new File(core.getSettingsManager().getImageCacheFolder());
         imageCache.mkdirs();
 
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(this)

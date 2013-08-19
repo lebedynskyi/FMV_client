@@ -26,7 +26,7 @@ public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>
 
     @Override
     protected final List<SearchBandModel> doInBackground(Object... voids) {
-        String language = Core.getInstance(context).getSettingsManager().getResultLanguage(context);
+        String language = Core.getInstance(context).getSettingsManager().getResultLanguage();
         try {
             return api.searchBand(searchQuery, language, page);
         } catch (Exception e) {

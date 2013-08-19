@@ -23,6 +23,7 @@ public class SearchFragment extends BaseFragment {
     public static int SONG_TAB = 2;
 
     private CustomViewPager pager;
+
     private GlowButton artistBtn;
     private  GlowButton albumButton;
     private GlowButton songsButton;

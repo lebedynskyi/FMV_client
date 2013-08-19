@@ -38,9 +38,9 @@ public class SearchAlbumFragment extends BaseFragment {
     @Override
     protected void createView(Bundle savedInstanceState) {
         mainView =inflateView(R.layout.search_album_fagment);
-        adapter = new SearchAlbumsAdapter(albumsList, baseActivity);
-
         albumsListsView = (SwipeListView) mainView.findViewById(R.id.albums_list);
+        adapter = new SearchAlbumsAdapter(albumsList, baseActivity, albumsListsView);
+
         albumsListsView.addHeaderView(createSearchHeader(searchListener));
         albumsListsView.setAdapter(adapter);
         albumsListsView.setHeaderDividersEnabled(false);

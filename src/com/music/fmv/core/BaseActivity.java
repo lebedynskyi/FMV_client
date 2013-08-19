@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.models.Captcha;
 import com.music.fmv.services.PlayerService;
@@ -77,7 +76,7 @@ public abstract class BaseActivity extends FragmentActivity{
             task.execute();
             return true;
         }
-        Toast.makeText(this, getString(R.string.network_unavailable), Toast.LENGTH_SHORT).show();
+        mCore.showToast(R.string.network_unavailable);
         return false;
     }
 

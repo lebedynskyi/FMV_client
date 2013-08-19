@@ -12,4 +12,5 @@ public class Const {
 
     public static final String IMAGE_CACHE_KEY = "IMAGE_CACHE_KEY";
     public static final String LANGUAGE_CACHE_KEY = "LANGUAGE_CACHE_KEY";
+    public static final String SONGS_FOLDER_CACHE_KEY = "SONGS_FOLDER_CACHE_KEY";
 }

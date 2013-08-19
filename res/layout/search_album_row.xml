@@ -1,44 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
+             android:layout_width="match_parent"
              android:layout_height="fill_parent">
     <LinearLayout
             android:id="@+id/back"
             android:layout_width="match_parent"
             android:background="@drawable/background_item"
-            android:layout_height="70dp" android:gravity="center_vertical|right">
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="80dp"
-                android:layout_height="fill_parent">
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/album_show"
-                    android:text="S" android:layout_weight="1"/>
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/album_download"
-                    android:text="D" android:layout_weight="1"/>
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/album_add_to_queu"
-                    android:text="A" android:layout_weight="1"/>
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/album_play"
-                    android:text="P" android:layout_weight="1"/>
-        </LinearLayout>
+            android:layout_height="70dp" android:gravity="center_vertical|right" android:orientation="horizontal">
+        <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/album_show"
+                android:layout_margin="5dp"/>
+        <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/album_download"
+                android:layout_margin="5dp" android:background="@drawable/back_item_download"/>
+        <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/album_add_to_queu"
+                android:layout_margin="5dp" android:background="@drawable/back_item_add_queue"/>
+        <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/album_play"
+                android:background="@drawable/back_item_play"
+                android:layout_margin="5dp"/>
     </LinearLayout>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:id="@+id/front"
                     android:tag="front"
-                    android:background="@drawable/white_background"
-                    android:layout_height="70dp">
+                    android:layout_height="70dp" android:background="@drawable/white_background">
         <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"

@@ -43,7 +43,8 @@ public class SearchSongsFragment extends BaseFragment{
         songsListView.setOnItemClickListener(songsListener);
         songsListView.addHeaderView(createSearchHeader(searchListener));
         songsListView.setHeaderDividersEnabled(false);
-        adapter = new SearchSongAdapter(baseActivity, songsInAdapter);
+        adapter = new SearchSongAdapter(baseActivity, songsInAdapter, songsListView);
+        adapter.setCallback(adapterCallback);
         songsListView.setAdapter(adapter);
         songsListView.setSwipeListViewListener(listViewListener);
         songsListView.setOnScrollListener(scrollListener);
@@ -127,6 +128,7 @@ public class SearchSongsFragment extends BaseFragment{
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             ViewUtils.hideSoftKeyboard(baseActivity);
+            songsListView.closeOpenedItems();
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
                 String text = v.getText().toString();
                 processSearch(text, null);
@@ -161,6 +163,23 @@ public class SearchSongsFragment extends BaseFragment{
         @Override
         public void onClickFrontView(int position) {
             songsListView.openAnimate(position);
+        }
+    };
+
+    private SearchSongAdapter.AdapterCallback adapterCallback = new SearchSongAdapter.AdapterCallback() {
+        @Override
+        public void playClicked(PlayableSong model) {
+            Toast.makeText(baseActivity, "Play " + model.getTitle(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void addToQueueClicked(PlayableSong model) {
+            Toast.makeText(baseActivity, "Add to queue " + model.getTitle(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void downloadClicked(PlayableSong model) {
+            core.getDownloadManager().download(model);
         }
     };
 }

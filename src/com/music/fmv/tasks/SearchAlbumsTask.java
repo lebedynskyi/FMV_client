@@ -24,7 +24,7 @@ public abstract class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumMod
 
     @Override
     protected final List<SearchAlbumModel> doInBackground(Object... params) {
-        String language = Core.getInstance(context).getSettingsManager().getResultLanguage(context);
+        String language = Core.getInstance(context).getSettingsManager().getResultLanguage();
         try {
             return api.searchAlbum(searchQuery, language, page);
         } catch (Exception e) {
