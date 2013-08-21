@@ -11,8 +11,8 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
-import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.tasks.SearchSongsTask;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.LoadDialog;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Date: 8/5/13
  * Time: 12:32 PM
  */
-public class SearchSongsFragment extends BaseFragment{
+public class SearchSongsFragment extends BaseFragment implements Core.IUpdateListener {
     private SwipeListView songsListView;
     private ArrayList<PlayableSong> songsInAdapter = new ArrayList<PlayableSong>();
     private SearchSongAdapter adapter;
@@ -34,6 +34,11 @@ public class SearchSongsFragment extends BaseFragment{
     private int futureSongPage;
     private View rotateFooter;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        core.registerForUpdates(this);
+    }
 
     @Override
     protected void createView(Bundle savedInstanceState) {
@@ -182,4 +187,17 @@ public class SearchSongsFragment extends BaseFragment{
             core.getDownloadManager().download(model);
         }
     };
+
+    @Override
+    public void canUpdate() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        core.unregisterListener(this);
+    }
 }

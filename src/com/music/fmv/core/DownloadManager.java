@@ -70,6 +70,7 @@ public class DownloadManager extends Manager {
                     failedSongs.clear();
                 }else core.getNotificationManager().notifySuccessDownloading();
             }
+            core.callUpdateOnListeners();
         }
 
         @Override
