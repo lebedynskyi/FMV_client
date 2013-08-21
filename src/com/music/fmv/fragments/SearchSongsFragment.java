@@ -84,6 +84,8 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
                 songsPageAvailable = PlayableSong.PAGE_AVAILABLE;
                 songTaskRunned = false;
 
+                if (isCancelled()) return;
+
                 if (isError || songs == null){
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
                     return;
@@ -96,8 +98,8 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
 
             @Override
             public void canceledByUser() {
-                this.cancel(true);
                 songTaskRunned = false;
+                cancel(true);
             }
         };
 

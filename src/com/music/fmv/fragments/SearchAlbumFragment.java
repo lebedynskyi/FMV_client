@@ -71,6 +71,8 @@ public class SearchAlbumFragment extends BaseFragment {
                 albumPageAvailable = SearchAlbumModel.AVAILABLE_PAGES;
                 albumTaskRunned = false;
 
+                if (isCancelled()) return;
+
                 if (isError || albums == null){
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
                     return;
@@ -83,8 +85,8 @@ public class SearchAlbumFragment extends BaseFragment {
 
             @Override
             public void canceledByUser() {
-                this.cancel(true);
                 albumTaskRunned = false;
+                cancel(true);
             }
         };
 

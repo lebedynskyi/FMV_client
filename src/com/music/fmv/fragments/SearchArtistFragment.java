@@ -80,6 +80,9 @@ public class SearchArtistFragment extends BaseFragment {
                 dialog = null;
                 artistTaskRunned = false;
                 artistsPageAvailable = 0;
+
+                if (isCancelled()) return;
+
                 //empty result
                 if (result != null && result.size() ==0){
                     Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
@@ -101,8 +104,8 @@ public class SearchArtistFragment extends BaseFragment {
 
             @Override
             public void canceledByUser() {
-                this.cancel(true);
-                artistTaskRunned = false;
+                artistTaskRunned= false;
+                cancel(true);
             }
         };
 
@@ -186,6 +189,8 @@ public class SearchArtistFragment extends BaseFragment {
 
                 @Override
                 protected void onPostExecute(BandInfoModel bandInfoModel) {
+                    if (isCancelled()) return;
+
                     getUserTaskRunned = false;
                     if (dialog != null) dialog.dismiss();
                 }
@@ -193,6 +198,7 @@ public class SearchArtistFragment extends BaseFragment {
                 @Override
                 public void canceledByUser() {
                     getUserTaskRunned = false;
+                    cancel(true);
                 }
             };
 
