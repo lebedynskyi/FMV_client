@@ -1,6 +1,7 @@
-package com.music.fmv.core;
+package com.music.fmv.core.managers;
 
 import android.text.TextUtils;
+import com.music.fmv.core.Core;
 
 import java.lang.ref.WeakReference;
 import java.util.*;

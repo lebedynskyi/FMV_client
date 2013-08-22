@@ -1,4 +1,4 @@
-package com.music.fmv.core;
+package com.music.fmv.core.managers;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -6,10 +6,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import com.music.fmv.R;
 import com.music.fmv.activities.PlayerActivity;
+import com.music.fmv.core.Core;
 import com.music.fmv.services.PlayerService;
 
 /**
@@ -97,21 +97,21 @@ public class NotifyManager extends Manager{
     private void createPausePending() {
         Intent intent = new Intent();
         intent.setAction(PlayerService.RECEIVER_ACTION);
-        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.ACTION.PAUSE);
+        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PAUSE);
         pausePendIntent = PendingIntent.getBroadcast(core.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void createNextPending() {
         Intent intent = new Intent();
         intent.setAction(PlayerService.RECEIVER_ACTION);
-        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.ACTION.NEXT);
+        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.NEXT);
         nextPendIntent = PendingIntent.getBroadcast(core.getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void createPrevPending() {
         Intent intent = new Intent();
         intent.setAction(PlayerService.RECEIVER_ACTION);
-        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.ACTION.PREV);
+        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PREV);
         prevPendIntent = PendingIntent.getBroadcast(core.getContext(), 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

@@ -11,11 +11,10 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.widget.Toast;
 import com.music.fmv.R;
-import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.Core;
+import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -32,27 +31,34 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public static final String RECEIVER_ACTION = "RECEIVER_ACTION";
     public static final String ACTION_KEY = "ACTION_KEY";
 
-    public static final String EXTRAS_SONGS_KEY = "EXTRAS_SONGS_KEY";
-
     private MediaPlayer mPlayer;
     private Core core;
     private ArrayList<PlayableSong> playerQueue;
+    private PlayerStatusListener statusListener;
 
     public enum PLAYER_STATUS {
         PLAYING, PAUSED, STOPPED, STARTED
     }
 
-    public enum ACTION {
-        PlAY, ADD, STOP, PAUSE, NEXT, PREV
+    public enum NOTIFICATION_ACTIONS {
+        STOP, PAUSE, NEXT, PREV
     }
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Service created", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Player created", Toast.LENGTH_SHORT).show();
         super.onCreate();
         playerQueue = new ArrayList<PlayableSong>();
         core = Core.getInstance(this);
         registerReceiver(receiver, new IntentFilter(RECEIVER_ACTION));
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable ex) {
+                Toast.makeText(PlayerService.this, "Exception in PLAYEr SERVICe!! BLEa", Toast.LENGTH_SHORT).show();
+                stopSelf();
+            }
+        });
     }
 
     @Override
@@ -60,13 +66,15 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         releasePlayer();
         clearNotify();
         unregisterReceiver(receiver);
-        Toast.makeText(this, "Service destroyed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Player destroyed", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        PlayerManager.Bind binder = new PlayerManager.Bind();
+        binder.setService(this);
+        return binder;
     }
 
     //Clears all notifications linked with player
@@ -94,7 +102,12 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     }
 
-    public void playSong(PlayableSong song){
+    @Override
+    public void setPlayerStatusListener(PlayerStatusListener listener) {
+        this.statusListener = listener;
+    }
+
+    private void playSong(PlayableSong song){
         try {
             releasePlayer();
             mPlayer = new MediaPlayer();
@@ -111,9 +124,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private void releasePlayer() {
         playerQueue.clear();
-        if (mPlayer == null) return;
-        mPlayer.stop();
-        mPlayer.release();
+        if (mPlayer != null){
+            mPlayer.stop();
+            mPlayer.release();
+        }
     }
 
 
@@ -142,15 +156,17 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (TextUtils.isEmpty(action) || !action.equals(RECEIVER_ACTION) || intent.getExtras() == null) return;
-            ACTION act = (ACTION) intent.getSerializableExtra(ACTION_KEY);
+            String actionStr = intent.getAction();
+            if (TextUtils.isEmpty(actionStr) || !actionStr.equals(RECEIVER_ACTION) || intent.getExtras() == null) return;
 
+            Object act = intent.getSerializableExtra(ACTION_KEY);
             if (act == null) return;
 
-            Toast.makeText(context, act.name(), Toast.LENGTH_SHORT).show();
+            NOTIFICATION_ACTIONS action = (NOTIFICATION_ACTIONS) act;
 
-            switch (act){
+            Toast.makeText(context, action.name(), Toast.LENGTH_SHORT).show();
+
+            switch (action){
                 case PREV:
                     previous();
                     break;
@@ -160,18 +176,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
                 case NEXT:
                     next();
                     break;
-                case ADD:
-                    ArrayList<PlayableSong> songs = (ArrayList<PlayableSong>) intent.getSerializableExtra(EXTRAS_SONGS_KEY);
-                    playerQueue.addAll(songs);
-                    break;
-                case PlAY:
-                    PlayableSong song = (PlayableSong) intent.getSerializableExtra(EXTRAS_SONGS_KEY);
-                    playerQueue.clear();
-                    playerQueue.add(song);
-                    playSong(song);
-                    break;
                 case STOP:
-                    releasePlayer();
+                    stop();
             }
         }
     };

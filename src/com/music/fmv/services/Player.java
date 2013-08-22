@@ -10,4 +10,9 @@ public interface Player {
     public void previous();
     public void next();
     public void stop();
+    public void setPlayerStatusListener(PlayerStatusListener listener);
+
+    public interface PlayerStatusListener{
+        public void onStatus();
+    }
 }

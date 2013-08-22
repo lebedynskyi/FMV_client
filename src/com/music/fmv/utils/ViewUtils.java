@@ -8,8 +8,6 @@ import android.util.DisplayMetrics;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -110,11 +108,5 @@ public class ViewUtils {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float dp = px / (metrics.densityDpi / 160f);
         return (int)dp;
-    }
-
-    public static void setVisible(View view, double latitude, double longitude) {
-        if (latitude == 999 || longitude == 999){
-            view.setVisibility(View.GONE);
-        }else view.setVisibility(View.VISIBLE);
     }
 }

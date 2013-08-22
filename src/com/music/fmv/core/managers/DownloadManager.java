@@ -1,6 +1,7 @@
-package com.music.fmv.core;
+package com.music.fmv.core.managers;
 
 import com.music.fmv.R;
+import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.tasks.threads.IDownloadListener;
 import com.music.fmv.tasks.threads.SongLoader;
@@ -20,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * To change this template use File | Settings | File Templates.
  */
 public class DownloadManager extends Manager {
-    protected DownloadManager(Core coreManager) {
+    public DownloadManager(Core coreManager) {
         super(coreManager);
     }
 
@@ -30,6 +31,12 @@ public class DownloadManager extends Manager {
         loaderExecutor.shutdownNow();
         if (loaderExecutor.getQueue().isEmpty()){
             core.getNotificationManager().removeDownloading();
+        }
+    }
+
+    public void download(ArrayList<PlayableSong> album){
+        for (PlayableSong song: album){
+            download(song);
         }
     }
 
@@ -85,7 +92,7 @@ public class DownloadManager extends Manager {
             super.beforeExecute(t, r);
             try {
                 if (getQueue().size() > 1){
-                    Thread.sleep(3200);
+                    Thread.sleep(3500);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

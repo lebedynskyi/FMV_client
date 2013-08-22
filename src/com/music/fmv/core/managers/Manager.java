@@ -1,4 +1,6 @@
-package com.music.fmv.core;
+package com.music.fmv.core.managers;
+
+import com.music.fmv.core.Core;
 
 /**
  * User: vitaliylebedinskiy
@@ -12,5 +14,4 @@ public abstract class Manager {
     }
 
     protected abstract void finish();
-
 }

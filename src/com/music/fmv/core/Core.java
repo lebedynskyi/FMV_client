@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.widget.Toast;
 import com.music.fmv.R;
+import com.music.fmv.core.managers.*;
 import com.music.fmv.models.PlayableSong;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -19,7 +20,6 @@ import java.util.Set;
  * Time: 5:46 PM
  */
 public final class Core {
-    public static final PlayableSong TEST_SONG = new PlayableSong();
     private final Set<WeakReference<IUpdateListener>> updateListeners;
 
     private static Core instance;
@@ -31,6 +31,7 @@ public final class Core {
     private SettingsManager mSettingsManager;
     private DisplayImageOptions notCachedOptions;
     private DownloadManager downloadManager;
+    private PlayerManager playerManager;
 
     public static Core getInstance(Context app) {
         if (instance == null){
@@ -52,6 +53,7 @@ public final class Core {
         mSettingsManager = new SettingsManager(this);
         downloadManager = new DownloadManager(this);
         updateListeners = new HashSet<WeakReference<IUpdateListener>>();
+        playerManager = new PlayerManager(this);
     }
 
     public NotifyManager getNotificationManager() {
@@ -66,6 +68,14 @@ public final class Core {
         return mSettingsManager;
     }
 
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    public DownloadManager getDownloadManager() {
+        return downloadManager;
+    }
+
     public DisplayImageOptions getNotCachedOptions(){
         if (notCachedOptions == null){
             notCachedOptions = new DisplayImageOptions.Builder()
@@ -77,10 +87,6 @@ public final class Core {
                     .build();
         }
         return notCachedOptions;
-    }
-
-    public DownloadManager getDownloadManager() {
-        return downloadManager;
     }
 
     public Context getContext() {
@@ -132,6 +138,10 @@ public final class Core {
                 break;
             }
         }
+    }
+
+    public Handler getHandler() {
+        return handler;
     }
 
     public interface IUpdateListener {
