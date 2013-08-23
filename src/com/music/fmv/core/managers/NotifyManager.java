@@ -1,6 +1,5 @@
 package com.music.fmv.core.managers;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 import com.music.fmv.R;
-import com.music.fmv.activities.PlayerActivity;
 import com.music.fmv.core.Core;
 import com.music.fmv.services.PlayerService;
 
@@ -33,20 +31,12 @@ public class NotifyManager extends Manager{
 
     @Override
     protected void finish() {
-        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(PLAYER_NOTIFY_ID);
-        mNotificationManager.cancel(DOWNLOAD_NOTIFY_ID);
+        mNotifyManager.cancel(PLAYER_NOTIFY_ID);
+        mNotifyManager.cancel(DOWNLOAD_NOTIFY_ID);
     }
-//
-//    public void notifyPlayer(){
-//        if (android.os.Build.VERSION.SDK_INT  < 15 ){
-//            show8ApiPlayerProgress();
-//        }else show15ApiPlayerProgress();
-//    }
 
     public void removePlayer(){
-        NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(PLAYER_NOTIFY_ID);
+        mNotifyManager.cancel(PLAYER_NOTIFY_ID);
     }
     public void notifyDownloading(String name, int current, int max){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
@@ -59,40 +49,15 @@ public class NotifyManager extends Manager{
     public void removeDownloading(){
         mNotifyManager.cancel(DOWNLOAD_NOTIFY_ID);
     }
-//
-//    private void show8ApiPlayerProgress() {
-//        RemoteViews remoteView = new RemoteViews(core.getContext().getPackageName(), R.layout.simple_player_notification);
-//        notify(PLAYER_NOTIFY_ID, R.drawable.icon, remoteView);
-//    }
-//
-//    private void show15ApiPlayerProgress() {
-//        RemoteViews notificationView = new RemoteViews(core.getContext().getPackageName(), R.layout.progress_notification);
-//
-//        if(prevPendIntent == null) createPrevPending();
-//        if(nextPendIntent == null) createNextPending();
-//        if(pausePendIntent == null) createPausePending();
-//
-//        notificationView.setOnClickPendingIntent(R.id.prev_notify_button, prevPendIntent);
-//        notificationView.setOnClickPendingIntent(R.id.next_notify_button, nextPendIntent);
-//        notificationView.setOnClickPendingIntent(R.id.play_pause_notify_button, pausePendIntent);
-//
-//        notify(PLAYER_NOTIFY_ID, R.drawable.icon, notificationView);
-//    }
 
-    //Shows notification
-    private void notify(int id, int iconId, RemoteViews remoteViews){
-        //Creating notification
-        long when = System.currentTimeMillis();
-        Notification notification = new Notification(iconId, "Playing", when);
-        notification.contentView = remoteViews;
-
-        //set pending intent to notification
-        Intent notificationIntent = new Intent(core.getContext(), PlayerActivity.class);
-        notification.contentIntent = PendingIntent.getActivity(core.getContext(), 0, notificationIntent, 0);
-
-        //adding flag, that will disable cancel of notification
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        mNotifyManager.notify(id, notification);
+    public void notifyPlayer(String songName, String songOwner){
+        RemoteViews view = new RemoteViews(core.getContext().getPackageName(),R.layout.simple_player_notification);
+        view.setTextViewText(R.id.song_name, songName);
+        view.setTextViewText(R.id.song_owner, songOwner);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(core.getContext());
+        builder.setContentTitle(songName).setOngoing(true);
+        builder.setContent(view).setContentIntent(createEmptyPending());
+        mNotifyManager.notify(PLAYER_NOTIFY_ID, builder.build());
     }
 
     private void createPausePending() {

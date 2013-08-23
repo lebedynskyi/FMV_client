@@ -90,7 +90,7 @@ public class PlayerManager extends Manager implements Player{
 
     @Override
     public void shuffle() {
-
+        if (player != null) player.shuffle();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PlayerManager extends Manager implements Player{
 
     @Override
     public void loop() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (player != null) player.loop();
     }
 
     private void bindToPlayer(){

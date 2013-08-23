@@ -8,14 +8,21 @@
             android:layout_width="50dp"
             android:layout_margin="5dp"
             android:id="@+id/song_icon"
-            android:layout_height="50dp"/>
-    <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/song_icon"
-            android:id="@+id/song_name"/>
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignLeft="@id/song_icon"
-              android:layout_below="@id/song_name"
-              android:id="@+id/artist_name"/>
+            android:layout_height="50dp" android:layout_marginRight="5dp"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" android:layout_toRightOf="@+id/song_icon"
+            android:gravity="center_vertical" android:padding="5dp">
+        <TextView android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/song_name" android:layout_toRightOf="@+id/song_icon"
+                android:singleLine="true" android:layout_weight="1" android:text="asdadasAASSDDDPPppp"
+                android:textSize="18sp"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_below="@id/song_name"
+                  android:id="@+id/song_owner" android:layout_toRightOf="@+id/song_icon" android:singleLine="true"
+                  android:layout_weight="1" android:text="asdadasAASSDDDPPppp"/>
+    </LinearLayout>
 </RelativeLayout>
