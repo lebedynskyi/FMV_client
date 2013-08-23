@@ -137,4 +137,8 @@ public class Api {
             throw new RuntimeException("Error in api response");
         }
     }
+
+    private interface ReponseListener{
+        public void onResponse();
+    }
 }

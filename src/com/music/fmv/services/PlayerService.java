@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.widget.Toast;
 import com.music.fmv.R;
+import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
@@ -33,7 +34,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private MediaPlayer mPlayer;
     private Core core;
-    private ArrayList<PlayableSong> playerQueue;
+    private final ArrayList<PlayableSong> playerQueue = new ArrayList<PlayableSong>();
     private PlayerStatusListener statusListener;
 
     public enum PLAYER_STATUS {
@@ -46,9 +47,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Player created", Toast.LENGTH_SHORT).show();
         super.onCreate();
-        playerQueue = new ArrayList<PlayableSong>();
+        Toast.makeText(this, "Player created", Toast.LENGTH_SHORT).show();
         core = Core.getInstance(this);
         registerReceiver(receiver, new IntentFilter(RECEIVER_ACTION));
 
@@ -83,6 +83,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     private void notifyState() {
+        if (statusListener == null)  return;
 
     }
 
@@ -103,11 +104,48 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
+    public void play(PlayableSong song) {
+        if (song == null) return;
+        playSong(song);
+    }
+
+    @Override
+    public void shuffle() {
+
+    }
+
+    @Override
     public void setPlayerStatusListener(PlayerStatusListener listener) {
         this.statusListener = listener;
     }
 
-    private void playSong(PlayableSong song){
+    @Override
+    public void loop() {
+        mPlayer.setLooping(!mPlayer.isLooping());
+    }
+
+    private synchronized void playSong(final PlayableSong song){
+        final Api api = new Api();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String url = api.getUrlOfSong(song.getId());
+                    song.setUrl(url);
+                    core.getHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            playFromHttp(song);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void playFromHttp(PlayableSong song) {
         try {
             releasePlayer();
             mPlayer = new MediaPlayer();
@@ -117,6 +155,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
             mPlayer.setOnBufferingUpdateListener(this);
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnCompletionListener(this);
+            mPlayer.prepareAsync();
         }catch (Exception e){
             Toast.makeText(this, getString(R.string.cannot_play_song) + " " + song.toString(), Toast.LENGTH_SHORT).show();
         }
@@ -128,6 +167,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
             mPlayer.stop();
             mPlayer.release();
         }
+        mPlayer = null;
     }
 
 

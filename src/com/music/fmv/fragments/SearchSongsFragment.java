@@ -176,7 +176,8 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
     private SearchSongAdapter.AdapterCallback adapterCallback = new SearchSongAdapter.AdapterCallback() {
         @Override
         public void playClicked(PlayableSong model) {
-            Toast.makeText(baseActivity, "Play " + model.getTitle(), Toast.LENGTH_SHORT).show();
+            core.getPlayerManager().play(model);
+            mMediator.startPlayerActivity();
         }
 
         @Override

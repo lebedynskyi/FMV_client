@@ -37,12 +37,12 @@ public class NotifyManager extends Manager{
         mNotificationManager.cancel(PLAYER_NOTIFY_ID);
         mNotificationManager.cancel(DOWNLOAD_NOTIFY_ID);
     }
-
-    public void notifyPlayer(){
-        if (android.os.Build.VERSION.SDK_INT  < 15 ){
-            show8ApiPlayerProgress();
-        }else show15ApiPlayerProgress();
-    }
+//
+//    public void notifyPlayer(){
+//        if (android.os.Build.VERSION.SDK_INT  < 15 ){
+//            show8ApiPlayerProgress();
+//        }else show15ApiPlayerProgress();
+//    }
 
     public void removePlayer(){
         NotificationManager mNotificationManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -51,6 +51,7 @@ public class NotifyManager extends Manager{
     public void notifyDownloading(String name, int current, int max){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
         mBuilder.setContentTitle(name).setSmallIcon(R.drawable.icon).setOngoing(true).setProgress(max, current, false)
+                .setContentIntent(createEmptyPending())
                 .setTicker(core.getContext().getString(R.string.song_downloading));
         mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
     }
@@ -58,25 +59,25 @@ public class NotifyManager extends Manager{
     public void removeDownloading(){
         mNotifyManager.cancel(DOWNLOAD_NOTIFY_ID);
     }
-
-    private void show8ApiPlayerProgress() {
-        RemoteViews remoteView = new RemoteViews(core.getContext().getPackageName(), R.layout.simple_player_notification);
-        notify(PLAYER_NOTIFY_ID, R.drawable.icon, remoteView);
-    }
-
-    private void show15ApiPlayerProgress() {
-        RemoteViews notificationView = new RemoteViews(core.getContext().getPackageName(), R.layout.progress_notification);
-
-        if(prevPendIntent == null) createPrevPending();
-        if(nextPendIntent == null) createNextPending();
-        if(pausePendIntent == null) createPausePending();
-
-        notificationView.setOnClickPendingIntent(R.id.prev_notify_button, prevPendIntent);
-        notificationView.setOnClickPendingIntent(R.id.next_notify_button, nextPendIntent);
-        notificationView.setOnClickPendingIntent(R.id.play_pause_notify_button, pausePendIntent);
-
-        notify(PLAYER_NOTIFY_ID, R.drawable.icon, notificationView);
-    }
+//
+//    private void show8ApiPlayerProgress() {
+//        RemoteViews remoteView = new RemoteViews(core.getContext().getPackageName(), R.layout.simple_player_notification);
+//        notify(PLAYER_NOTIFY_ID, R.drawable.icon, remoteView);
+//    }
+//
+//    private void show15ApiPlayerProgress() {
+//        RemoteViews notificationView = new RemoteViews(core.getContext().getPackageName(), R.layout.progress_notification);
+//
+//        if(prevPendIntent == null) createPrevPending();
+//        if(nextPendIntent == null) createNextPending();
+//        if(pausePendIntent == null) createPausePending();
+//
+//        notificationView.setOnClickPendingIntent(R.id.prev_notify_button, prevPendIntent);
+//        notificationView.setOnClickPendingIntent(R.id.next_notify_button, nextPendIntent);
+//        notificationView.setOnClickPendingIntent(R.id.play_pause_notify_button, pausePendIntent);
+//
+//        notify(PLAYER_NOTIFY_ID, R.drawable.icon, notificationView);
+//    }
 
     //Shows notification
     private void notify(int id, int iconId, RemoteViews remoteViews){
@@ -119,6 +120,7 @@ public class NotifyManager extends Manager{
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
         mBuilder.setContentTitle(core.getContext().getString(R.string.song_downloading_error))
                 .setContentInfo(name).setSmallIcon(R.drawable.icon).setOngoing(false).setProgress(0, 0, false)
+                .setContentIntent(createEmptyPending())
                 .setTicker(core.getContext().getString(R.string.song_downloading_error));
         mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
     }
@@ -127,7 +129,12 @@ public class NotifyManager extends Manager{
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
         mBuilder.setContentTitle(core.getContext().getString(R.string.downloading_finish)).setSmallIcon(R.drawable.icon)
                 .setOngoing(false).setProgress(0, 0, false)
+                .setContentIntent(createEmptyPending())
                 .setTicker(core.getContext().getString(R.string.downloading_finish));
         mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
+    }
+
+    private PendingIntent createEmptyPending(){
+        return PendingIntent.getActivity(core.getContext(), 0, new Intent(), 0);
     }
 }

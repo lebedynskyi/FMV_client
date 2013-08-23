@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import com.music.fmv.core.Core;
+import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
 import com.music.fmv.services.PlayerService;
 
@@ -19,6 +20,7 @@ public class PlayerManager extends Manager implements Player{
     private Player player;
     private SourceConnection connection;
 
+
     public PlayerManager(Core coreManager){
         super(coreManager);
         connection = new SourceConnection();
@@ -28,6 +30,10 @@ public class PlayerManager extends Manager implements Player{
     @Override
     protected void finish() {
         core.getContext().unbindService(connection);
+    }
+
+    public boolean isShuffle() {
+        return false;
     }
 
     private class SourceConnection implements ServiceConnection{
@@ -77,8 +83,24 @@ public class PlayerManager extends Manager implements Player{
     }
 
     @Override
+    public void play(PlayableSong song) {
+        if (player == null) bindToPlayer();
+        player.play(song);
+    }
+
+    @Override
+    public void shuffle() {
+
+    }
+
+    @Override
     public void setPlayerStatusListener(PlayerStatusListener listener) {
 
+    }
+
+    @Override
+    public void loop() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private void bindToPlayer(){

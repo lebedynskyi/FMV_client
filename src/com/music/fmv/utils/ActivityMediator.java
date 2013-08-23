@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.music.fmv.activities.BandInfoActivity;
+import com.music.fmv.activities.PlayerActivity;
 import com.music.fmv.models.BandInfoModel;
 
 /**
@@ -70,5 +71,9 @@ public class ActivityMediator {
         if (isActivity) {
             ((Activity) context).startActivityForResult(intent, requestCode);
         }
+    }
+
+    public void startPlayerActivity() {
+        startActivity(PlayerActivity.class);
     }
 }
