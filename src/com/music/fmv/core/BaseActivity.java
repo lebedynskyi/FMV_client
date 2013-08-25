@@ -7,6 +7,10 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
 import com.music.fmv.R;
 import com.music.fmv.models.Captcha;
 import com.music.fmv.services.PlayerService;
@@ -26,6 +30,7 @@ public abstract class BaseActivity extends FragmentActivity{
     protected Core mCore;
     protected ActivityMediator mMediator;
     protected Handler handler;
+    protected Tracker tracker;
 
     @Override
     protected final void onCreate(Bundle savedInstanceState){
@@ -35,6 +40,13 @@ public abstract class BaseActivity extends FragmentActivity{
         handler = new Handler();
         onCreated(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(findViewById(android.R.id.content), this);
+        tracker = GoogleAnalytics.getInstance(this).getTracker("UA-43469464-1");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        tracker.set(Fields.SESSION_CONTROL, "start");
     }
 
     @Override
@@ -46,6 +58,17 @@ public abstract class BaseActivity extends FragmentActivity{
                 checkAdvert();
             }
         }, 500);
+    }
+
+    protected void sendScreenCount(String screenName){
+        tracker.set(Fields.SCREEN_NAME, screenName.toString() + " -> " + this.getClass().getName());
+        tracker.send(MapBuilder.createAppView().build());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        tracker.set(Fields.SESSION_CONTROL, "end");
     }
 
     private void checkAdvert() {
@@ -77,16 +100,6 @@ public abstract class BaseActivity extends FragmentActivity{
             return true;
         }
         mCore.showToast(R.string.network_unavailable);
-        return false;
-    }
-
-    protected final boolean isPlayerRunned() {
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (PlayerService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
         return false;
     }
 

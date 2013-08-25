@@ -176,7 +176,7 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
     private SearchSongAdapter.AdapterCallback adapterCallback = new SearchSongAdapter.AdapterCallback() {
         @Override
         public void playClicked(PlayableSong model) {
-            core.getPlayerManager().play(model);
+            core.getPlayerManager().getPlayer().play(model);
             mMediator.startPlayerActivity();
         }
 

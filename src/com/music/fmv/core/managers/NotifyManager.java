@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 import com.music.fmv.R;
+import com.music.fmv.activities.PlayerActivity;
 import com.music.fmv.core.Core;
 import com.music.fmv.services.PlayerService;
 
@@ -54,10 +55,13 @@ public class NotifyManager extends Manager{
         RemoteViews view = new RemoteViews(core.getContext().getPackageName(),R.layout.simple_player_notification);
         view.setTextViewText(R.id.song_name, songName);
         view.setTextViewText(R.id.song_owner, songOwner);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(core.getContext());
-        builder.setContentTitle(songName).setOngoing(true);
-        builder.setContent(view).setContentIntent(createEmptyPending());
-        mNotifyManager.notify(PLAYER_NOTIFY_ID, builder.build());
+        Intent playerIntent = new Intent(core.getContext(), PlayerActivity.class);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
+        mBuilder.setContent(view).setSmallIcon(R.drawable.icon).setOngoing(true)
+                .setContentIntent(PendingIntent.getActivity(core.getContext(), 0, playerIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .setTicker(songOwner + " - " + songName);
+        mNotifyManager.notify(PLAYER_NOTIFY_ID, mBuilder.build());
     }
 
     private void createPausePending() {
@@ -100,6 +104,6 @@ public class NotifyManager extends Manager{
     }
 
     private PendingIntent createEmptyPending(){
-        return PendingIntent.getActivity(core.getContext(), 0, new Intent(), 0);
+        return PendingIntent.getActivity(core.getContext(), 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

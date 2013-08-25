@@ -37,6 +37,9 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private final ArrayList<PlayableSong> playerQueue = new ArrayList<PlayableSong>();
     private PlayerStatusListener statusListener;
 
+    private PlayableSong currentSong;
+    private boolean isShuffle;
+
     public enum PLAYER_STATUS {
         PLAYING, PAUSED, STOPPED, STARTED
     }
@@ -82,13 +85,29 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         core.getNotificationManager().removePlayer();
     }
 
-    private void notifyState() {
-        if (statusListener == null)  return;
+    private void showNotification(){
+        if (currentSong != null){
+            core.getNotificationManager().notifyPlayer(currentSong.getTitle(), currentSong.getArtist());
+        }
+    }
 
+    private void notifyState() {
+        if (statusListener != null) {
+            statusListener.onStatus();
+        }
     }
 
     public void pause() {
-
+        if (mPlayer != null) {
+            if(mPlayer.isPlaying()){
+                mPlayer.pause();
+                core.getNotificationManager().removePlayer();
+            }else {
+                mPlayer.start();
+                showNotification();
+            }
+        }
+        notifyStateCallback();
     }
 
     public void previous() {
@@ -100,7 +119,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     public void stop() {
-
+        if (mPlayer != null) mPlayer.stop();
     }
 
     @Override
@@ -111,7 +130,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public void shuffle() {
-
+        isShuffle = !isShuffle;
+        notifyStateCallback();
     }
 
     @Override
@@ -120,8 +140,45 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
+    public boolean isShuffle() {
+        return isShuffle;
+    }
+
+    @Override
+    public void seek(int value) {
+        if (mPlayer != null) mPlayer.seekTo(value);
+    }
+
+    @Override
+    public int getProgress() {
+        if (mPlayer != null) return mPlayer.getCurrentPosition();
+        return 0;
+    }
+
+    @Override
+    public int getDuration() {
+        if (mPlayer != null) return mPlayer.getDuration();
+        return 0;
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return  mPlayer != null && mPlayer.isPlaying();
+    }
+
+    @Override
     public void loop() {
         mPlayer.setLooping(!mPlayer.isLooping());
+        notifyStateCallback();
+    }
+
+    private void notifyStateCallback() {
+        if (statusListener != null) statusListener.onControllCallBack();
+    }
+
+    @Override
+    public boolean isLooping() {
+        return mPlayer != null && mPlayer.isLooping();
     }
 
     private synchronized void playSong(final PlayableSong song){
@@ -156,6 +213,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnCompletionListener(this);
             mPlayer.prepareAsync();
+            currentSong = song;
+            showNotification();
         }catch (Exception e){
             Toast.makeText(this, getString(R.string.cannot_play_song) + " " + song.toString(), Toast.LENGTH_SHORT).show();
         }
@@ -174,18 +233,18 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     //Players listeners
     @Override
     public void onCompletion(MediaPlayer mp) {
-        notifyState();
+//        notifyState();
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
-        notifyState();
+        statusListener.onNewSong();
     }
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        notifyState();
+        if (statusListener != null) statusListener.onBuffering(percent);
     }
 
     @Override

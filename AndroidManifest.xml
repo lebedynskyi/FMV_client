@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.music.fmv"
-          android:versionCode="10"
-          android:versionName="1.1">
+          android:versionCode="45"
+          android:versionName="1.0.45">
     <uses-sdk android:minSdkVersion="8"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.PlayerActivity" android:configChanges="orientation"/>
+        <activity android:name=".activities.PlayerActivity" android:configChanges="orientation"
+                android:launchMode="singleInstance"/>
         <activity android:name=".activities.BandInfoActivity" android:configChanges="orientation"/>
         <service android:name=".services.PlayerService"/>
     </application>

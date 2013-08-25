@@ -16,7 +16,7 @@ import com.music.fmv.services.PlayerService;
  * Date: 8/12/13
  * Time: 12:07 PM
  */
-public class PlayerManager extends Manager implements Player{
+public class PlayerManager extends Manager{
     private Player player;
     private SourceConnection connection;
 
@@ -27,13 +27,14 @@ public class PlayerManager extends Manager implements Player{
         bindToPlayer();
     }
 
+    public Player getPlayer(){
+        if (player == null)  bindToPlayer();
+        return player;
+    }
+
     @Override
     protected void finish() {
         core.getContext().unbindService(connection);
-    }
-
-    public boolean isShuffle() {
-        return false;
     }
 
     private class SourceConnection implements ServiceConnection{
@@ -56,51 +57,6 @@ public class PlayerManager extends Manager implements Player{
         public PlayerService getService() {
             return service;
         }
-    }
-
-    @Override
-    public void pause() {
-        if (player == null) bindToPlayer();
-        player.pause();
-    }
-
-    @Override
-    public void previous() {
-        if (player == null) bindToPlayer();
-        player.previous();
-    }
-
-    @Override
-    public void next() {
-        if (player == null) bindToPlayer();
-        player.next();
-    }
-
-    @Override
-    public void stop() {
-        if (player == null) bindToPlayer();
-        player.stop();
-    }
-
-    @Override
-    public void play(PlayableSong song) {
-        if (player == null) bindToPlayer();
-        player.play(song);
-    }
-
-    @Override
-    public void shuffle() {
-        if (player != null) player.shuffle();
-    }
-
-    @Override
-    public void setPlayerStatusListener(PlayerStatusListener listener) {
-
-    }
-
-    @Override
-    public void loop() {
-        if (player != null) player.loop();
     }
 
     private void bindToPlayer(){

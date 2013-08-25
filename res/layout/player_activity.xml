@@ -3,7 +3,7 @@
 <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
-        android:padding="5dp">
+        android:padding="5dp" android:background="@color/black">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -18,12 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/song_name" android:layout_above="@+id/song_owner" android:singleLine="true"/>
+            android:id="@+id/song_name" android:layout_above="@+id/song_owner" android:singleLine="true"
+            android:textColor="@color/white"/>
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/song_owner" android:layout_above="@+id/status_container" android:singleLine="true"/>
+            android:id="@+id/song_owner" android:layout_above="@+id/status_container" android:singleLine="true"
+            android:textColor="@color/white"/>
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:id="@+id/status_container"
@@ -31,48 +33,51 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/full_time" android:layout_alignParentLeft="true"/>
+                android:text="15.25"
+                android:id="@+id/current_time" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+                android:textColor="@color/white"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/curr_time" android:layout_alignParentRight="true"/>
-        <ProgressBar
+                android:text="102.36"
+                android:id="@+id/full_time" android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" android:textColor="@color/white"/>
+        <SeekBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/curr_progress" android:layout_toRightOf="@+id/full_time"
-                android:layout_toLeftOf="@+id/curr_time"/>
+                android:id="@+id/curr_progress" android:layout_toRightOf="@+id/current_time"
+                android:layout_toLeftOf="@+id/full_time" android:layout_centerVertical="true"
+                android:layout_margin="5dp" android:layout_marginRight="5dp"/>
     </RelativeLayout>
-    <LinearLayout
-            android:orientation="horizontal"
+    <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:layout_alignParentBottom="true"
             android:id="@+id/controls_container">
         <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N"
-                android:id="@+id/shuffle" android:layout_weight="1"/>
+                android:id="@+id/shuffle" android:layout_weight="1"
+                android:background="@drawable/player_shuffle_selector" android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
         <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N"
-                android:id="@+id/prev" android:layout_weight="1"/>
+                android:id="@+id/prev" android:layout_weight="1" android:background="@drawable/player_prev_selector"
+                android:layout_centerVertical="true" android:layout_toLeftOf="@+id/play_pause"/>
         <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N"
-                android:id="@+id/play_pause" android:layout_weight="1"/>
+                android:id="@+id/play_pause" android:layout_weight="1"
+                android:background="@drawable/player_play_selector" android:layout_centerInParent="true"/>
         <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N"
-                android:id="@+id/next" android:layout_weight="1"/>
+                android:id="@+id/next" android:layout_weight="1" android:background="@drawable/player_next_selector"
+                android:layout_centerVertical="true" android:layout_toRightOf="@+id/play_pause"/>
         <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N"
-                android:id="@+id/loop" android:layout_weight="1"/>
-    </LinearLayout>
+                android:id="@+id/loop" android:layout_weight="1" android:background="@drawable/player_loop_selector"
+                android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 </RelativeLayout>

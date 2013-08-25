@@ -74,6 +74,6 @@ public class ActivityMediator {
     }
 
     public void startPlayerActivity() {
-        startActivity(PlayerActivity.class);
+        startActivity(PlayerActivity.class, new int[]{Intent.FLAG_ACTIVITY_SINGLE_TOP});
     }
 }
