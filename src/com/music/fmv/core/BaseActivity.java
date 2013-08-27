@@ -1,19 +1,14 @@
 package com.music.fmv.core;
 
-import android.app.ActivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.analytics.tracking.android.Fields;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.analytics.tracking.android.*;
 import com.music.fmv.R;
 import com.music.fmv.models.Captcha;
-import com.music.fmv.services.PlayerService;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
@@ -47,6 +42,7 @@ public abstract class BaseActivity extends FragmentActivity{
     protected void onStart() {
         super.onStart();
         tracker.set(Fields.SESSION_CONTROL, "start");
+        EasyTracker.getInstance(this).activityStart(this);
     }
 
     @Override
@@ -60,8 +56,8 @@ public abstract class BaseActivity extends FragmentActivity{
         }, 500);
     }
 
-    protected void sendScreenCount(String screenName){
-        tracker.set(Fields.SCREEN_NAME, screenName.toString() + " -> " + this.getClass().getName());
+    public void sendScreenCount(String screenName){
+        tracker.set(Fields.SCREEN_NAME, screenName + " -> " + this.getClass().getName());
         tracker.send(MapBuilder.createAppView().build());
     }
 
@@ -69,6 +65,7 @@ public abstract class BaseActivity extends FragmentActivity{
     protected void onStop() {
         super.onStop();
         tracker.set(Fields.SESSION_CONTROL, "end");
+        EasyTracker.getInstance(this).activityStop(this);
     }
 
     private void checkAdvert() {

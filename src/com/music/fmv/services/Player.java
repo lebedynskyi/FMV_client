@@ -25,10 +25,8 @@ public interface Player {
 
 
     public interface PlayerStatusListener{
-        public void onStatus();
         public void onNewSong();
         public void onControllCallBack();
-
-        void onBuffering(int progress);
+        public void onBuffering(int progress);
     }
 }

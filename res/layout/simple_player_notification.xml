@@ -8,7 +8,8 @@
             android:layout_width="50dp"
             android:layout_margin="5dp"
             android:id="@+id/song_icon"
-            android:layout_height="50dp" android:layout_marginRight="5dp"/>
+            android:layout_height="50dp" android:layout_marginRight="5dp" android:background="@drawable/ic_player_play_down"
+            android:scaleType="centerInside"/>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -18,11 +19,12 @@
                 android:layout_height="match_parent"
                 android:id="@+id/song_name" android:layout_toRightOf="@+id/song_icon"
                 android:singleLine="true" android:layout_weight="1" android:text="asdadasAASSDDDPPppp"
-                android:textSize="18sp"/>
+                android:textSize="20sp"/>
         <TextView android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:layout_below="@id/song_name"
                   android:id="@+id/song_owner" android:layout_toRightOf="@+id/song_icon" android:singleLine="true"
-                  android:layout_weight="1" android:text="asdadasAASSDDDPPppp"/>
+                  android:layout_weight="1" android:text="asdadasAASSDDDPPppp" android:textSize="16sp"
+                  android:layout_marginTop="3dp"/>
     </LinearLayout>
 </RelativeLayout>

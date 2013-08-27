@@ -29,9 +29,6 @@ public class MainActivity extends BaseActivity {
 
     private int backPressed = 0;
 
-
-    private List<BaseFragment> fragments;
-
     @Override
     protected void onCreated(Bundle state) {
         setContentView(R.layout.main_activity);
@@ -47,7 +44,7 @@ public class MainActivity extends BaseActivity {
         musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector), tabListener);
         settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector), tabListener);
 
-        fragments = new ArrayList<BaseFragment>(4);
+        List<BaseFragment> fragments = new ArrayList<BaseFragment>(4);
         fragments.add(SEARCH_TAB, createSearchTab());
         fragments.add(HISTORY_TAB, createHistoryTab());
         fragments.add(MUSIC_TAB, createMusicTab());
@@ -82,23 +79,25 @@ public class MainActivity extends BaseActivity {
     public void searchTabClicked() {
         ViewUtils.selectButton(searchBTN, musicBTN, historyBTN, settingsBTN);
         pager.setCurrentItem(SEARCH_TAB);
+        sendScreenCount("Search tab");
     }
 
     public void musicTabClicked() {
         ViewUtils.selectButton(musicBTN, searchBTN, historyBTN, settingsBTN);
         pager.setCurrentItem(MUSIC_TAB);
-
+        sendScreenCount("Music tab");
     }
 
     public void settingsTabClicked() {
         ViewUtils.selectButton(settingsBTN, searchBTN, musicBTN, historyBTN);
         pager.setCurrentItem(SETTINGS_TAB);
-
+        sendScreenCount("Settings tab");
     }
 
     public void historyClicked() {
         ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
         pager.setCurrentItem(HISTORY_TAB);
+        sendScreenCount("History tab");
     }
 
     //Listener for buttons on the bottom of screen (Tabs)

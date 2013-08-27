@@ -10,7 +10,6 @@ import com.music.fmv.core.BaseActivity;
 import com.music.fmv.services.Player;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -18,7 +17,7 @@ import java.util.Date;
  * Date: 8/1/13
  * Time: 10:33 AM
  */
-public class PlayerActivity extends BaseActivity{
+public class PlayerActivity extends BaseActivity {
     private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
 
     private View prev;
@@ -47,7 +46,7 @@ public class PlayerActivity extends BaseActivity{
     private Drawable shuffleNorm;
     private Drawable shuffleAct;
 
-    private RefresshTimer refresher;
+    private RefreshTimer refresher;
 
     @Override
     protected void onCreated(Bundle state) {
@@ -60,14 +59,14 @@ public class PlayerActivity extends BaseActivity{
         super.onStart();
         playerManager = mCore.getPlayerManager().getPlayer();
         playerManager.setPlayerStatusListener(statusListener);
-        refresher = new RefresshTimer(1 * 60 * 1000, 500);
+        refresher = new RefreshTimer(1 * 60 * 1000, 500);
         refresher.start();
         currProgress.setMax(playerManager.getDuration());
         fullTime.setText(TIME_SD.format(new Date(playerManager.getDuration())));
         currProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser){
+                if (fromUser) {
                     playerManager.seek(progress);
                 }
             }
@@ -84,18 +83,18 @@ public class PlayerActivity extends BaseActivity{
         });
     }
 
-    public void initViews(){
+    public void initViews() {
         shuffle = findViewById(R.id.shuffle);
         prev = findViewById(R.id.prev);
         pausePlay = findViewById(R.id.play_pause);
         next = findViewById(R.id.next);
         loop = findViewById(R.id.loop);
 
-        shuffle   .setOnClickListener(controlsListener);
-        prev      .setOnClickListener(controlsListener);
-        pausePlay .setOnClickListener(controlsListener);
-        next      .setOnClickListener(controlsListener);
-        loop      .setOnClickListener(controlsListener);
+        shuffle.setOnClickListener(controlsListener);
+        prev.setOnClickListener(controlsListener);
+        pausePlay.setOnClickListener(controlsListener);
+        next.setOnClickListener(controlsListener);
+        loop.setOnClickListener(controlsListener);
 
         songCover = (ImageView) findViewById(R.id.song_image);
         imageContainer = findViewById(R.id.image_container);
@@ -107,12 +106,12 @@ public class PlayerActivity extends BaseActivity{
         currProgress = (SeekBar) findViewById(R.id.curr_progress);
 
 
-        pause       = getResources().getDrawable(R.drawable.player_pause_selector);
-        play        = getResources().getDrawable(R.drawable.player_play_selector);
-        loopNorm    = getResources().getDrawable(R.drawable.player_loop_selector);
-        loopAct     = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
+        pause = getResources().getDrawable(R.drawable.player_pause_selector);
+        play = getResources().getDrawable(R.drawable.player_play_selector);
+        loopNorm = getResources().getDrawable(R.drawable.player_loop_selector);
+        loopAct = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
         shuffleNorm = getResources().getDrawable(R.drawable.player_shuffle_selector);
-        shuffleAct  = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
+        shuffleAct = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
     }
 
     @Override
@@ -130,7 +129,7 @@ public class PlayerActivity extends BaseActivity{
         super.onWindowFocusChanged(hasFocus);
         int width = imageContainer.getWidth();
         int height = imageContainer.getHeight();
-        int minimum = width < height ? width: height;
+        int minimum = width < height ? width : height;
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(minimum, minimum);
         songCover.setLayoutParams(params);
     }
@@ -138,7 +137,7 @@ public class PlayerActivity extends BaseActivity{
     private View.OnClickListener controlsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.next:
                     playerManager.next();
                     break;
@@ -157,31 +156,30 @@ public class PlayerActivity extends BaseActivity{
         }
     };
 
+    private void checkStatus() {
+        if (playerManager.isPlaying()) {
+            pausePlay.setBackground(pause);
+        } else pausePlay.setBackground(play);
+        curTime.setText(TIME_SD.format(new Date(playerManager.getProgress())));
+        if (!trackingInTouchMode) {
+            currProgress.setProgress(playerManager.getProgress());
+        }
+    }
+
     private Player.PlayerStatusListener statusListener = new Player.PlayerStatusListener() {
         @Override
-        public void onStatus() {
-            if (playerManager.isPlaying()){
+        public void onControllCallBack() {
+            if (playerManager.isPlaying()) {
                 pausePlay.setBackground(pause);
-            }else pausePlay.setBackground(play);
-            curTime.setText(TIME_SD.format(new Date(playerManager.getProgress())));
-            if (!trackingInTouchMode){
-                currProgress.setProgress(playerManager.getProgress());
-            }
-        }
+            } else pausePlay.setBackground(play);
 
-        @Override
-        public void onControllCallBack(){
-            if (playerManager.isPlaying()){
-                pausePlay.setBackground(pause);
-            }else pausePlay.setBackground(play);
-
-            if (playerManager.isLooping()){
+            if (playerManager.isLooping()) {
                 loop.setBackground(loopAct);
-            }else loop.setBackground(loopNorm);
+            } else loop.setBackground(loopNorm);
 
-            if (playerManager.isShuffle()){
+            if (playerManager.isShuffle()) {
                 shuffle.setBackground(shuffleAct);
-            }else shuffle.setBackground(shuffleNorm);
+            } else shuffle.setBackground(shuffleNorm);
         }
 
         @Override
@@ -192,25 +190,25 @@ public class PlayerActivity extends BaseActivity{
         }
 
         @Override
-        public void onBuffering(int progress){
+        public void onBuffering(int progress) {
             currProgress.setSecondaryProgress(progress);
         }
     };
 
-    private class RefresshTimer extends CountDownTimer{
-        public RefresshTimer(long millisInFuture, long countDownInterval) {
+    private class RefreshTimer extends CountDownTimer {
+        public RefreshTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
         @Override
         public void onTick(long l) {
-            statusListener.onStatus();
+            checkStatus();
         }
 
         @Override
         public void onFinish() {
             refresher = null;
-            refresher  = new RefresshTimer(1 * 60 * 1000, 500);
+            refresher = new RefreshTimer(1 * 60 * 1000, 500);
             refresher.start();
         }
     }
