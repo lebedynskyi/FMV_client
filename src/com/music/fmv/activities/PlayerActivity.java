@@ -18,6 +18,7 @@ import java.util.Date;
  * Time: 10:33 AM
  */
 public class PlayerActivity extends BaseActivity {
+    public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
     private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
 
     private View prev;
@@ -47,11 +48,13 @@ public class PlayerActivity extends BaseActivity {
     private Drawable shuffleAct;
 
     private RefreshTimer refresher;
+    private boolean fromNotify;
 
     @Override
     protected void onCreated(Bundle state) {
         setContentView(R.layout.player_activity);
         initViews();
+        fromNotify = getIntent().getIntExtra(FROM_NOTIFY_FLAG, 0) != 0;
     }
 
     @Override
@@ -122,6 +125,10 @@ public class PlayerActivity extends BaseActivity {
             refresher.cancel();
             refresher = null;
         }
+    }
+
+    public void startMainActivity(){
+        mMediator.startMain();
     }
 
     @Override

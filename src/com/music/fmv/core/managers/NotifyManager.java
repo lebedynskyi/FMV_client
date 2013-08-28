@@ -56,6 +56,7 @@ public class NotifyManager extends Manager{
         view.setTextViewText(R.id.song_name, songName);
         view.setTextViewText(R.id.song_owner, songOwner);
         Intent playerIntent = new Intent(core.getContext(), PlayerActivity.class);
+        playerIntent.putExtra(PlayerActivity.FROM_NOTIFY_FLAG, 1);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
         mBuilder.setContent(view).setSmallIcon(R.drawable.icon).setOngoing(true)

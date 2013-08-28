@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.music.fmv.activities.BandInfoActivity;
+import com.music.fmv.activities.MainActivity;
 import com.music.fmv.activities.PlayerActivity;
 import com.music.fmv.models.BandInfoModel;
 
@@ -30,6 +31,10 @@ public class ActivityMediator {
         this.context = context;
         if (context instanceof Activity)
             isActivity = true;
+    }
+
+    public void startMain() {
+        startActivity(MainActivity.class, new int[]{Intent.FLAG_ACTIVITY_CLEAR_TOP});
     }
 
     private void startActivity(Intent intent) {
