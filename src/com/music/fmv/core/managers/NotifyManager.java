@@ -64,26 +64,26 @@ public class NotifyManager extends Manager{
         mNotifyManager.notify(PLAYER_NOTIFY_ID, mBuilder.build());
     }
 
-    private void createPausePending() {
-        Intent intent = new Intent();
-        intent.setAction(PlayerService.RECEIVER_ACTION);
-        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PAUSE);
-        pausePendIntent = PendingIntent.getBroadcast(core.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    private void createNextPending() {
-        Intent intent = new Intent();
-        intent.setAction(PlayerService.RECEIVER_ACTION);
-        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.NEXT);
-        nextPendIntent = PendingIntent.getBroadcast(core.getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    private void createPrevPending() {
-        Intent intent = new Intent();
-        intent.setAction(PlayerService.RECEIVER_ACTION);
-        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PREV);
-        prevPendIntent = PendingIntent.getBroadcast(core.getContext(), 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
+//    private void createPausePending() {
+//        Intent intent = new Intent();
+//        intent.setAction(PlayerService.RECEIVER_ACTION);
+//        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PAUSE);
+//        pausePendIntent = PendingIntent.getBroadcast(core.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//    }
+//
+//    private void createNextPending() {
+//        Intent intent = new Intent();
+//        intent.setAction(PlayerService.RECEIVER_ACTION);
+//        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.NEXT);
+//        nextPendIntent = PendingIntent.getBroadcast(core.getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//    }
+//
+//    private void createPrevPending() {
+//        Intent intent = new Intent();
+//        intent.setAction(PlayerService.RECEIVER_ACTION);
+//        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PREV);
+//        prevPendIntent = PendingIntent.getBroadcast(core.getContext(), 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//    }
 
     public void notifyErrorDownloading(String name) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());

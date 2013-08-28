@@ -33,9 +33,9 @@ public abstract class BaseActivity extends FragmentActivity{
         mCore = Core.getInstance(this);
         mMediator = new ActivityMediator(this);
         handler = new Handler();
+        tracker = GoogleAnalytics.getInstance(this).getTracker("UA-43469464-1");
         onCreated(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(findViewById(android.R.id.content), this);
-        tracker = GoogleAnalytics.getInstance(this).getTracker("UA-43469464-1");
     }
 
     @Override
