@@ -29,8 +29,8 @@ import java.util.ArrayList;
 
 public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener, Player {
-    public static final String RECEIVER_ACTION = "RECEIVER_ACTION";
-    public static final String ACTION_KEY = "ACTION_KEY";
+//    public static final String RECEIVER_ACTION = "RECEIVER_ACTION";
+//    public static final String ACTION_KEY = "ACTION_KEY";
 
     private MediaPlayer mPlayer;
     private Core core;
@@ -40,20 +40,20 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private PlayableSong currentSong;
     private boolean isShuffle;
 
-    public enum PLAYER_STATUS {
-        PLAYING, PAUSED, STOPPED, STARTED
-    }
+//    public enum PLAYER_STATUS {
+//        PLAYING, PAUSED, STOPPED, STARTED
+//    }
 
-    public enum NOTIFICATION_ACTIONS {
-        STOP, PAUSE, NEXT, PREV
-    }
+//    public enum NOTIFICATION_ACTIONS {
+//        STOP, PAUSE, NEXT, PREV
+//    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         Toast.makeText(this, "Player created", Toast.LENGTH_SHORT).show();
         core = Core.getInstance(this);
-        registerReceiver(receiver, new IntentFilter(RECEIVER_ACTION));
+//        registerReceiver(receiver, new IntentFilter(RECEIVER_ACTION));
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -68,7 +68,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public void onDestroy() {
         releasePlayer();
         clearNotify();
-        unregisterReceiver(receiver);
+//        unregisterReceiver(receiver);
         Toast.makeText(this, "Player destroyed", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
@@ -88,12 +88,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private void showNotification(){
         if (currentSong != null){
             core.getNotificationManager().notifyPlayer(currentSong.getTitle(), currentSong.getArtist());
-        }
-    }
-
-    private void notifyState() {
-        if (statusListener != null) {
-            statusListener.onStatus();
         }
     }
 
@@ -233,7 +227,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     //Players listeners
     @Override
     public void onCompletion(MediaPlayer mp) {
-//        notifyState();
+        core.getNotificationManager().removePlayer();
     }
 
     @Override
@@ -252,32 +246,32 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return false;
     }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String actionStr = intent.getAction();
-            if (TextUtils.isEmpty(actionStr) || !actionStr.equals(RECEIVER_ACTION) || intent.getExtras() == null) return;
-
-            Object act = intent.getSerializableExtra(ACTION_KEY);
-            if (act == null) return;
-
-            NOTIFICATION_ACTIONS action = (NOTIFICATION_ACTIONS) act;
-
-            Toast.makeText(context, action.name(), Toast.LENGTH_SHORT).show();
-
-            switch (action){
-                case PREV:
-                    previous();
-                    break;
-                case PAUSE:
-                    pause();
-                    break;
-                case NEXT:
-                    next();
-                    break;
-                case STOP:
-                    stop();
-            }
-        }
-    };
+//    private BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String actionStr = intent.getAction();
+//            if (TextUtils.isEmpty(actionStr) || !actionStr.equals(RECEIVER_ACTION) || intent.getExtras() == null) return;
+//
+//            Object act = intent.getSerializableExtra(ACTION_KEY);
+//            if (act == null) return;
+//
+//            NOTIFICATION_ACTIONS action = (NOTIFICATION_ACTIONS) act;
+//
+//            Toast.makeText(context, action.name(), Toast.LENGTH_SHORT).show();
+//
+//            switch (action){
+//                case PREV:
+//                    previous();
+//                    break;
+//                case PAUSE:
+//                    pause();
+//                    break;
+//                case NEXT:
+//                    next();
+//                    break;
+//                case STOP:
+//                    stop();
+//            }
+//        }
+//    };
 }
