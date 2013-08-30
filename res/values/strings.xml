@@ -22,4 +22,5 @@
     <string name="downloading_finish">All songs downloaded successfully</string>
     <string name="file_already_exists">The song already downloaded</string>
     <string name="already_in_queue">The song is downloading already</string>
+    <string name="waiting">Waiting\.\.\.</string>
 </resources>

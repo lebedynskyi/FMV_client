@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
+import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
 
 import java.text.SimpleDateFormat;
@@ -190,10 +191,12 @@ public class PlayerActivity extends BaseActivity {
         }
 
         @Override
-        public void onNewSong() {
+        public void onNewSong(PlayableSong song) {
             int duration = playerManager.getDuration();
             currProgress.setMax(duration);
             fullTime.setText(TIME_SD.format(new Date(duration)));
+            songName.setText(song.getTitle());
+            songOwner.setText(song.getArtist());
         }
 
         @Override
@@ -215,7 +218,7 @@ public class PlayerActivity extends BaseActivity {
         @Override
         public void onFinish() {
             refresher = null;
-            refresher = new RefreshTimer(1 * 60 * 1000, 500);
+            refresher = new RefreshTimer(1 * 60 * 1000, 250);
             refresher.start();
         }
     }

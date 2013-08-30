@@ -110,7 +110,7 @@ public class SearchSongAdapter extends BaseAdapter{
             listView.closeAnimate(position + 1);
             switch (v.getId()){
                 case R.id.song_play:
-                    if (callback != null) callback.playClicked(model);
+                    if (callback != null) callback.playClicked(model, position);
                     break;
                 case R.id.song_add_to_queu:
                     if (callback != null) callback.addToQueueClicked(model);
@@ -122,7 +122,7 @@ public class SearchSongAdapter extends BaseAdapter{
     }
 
     public interface AdapterCallback{
-        public void playClicked(PlayableSong model);
+        public void playClicked(PlayableSong model, int pos);
         public void addToQueueClicked(PlayableSong model);
         public void downloadClicked(PlayableSong model);
     }

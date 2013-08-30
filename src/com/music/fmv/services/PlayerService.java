@@ -16,7 +16,12 @@ import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -29,8 +34,6 @@ import java.util.ArrayList;
 
 public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener, Player {
-//    public static final String RECEIVER_ACTION = "RECEIVER_ACTION";
-//    public static final String ACTION_KEY = "ACTION_KEY";
 
     private MediaPlayer mPlayer;
     private Core core;
@@ -40,35 +43,18 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private PlayableSong currentSong;
     private boolean isShuffle;
 
-//    public enum PLAYER_STATUS {
-//        PLAYING, PAUSED, STOPPED, STARTED
-//    }
-
-//    public enum NOTIFICATION_ACTIONS {
-//        STOP, PAUSE, NEXT, PREV
-//    }
-
     @Override
     public void onCreate() {
         super.onCreate();
         Toast.makeText(this, "Player created", Toast.LENGTH_SHORT).show();
         core = Core.getInstance(this);
-//        registerReceiver(receiver, new IntentFilter(RECEIVER_ACTION));
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread thread, Throwable ex) {
-                Toast.makeText(PlayerService.this, "Exception in PLAYEr SERVICe!! BLEa", Toast.LENGTH_SHORT).show();
-                stopSelf();
-            }
-        });
     }
 
     @Override
     public void onDestroy() {
         releasePlayer();
+        playerQueue.clear();
         clearNotify();
-//        unregisterReceiver(receiver);
         Toast.makeText(this, "Player destroyed", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
@@ -80,23 +66,12 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return binder;
     }
 
-    //Clears all notifications linked with player
-    private void clearNotify() {
-        core.getNotificationManager().removePlayer();
-    }
-
-    private void showNotification(){
-        if (currentSong != null){
-            core.getNotificationManager().notifyPlayer(currentSong.getTitle(), currentSong.getArtist());
-        }
-    }
-
     public void pause() {
         if (mPlayer != null) {
-            if(mPlayer.isPlaying()){
+            if (mPlayer.isPlaying()) {
                 mPlayer.pause();
                 core.getNotificationManager().removePlayer();
-            }else {
+            } else {
                 mPlayer.start();
                 showNotification();
             }
@@ -105,21 +80,24 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     public void previous() {
-
+        int curPosition = playerQueue.indexOf(currentSong);
+        if (curPosition <= 0) return;
+        playSong(playerQueue.get(curPosition - 1));
     }
 
     public void next() {
+        int curPosition = playerQueue.indexOf(currentSong);
+        int newPosition = curPosition + 1;
 
+        if (newPosition >= playerQueue.size() || curPosition == -1) {
+            core.getNotificationManager().removePlayer();
+        } else {
+            playSong(playerQueue.get(newPosition));
+        }
     }
 
     public void stop() {
         if (mPlayer != null) mPlayer.stop();
-    }
-
-    @Override
-    public void play(PlayableSong song) {
-        if (song == null) return;
-        playSong(song);
     }
 
     @Override
@@ -157,7 +135,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public boolean isPlaying() {
-        return  mPlayer != null && mPlayer.isPlaying();
+        return mPlayer != null && mPlayer.isPlaying();
     }
 
     @Override
@@ -166,74 +144,16 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         notifyStateCallback();
     }
 
-    private void notifyStateCallback() {
-        if (statusListener != null) statusListener.onControllCallBack();
-    }
-
-    @Override
-    public boolean isLooping() {
-        return mPlayer != null && mPlayer.isLooping();
-    }
-
-    private synchronized void playSong(final PlayableSong song){
-        final Api api = new Api();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String url = api.getUrlOfSong(song.getId());
-                    song.setUrl(url);
-                    core.getHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            playFromHttp(song);
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    private void playFromHttp(PlayableSong song) {
-        try {
-            releasePlayer();
-            mPlayer = new MediaPlayer();
-            mPlayer.setDataSource(song.getUrl());
-            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mPlayer.setOnInfoListener(this);
-            mPlayer.setOnBufferingUpdateListener(this);
-            mPlayer.setOnPreparedListener(this);
-            mPlayer.setOnCompletionListener(this);
-            mPlayer.prepareAsync();
-            currentSong = song;
-            showNotification();
-        }catch (Exception e){
-            Toast.makeText(this, getString(R.string.cannot_play_song) + " " + song.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void releasePlayer() {
-        playerQueue.clear();
-        if (mPlayer != null){
-            mPlayer.stop();
-            mPlayer.release();
-        }
-        mPlayer = null;
-    }
-
-
     //Players listeners
     @Override
     public void onCompletion(MediaPlayer mp) {
-        core.getNotificationManager().removePlayer();
+        next();
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
-        statusListener.onNewSong();
+        notifyNewSong(currentSong);
     }
 
     @Override
@@ -246,32 +166,104 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return false;
     }
 
-//    private BroadcastReceiver receiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String actionStr = intent.getAction();
-//            if (TextUtils.isEmpty(actionStr) || !actionStr.equals(RECEIVER_ACTION) || intent.getExtras() == null) return;
-//
-//            Object act = intent.getSerializableExtra(ACTION_KEY);
-//            if (act == null) return;
-//
-//            NOTIFICATION_ACTIONS action = (NOTIFICATION_ACTIONS) act;
-//
-//            Toast.makeText(context, action.name(), Toast.LENGTH_SHORT).show();
-//
-//            switch (action){
-//                case PREV:
-//                    previous();
-//                    break;
-//                case PAUSE:
-//                    pause();
-//                    break;
-//                case NEXT:
-//                    next();
-//                    break;
-//                case STOP:
-//                    stop();
-//            }
-//        }
-//    };
+    @Override
+    public boolean isLooping() {
+        return mPlayer != null && mPlayer.isLooping();
+    }
+
+    @Override
+    public void play(List<PlayableSong> songs, int position) {
+        if (songs == null || songs.size() == 0 || position >= songs.size()) return;
+        playerQueue.clear();
+        releasePlayer();
+        playerQueue.addAll(songs);
+        playSong(songs.get(position));
+    }
+
+    @Override
+    public PlayableSong getCurrentSong() {
+        return currentSong;
+    }
+
+    private synchronized void playSong(final PlayableSong song) {
+        if (statusListener != null) statusListener.onNewSong(song);
+        currentSong = song;
+        notifyNewSong(song);
+        showNotification();
+        if (core.getCacheManager().isSongExists(song)) {
+            playFromFile(song);
+        } else playFromHttp(song);
+    }
+
+    private void playFromFile(PlayableSong song) {
+        playFromPath(core.getCacheManager().getSongPath(song));
+    }
+
+    private void playFromHttp(final PlayableSong song) {
+        final Api api = new Api();
+        if (TextUtils.isEmpty(song.getUrl())) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final String url = api.getUrlOfSong(song.getId());
+                        song.setUrl(url);
+                        core.getHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                playFromPath(url);
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } else {
+            playFromPath(song.getUrl());
+        }
+    }
+
+    private void playFromPath(String path) {
+        try {
+            releasePlayer();
+            mPlayer = new MediaPlayer();
+            mPlayer.setDataSource(path);
+            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mPlayer.setOnInfoListener(this);
+            mPlayer.setOnBufferingUpdateListener(this);
+            mPlayer.setOnPreparedListener(this);
+            mPlayer.setOnCompletionListener(this);
+            mPlayer.prepareAsync();
+        } catch (Exception e) {
+            Toast.makeText(this, getString(R.string.cannot_play_song), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void releasePlayer() {
+        if (mPlayer != null) {
+            mPlayer.stop();
+            mPlayer.release();
+        }
+        mPlayer = null;
+    }
+
+    //Clears all notifications linked with player
+    private void clearNotify() {
+        core.getNotificationManager().removePlayer();
+    }
+
+    private void showNotification() {
+        if (currentSong != null) {
+            core.getNotificationManager().notifyPlayer(currentSong.getTitle(), currentSong.getArtist());
+        }
+    }
+
+    private void notifyStateCallback() {
+        if (statusListener != null) statusListener.onControllCallBack();
+    }
+
+    private void notifyNewSong(PlayableSong song) {
+        if (statusListener != null) statusListener.onNewSong(song);
+    }
 }
