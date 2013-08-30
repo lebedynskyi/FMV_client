@@ -13,8 +13,6 @@ import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.widgets.CaptchaDialog;
-import com.smaato.soma.AdType;
-import com.smaato.soma.BannerView;
 
 /**
  * User: vitaliylebedinskiy
@@ -81,14 +79,7 @@ public abstract class BaseActivity extends FragmentActivity{
     }
 
     private void initAdvert(ViewGroup advertView) {
-        BannerView banner = new BannerView(this);
-        banner.getAdSettings().setPublisherId(Const.ADS_PUBLISHER_ID);
-        banner.getAdSettings().setAdspaceId(Const.ADS_BLOCK_ID);
-        banner.getAdSettings().setBannerWidth(ViewUtils.getScrenWidth(this));
-        banner.getAdSettings().setAdType(AdType.ALL);
-        banner.asyncLoadNewBanner();
-        banner.setAutoReloadFrequency(30000);
-        advertView.addView(banner);
+
     }
 
     protected boolean runTask(AsyncTask task){

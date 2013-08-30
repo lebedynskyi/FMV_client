@@ -24,6 +24,14 @@ public class App extends Application{
         //Initialization of core Manager
         Core core = Core.getInstance(this);
 
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable ex) {
+                Core.getInstance(App.this).getNotificationManager().removeDownloading();
+                Core.getInstance(App.this).getNotificationManager().removePlayer();
+            }
+        });
+
         File imageCache = new File(core.getSettingsManager().getImageCacheFolder());
         imageCache.mkdirs();
 
