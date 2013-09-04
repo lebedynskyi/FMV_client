@@ -7,7 +7,8 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_above="@+id/song_name" android:gravity="center_vertical|center_horizontal"
+            android:layout_height="fill_parent" android:layout_above="@+id/song_name"
+            android:gravity="center_vertical|center_horizontal"
             android:id="@+id/image_container">
         <ImageView
                 android:layout_width="wrap_content"
@@ -34,7 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/waiting"
-                android:id="@+id/current_time" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+                android:id="@+id/current_time" android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:textColor="@color/white"/>
         <TextView
                 android:layout_width="wrap_content"
@@ -56,28 +58,48 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/shuffle" android:layout_weight="1"
+                android:id="@+id/shuffle"
                 android:background="@drawable/player_shuffle_selector" android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/prev" android:layout_weight="1" android:background="@drawable/player_prev_selector"
+                android:id="@+id/prev" android:background="@drawable/player_prev_selector"
                 android:layout_centerVertical="true" android:layout_toLeftOf="@+id/play_pause"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/play_pause" android:layout_weight="1"
+                android:id="@+id/play_pause"
                 android:background="@drawable/player_play_selector" android:layout_centerInParent="true"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/next" android:layout_weight="1" android:background="@drawable/player_next_selector"
+                android:id="@+id/next" android:background="@drawable/player_next_selector"
                 android:layout_centerVertical="true" android:layout_toRightOf="@+id/play_pause"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/loop" android:layout_weight="1" android:background="@drawable/player_loop_selector"
+                android:id="@+id/loop" android:background="@drawable/player_loop_selector"
                 android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
     </RelativeLayout>
+
+    <SlidingDrawer android:id="@+id/songs_drawer"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+            android:handle="@+id/songs_slider_handler"
+            android:content="@+id/songs_content">
+        <Button android:id="@+id/songs_slider_handler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <LinearLayout android:id="@+id/songs_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <TextView android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            <ListView android:id="@+id/songs_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                </LinearLayout>
+    </SlidingDrawer>
 </RelativeLayout>

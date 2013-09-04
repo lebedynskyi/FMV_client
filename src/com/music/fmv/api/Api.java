@@ -6,16 +6,11 @@ import com.music.fmv.models.PlayableSong;
 import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.utils.NetworkUtil;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
-
-import static com.music.fmv.api.ApiUtils.generateUrl;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,8 +49,8 @@ public class Api {
         }
 
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(API_URL).append(SEARCH_BAND_COMMAND).append(generateUrl(params));
-        String jsonResponse = NetworkUtil.doRequest(urlBuilder.toString());
+        urlBuilder.append(API_URL).append(SEARCH_BAND_COMMAND);
+        String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
 
         if (!TextUtils.isEmpty(jsonResponse)){
             JSONObject response = new JSONObject(jsonResponse);
@@ -78,9 +73,9 @@ public class Api {
         }
 
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(API_URL).append(SEARCH_ALBUMS_COMMAND).append(generateUrl(params));
+        urlBuilder.append(API_URL).append(SEARCH_ALBUMS_COMMAND);
 
-        String jsonResponse = NetworkUtil.doRequest(urlBuilder.toString());
+        String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
 
         if (!TextUtils.isEmpty(jsonResponse)){
             JSONObject response =new JSONObject(jsonResponse);
@@ -100,22 +95,21 @@ public class Api {
         }
 
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(API_URL).append(SEARCH_SONGS_COMMAND).append(generateUrl(params));
+        urlBuilder.append(API_URL).append(SEARCH_SONGS_COMMAND);
 
-        String jsonResponse = NetworkUtil.doRequest(urlBuilder.toString());
+        String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
 
         if (!TextUtils.isEmpty(jsonResponse)){
             JSONObject response = new JSONObject(jsonResponse);
             checkError(response);
             return ApiUtils.parseSearchSongs(response);
         }
-
         return null;
     }
 
     public String getUrlOfSong(String id) throws Exception{
         if (TextUtils.isEmpty(id)) throw new IllegalArgumentException("searchQuery cannot be empty");
-        String resp = NetworkUtil.doRequest(GET_SONG_URl + id);
+        String resp = NetworkUtil.doGet(GET_SONG_URl + id, null);
         if (resp!=null){
             JSONObject response = new JSONObject(resp);
             return response.getString("track_link");
@@ -127,18 +121,10 @@ public class Api {
         return null;
     }
 
-    public synchronized void downloadSong(){
-
-    }
-
     //throws exception if Json response has error
     private void checkError(JSONObject response) {
         if (response.has("error")){
             throw new RuntimeException("Error in api response");
         }
-    }
-
-    private interface ReponseListener{
-        public void onResponse();
     }
 }

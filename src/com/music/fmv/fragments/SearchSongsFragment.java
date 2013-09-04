@@ -33,6 +33,7 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
     private int songsPageAvailable;
     private int futureSongPage;
     private View rotateFooter;
+    private TextView emptyView;
 
     @Override
     public void onResume() {
@@ -44,6 +45,9 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
     protected void createView(Bundle savedInstanceState) {
         mainView = inflateView(R.layout.search_songs_fragment);
         rotateFooter = inflateView(R.layout.rotate_footer);
+
+        emptyView = (TextView) mainView.findViewById(R.id.empty_view);
+
         songsListView = (SwipeListView) mainView.findViewById(R.id.songs_list);
         songsListView.setOnItemClickListener(songsListener);
         songsListView.addHeaderView(createSearchHeader(searchListener));
@@ -122,6 +126,10 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
         }else if (songsPageAvailable > 0 && songsListView.getFooterViewsCount() == 0){
             songsListView.addFooterView(rotateFooter);
         }
+
+        if (songsListView.getCount() ==0){
+            emptyView.setVisibility(View.VISIBLE);
+        }else emptyView.setVisibility(View.GONE);
     }
 
     private void getNextSongsPage() {

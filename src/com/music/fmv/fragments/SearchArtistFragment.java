@@ -134,6 +134,10 @@ public class SearchArtistFragment extends BaseFragment {
         }else if (artistsPageAvailable > 0 && artistsListView.getFooterViewsCount() == 0){
             artistsListView.addFooterView(rotateFooter);
         }
+
+        if (artistsListView.getCount() ==0){
+            emptyView.setVisibility(View.VISIBLE);
+        }else emptyView.setVisibility(View.GONE);
     }
 
     private void clearArtists() {
@@ -175,8 +179,8 @@ public class SearchArtistFragment extends BaseFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (getUserTaskRunned) return;
 
-            SearchBandModel m = artistsList.get(position - artistsListView.getHeaderViewsCount());
-            GetBandTask task = new GetBandTask(baseActivity) {
+            SearchBandModel model = artistsList.get(position - artistsListView.getHeaderViewsCount());
+            GetBandTask task = new GetBandTask(baseActivity, model) {
                 public LoadDialog dialog;
 
                 @Override

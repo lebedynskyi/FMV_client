@@ -2,6 +2,7 @@ package com.music.fmv.services;
 
 import com.music.fmv.models.PlayableSong;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public interface Player {
     public int getDuration();
     public void play(List<PlayableSong> songs, int position);
     public PlayableSong getCurrentSong();
+    public ArrayList<PlayableSong> getCurrentQueue();
 
     public interface PlayerStatusListener{
         public void onNewSong(PlayableSong song);

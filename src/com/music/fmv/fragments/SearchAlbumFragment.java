@@ -34,12 +34,16 @@ public class SearchAlbumFragment extends BaseFragment {
     private ArrayList<SearchAlbumModel> albumsList = new ArrayList<SearchAlbumModel>(21);
     private SearchAlbumsAdapter adapter;
     private View rotateFooter;
+    private TextView emptyView;
 
     @Override
     protected void createView(Bundle savedInstanceState) {
         mainView =inflateView(R.layout.search_album_fagment);
         albumsListsView = (SwipeListView) mainView.findViewById(R.id.albums_list);
         adapter = new SearchAlbumsAdapter(albumsList, baseActivity, albumsListsView);
+
+        emptyView = (TextView) mainView.findViewById(R.id.empty_view);
+
 
         albumsListsView.addHeaderView(createSearchHeader(searchListener));
         albumsListsView.setAdapter(adapter);
@@ -115,6 +119,10 @@ public class SearchAlbumFragment extends BaseFragment {
         }else if (albumPageAvailable > 0 && albumsListsView.getFooterViewsCount() == 0){
             albumsListsView.addFooterView(rotateFooter);
         }
+
+        if (albumsListsView.getCount() ==0){
+            emptyView.setVisibility(View.VISIBLE);
+        }else emptyView.setVisibility(View.GONE);
     }
 
     //Scroll listeners for lists, call method when last item in list is visible

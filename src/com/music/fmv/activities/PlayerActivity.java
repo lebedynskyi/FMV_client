@@ -22,9 +22,7 @@ public class PlayerActivity extends BaseActivity {
     public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
     private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
 
-    private View prev;
     private View pausePlay;
-    private View next;
     private View shuffle;
     private View loop;
 
@@ -88,11 +86,11 @@ public class PlayerActivity extends BaseActivity {
     }
 
     public void initViews() {
-        shuffle = findViewById(R.id.shuffle);
-        prev = findViewById(R.id.prev);
+        shuffle   = findViewById(R.id.shuffle);
+        View prev = findViewById(R.id.prev);
         pausePlay = findViewById(R.id.play_pause);
-        next = findViewById(R.id.next);
-        loop = findViewById(R.id.loop);
+        View next = findViewById(R.id.next);
+        loop      = findViewById(R.id.loop);
 
         shuffle.setOnClickListener(controlsListener);
         prev.setOnClickListener(controlsListener);
@@ -100,22 +98,22 @@ public class PlayerActivity extends BaseActivity {
         next.setOnClickListener(controlsListener);
         loop.setOnClickListener(controlsListener);
 
-        songCover = (ImageView) findViewById(R.id.song_image);
+        songCover      = (ImageView) findViewById(R.id.song_image);
         imageContainer = findViewById(R.id.image_container);
 
-        songName = (TextView) findViewById(R.id.song_name);
-        songOwner = (TextView) findViewById(R.id.song_owner);
-        fullTime = (TextView) findViewById(R.id.full_time);
-        curTime = (TextView) findViewById(R.id.current_time);
+        songName     = (TextView) findViewById(R.id.song_name);
+        songOwner    = (TextView) findViewById(R.id.song_owner);
+        fullTime     = (TextView) findViewById(R.id.full_time);
+        curTime      = (TextView) findViewById(R.id.current_time);
         currProgress = (SeekBar) findViewById(R.id.curr_progress);
 
 
-        pause = getResources().getDrawable(R.drawable.player_pause_selector);
-        play = getResources().getDrawable(R.drawable.player_play_selector);
-        loopNorm = getResources().getDrawable(R.drawable.player_loop_selector);
-        loopAct = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
+        pause       = getResources().getDrawable(R.drawable.player_pause_selector);
+        play        = getResources().getDrawable(R.drawable.player_play_selector);
+        loopNorm    = getResources().getDrawable(R.drawable.player_loop_selector);
+        loopAct     = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
         shuffleNorm = getResources().getDrawable(R.drawable.player_shuffle_selector);
-        shuffleAct = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
+        shuffleAct  = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
     }
 
     @Override
@@ -168,7 +166,9 @@ public class PlayerActivity extends BaseActivity {
         if (playerManager.isPlaying()) {
             pausePlay.setBackground(pause);
         } else pausePlay.setBackground(play);
+
         curTime.setText(TIME_SD.format(new Date(playerManager.getProgress())));
+
         if (!trackingInTouchMode) {
             currProgress.setProgress(playerManager.getProgress());
         }

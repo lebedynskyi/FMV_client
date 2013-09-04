@@ -2,6 +2,7 @@ package com.music.fmv.tasks;
 
 import android.content.Context;
 import com.music.fmv.models.BandInfoModel;
+import com.music.fmv.models.SearchBandModel;
 
 /**
  * User: vitaliylebedinskiy
@@ -9,7 +10,7 @@ import com.music.fmv.models.BandInfoModel;
  * Time: 10:08 AM
  */
 public abstract class GetBandTask extends BaseAsyncTask<BandInfoModel> {
-    protected GetBandTask(Context context) {
+    protected GetBandTask(Context context, SearchBandModel model) {
         super(context);
     }
 

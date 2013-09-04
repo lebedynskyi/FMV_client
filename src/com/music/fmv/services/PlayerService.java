@@ -178,6 +178,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return currentSong;
     }
 
+    @Override
+    public ArrayList<PlayableSong> getCurrentQueue() {
+        return playerQueue;
+    }
+
     private synchronized void playSong(final PlayableSong song) {
         if (statusListener != null) statusListener.onNewSong(song);
         currentSong = song;
