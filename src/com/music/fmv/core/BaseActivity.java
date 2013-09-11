@@ -70,7 +70,8 @@ public abstract class BaseActivity extends FragmentActivity{
         try {
             ViewGroup advertView = (ViewGroup)findViewById(R.id.advert_layout);
             if (advertView == null) return;
-            if (NetworkUtil.isNetworkAvailable(this) && false){
+
+            if (NetworkUtil.isNetworkAvailable(this)){
                 initAdvert(advertView);
             }else advertView.setVisibility(View.GONE);
         }catch (Exception e){

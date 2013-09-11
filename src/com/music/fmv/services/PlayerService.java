@@ -7,12 +7,12 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.widget.Toast;
-import com.music.fmv.R;
-import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
+import com.music.fmv.tasks.threads.IDownloadListener;
 
+import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +25,12 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
-        MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener, Player {
+public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, Player {
 
     private MediaPlayer mPlayer;
     private Core core;
     private final ArrayList<PlayableSong> playerQueue = new ArrayList<PlayableSong>();
-    private PlayerStatusListener statusListener;
+    private PlayerListener playerListener;
 
     private PlayableSong currentSong;
     private boolean isShuffle;
@@ -94,14 +93,19 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public void shuffle() {
-        isShuffle = !isShuffle;
+    public boolean isPlaying() {
+        return mPlayer != null && mPlayer.isPlaying();
+    }
+
+    @Override
+    public void setShuffle(boolean v) {
+        isShuffle = v;
         notifyStateCallback();
     }
 
     @Override
-    public void setPlayerStatusListener(PlayerStatusListener listener) {
-        this.statusListener = listener;
+    public void setPlayerListener(PlayerListener listener) {
+        this.playerListener = listener;
     }
 
     @Override
@@ -115,26 +119,14 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public int getProgress() {
-        if (mPlayer != null) return mPlayer.getCurrentPosition();
-        return 0;
-    }
-
-    @Override
-    public int getDuration() {
-        if (mPlayer != null) return mPlayer.getDuration();
-        return 0;
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return mPlayer != null && mPlayer.isPlaying();
-    }
-
-    @Override
-    public void loop() {
-        mPlayer.setLooping(!mPlayer.isLooping());
+    public void setLoop(boolean v) {
+        mPlayer.setLooping(v);
         notifyStateCallback();
+    }
+
+    @Override
+    public boolean isLoop() {
+        return mPlayer != null && mPlayer.isLooping();
     }
 
     //Players listeners
@@ -150,21 +142,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        if (statusListener != null) statusListener.onBuffering(percent);
-    }
-
-    @Override
-    public boolean onInfo(MediaPlayer mp, int what, int extra) {
-        return false;
-    }
-
-    @Override
-    public boolean isLooping() {
-        return mPlayer != null && mPlayer.isLooping();
-    }
-
-    @Override
     public void play(List<PlayableSong> songs, int position) {
         if (songs == null || songs.size() == 0 || position >= songs.size()) return;
         playerQueue.clear();
@@ -174,67 +151,54 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public PlayableSong getCurrentSong() {
-        return currentSong;
-    }
-
-    @Override
-    public ArrayList<PlayableSong> getCurrentQueue() {
-        return playerQueue;
+    public PlayerStatus getStatus() {
+        if (mPlayer == null) return null;
+        return new PlayerStatus(mPlayer.getDuration(), mPlayer.getCurrentPosition(), currentSong,
+                playerQueue, isShuffle, mPlayer.isLooping(), mPlayer.isPlaying());
     }
 
     private synchronized void playSong(final PlayableSong song) {
-        if (statusListener != null) statusListener.onNewSong(song);
         currentSong = song;
         notifyNewSong(song);
         showNotification();
         if (core.getCacheManager().isSongExists(song)) {
             playFromFile(song);
-        } else playFromHttp(song);
+        } else playAsyncFromHttp(song);
     }
 
     private void playFromFile(PlayableSong song) {
-        playFromPath(core.getCacheManager().getSongPath(song));
+        playFromSource(core.getCacheManager().getSongPath(song));
     }
 
-    private void playFromHttp(final PlayableSong song) {
-        final Api api = new Api();
-        if (TextUtils.isEmpty(song.getUrl())) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        final String url = api.getUrlOfSong(song.getId());
-                        song.setUrl(url);
-                        core.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                playFromPath(url);
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        } else {
-            playFromPath(song.getUrl());
+    //TODO redesign for FileDescritor
+    private void playAsyncFromHttp(final PlayableSong song) {
+        if (!TextUtils.isEmpty(song.getUrl())) {
+            playFromSource(song.getUrl());
+            return;
         }
+        AsyncHttpRunner runner = new AsyncHttpRunner(song);
+        runner.start();
     }
 
-    private void playFromPath(String path) {
+    private void playFromSource(Object source) {
         try {
             releasePlayer();
             mPlayer = new MediaPlayer();
-            mPlayer.setDataSource(path);
+
+            if (source instanceof String) {
+                mPlayer.setDataSource((String) source);
+            } else if (source instanceof FileDescriptor) {
+                mPlayer.setDataSource((FileDescriptor) source);
+            } else throw new RuntimeException("Unknown type of source");
+
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mPlayer.setOnInfoListener(this);
-            mPlayer.setOnBufferingUpdateListener(this);
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnCompletionListener(this);
             mPlayer.prepareAsync();
         } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.cannot_play_song), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            releasePlayer();
+            clearNotify();
         }
     }
 
@@ -242,8 +206,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (mPlayer != null) {
             mPlayer.stop();
             mPlayer.release();
+            mPlayer = null;
         }
-        mPlayer = null;
     }
 
     //Clears all notifications linked with player
@@ -258,10 +222,62 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     private void notifyStateCallback() {
-        if (statusListener != null) statusListener.onControllCallBack();
+        if (playerListener != null) playerListener.needRefreshControls();
     }
 
     private void notifyNewSong(PlayableSong song) {
-        if (statusListener != null) statusListener.onNewSong(song);
+        if (playerListener != null) playerListener.onSongPlaying(song);
+    }
+
+
+    private class AsyncHttpRunner extends Thread{
+        private PlayableSong song;
+        private boolean needIgnore;
+
+        private AsyncHttpRunner(PlayableSong song) {
+            this.song = song;
+        }
+
+        @Override
+        public void run() {
+            try {
+                core.getDownloadManager().download(song, downloadListener);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        private IDownloadListener downloadListener = new IDownloadListener() {
+            @Override
+            public void onDownload(String name, final int cur, final int max) {
+                if (playerListener != null) {
+                    core.getHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            playerListener.onBuffering(song, cur, max);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onDownloadFinished() {
+                if (playerListener != null) {
+                    core.getHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            playerListener.bufferingFinished(song);
+                        }
+                    });
+                }
+            }
+
+            @Override public void onError(String name) {}
+
+            @Override
+            public void onChunkDownloaded(byte[] chunk, int total, Integer fileLength) {
+
+            }
+        };
     }
 }

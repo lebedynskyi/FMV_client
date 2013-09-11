@@ -70,29 +70,6 @@ public final class NetworkUtil {
         return responseBuilder.toString();
     }
 
-    public static int getRequestStatus(String oldUrl, Method method, String data, Map<String, String> params) throws Exception{
-        String newUrl = generateUrl(oldUrl, params);
-        URL url = new URL(newUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setConnectTimeout(5000);
-        connection.setRequestMethod(method.name());
-        connection.setDoInput(true);
-        if (method == Method.POST) {
-            connection.setDoOutput(true);
-        }
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.addRequestProperty("Accept", "application/json");
-
-        //Send data to service
-        if (data != null && method == Method.POST){
-            BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
-            outputStream.write(data.getBytes());
-            outputStream.flush();
-            outputStream.close();
-        }
-        return connection.getResponseCode();
-    }
-
     //returns a valid url from Map
     public static String generateUrl(String baseUrl, Map<String, String> params){
         if (params == null || params.size() == 0) return baseUrl;
@@ -129,33 +106,27 @@ public final class NetworkUtil {
         InputStream inStream = connection.getInputStream();
         FileOutputStream outStream = new FileOutputStream(f);
 
-        Integer fileLength = 0;
+        Integer fileLength = connection.getContentLength();
         try {
-            fileLength = connection.getContentLength();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if (fileLength == 0) fileLength = 1;
-
-        try {
-            byte data[] = new byte[5120];
+            byte data[] = new byte[16384];
 
             int lastPercentNotify = -1, curPercent;
             int count;
             int total = 0;
-            while ((count = inStream.read(data, 0, 5120)) != -1){
+
+            while ((count = inStream.read(data, 0, data.length)) != -1){
                 total += count;
                 outStream.write(data, 0, count);
-
                 curPercent = (total * 100) / fileLength;
-                if (listener != null && curPercent != lastPercentNotify && curPercent % 10 == 0){
+
+                if (curPercent != lastPercentNotify && listener != null && curPercent % 10 == 0){
                     listener.onDownload(f.getName(), curPercent, 100);
+                    listener.onChunkDownloaded(data, total, fileLength);
                     lastPercentNotify = curPercent;
                 }
             }
         }finally {
             inStream.close();
-            outStream.flush();
             outStream.close();
         }
     }

@@ -11,4 +11,5 @@ public interface IDownloadListener{
     public void onDownload(String name, int cur, int max);
     public void onDownloadFinished();
     public void onError(String name);
+    public void onChunkDownloaded(byte[] chunk, int total, Integer fileLength);
 }

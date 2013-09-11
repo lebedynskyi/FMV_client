@@ -31,7 +31,6 @@
         <activity android:name=".activities.AlbumInfoActivity"  android:configChanges="orientation"/>
         <activity android:name=".activities.ArtistSongsActivity" android:configChanges="orientation"/>
         <activity android:name=".activities.ArtistAlbumsActivity" android:configChanges="orientation"/>
-
         <service android:name=".services.PlayerService"/>
     </application>
 </manifest>

@@ -16,21 +16,25 @@ import java.io.File;
  * Time: 12:16 PM
  */
 public class App extends Application{
-
     @Override
     public void onCreate() {
         super.onCreate();
 
         //Initialization of core Manager
         Core core = Core.getInstance(this);
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread thread, Throwable ex) {
-                Core.getInstance(App.this).getNotificationManager().removeDownloading();
-                Core.getInstance(App.this).getNotificationManager().removePlayer();
-            }
-        });
+//
+//        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//            @Override
+//            public void uncaughtException(Thread thread, Throwable ex) {
+//                Core.getInstance(App.this).getNotificationManager().removeDownloading();
+//                Core.getInstance(App.this).getNotificationManager().removePlayer();
+//
+//                ex.printStackTrace();
+//                if (ex instanceof RuntimeException)
+//                    throw (RuntimeException) ex;
+//                throw new RuntimeException("Re-throw", ex);
+//            }
+//        });
 
         File imageCache = new File(core.getSettingsManager().getImageCacheFolder());
         imageCache.mkdirs();

@@ -8,6 +8,7 @@ import com.music.fmv.tasks.threads.SongLoader;
 import com.music.fmv.utils.NetworkUtil;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -36,11 +37,16 @@ public class DownloadManager extends Manager {
 
     public void download(ArrayList<PlayableSong> album){
         for (PlayableSong song: album){
-            download(song);
+            download(song, downloadListener);
         }
     }
 
     public void download(PlayableSong model) {
+        download(model, downloadListener);
+    }
+
+
+    public void download(PlayableSong model, IDownloadListener listener) {
         if (!NetworkUtil.isNetworkAvailable(core.getContext())){
             core.showToast(R.string.network_unavailable);
             return;
@@ -56,7 +62,7 @@ public class DownloadManager extends Manager {
         }
 
         SongLoader loader = new SongLoader(newSongFile, model);
-        loader.setDownloadListener(downloadListener);
+        loader.setDownloadListener(listener);
         if (!loaderExecutor.getQueue().contains(loader)){
             loaderExecutor.execute(loader);
         }else core.showToast(R.string.already_in_queue);
@@ -83,6 +89,11 @@ public class DownloadManager extends Manager {
         @Override
         public void onError(String name) {
             failedSongs.add(name);
+        }
+
+        @Override
+        public void onFileDescriptorAvailable(FileDescriptor fd) {
+            //DO nothing
         }
     };
 
