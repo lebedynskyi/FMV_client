@@ -8,7 +8,6 @@ import com.music.fmv.tasks.threads.SongLoader;
 import com.music.fmv.utils.NetworkUtil;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -89,11 +88,6 @@ public class DownloadManager extends Manager {
         @Override
         public void onError(String name) {
             failedSongs.add(name);
-        }
-
-        @Override
-        public void onFileDescriptorAvailable(FileDescriptor fd) {
-            //DO nothing
         }
     };
 

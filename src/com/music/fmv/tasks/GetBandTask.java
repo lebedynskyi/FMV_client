@@ -10,8 +10,8 @@ import com.music.fmv.models.SearchBandModel;
  * Time: 10:08 AM
  */
 public abstract class GetBandTask extends BaseAsyncTask<BandInfoModel> {
-    protected GetBandTask(Context context, SearchBandModel model) {
-        super(context);
+    protected GetBandTask(Context context, SearchBandModel model, boolean isShowLoader) {
+        super(context, isShowLoader);
     }
 
     @Override

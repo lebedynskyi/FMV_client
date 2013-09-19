@@ -14,7 +14,6 @@ import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.tasks.GetBandTask;
 import com.music.fmv.tasks.SearchBandTask;
 import com.music.fmv.utils.ViewUtils;
-import com.music.fmv.views.LoadDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,23 +60,18 @@ public class SearchArtistFragment extends BaseFragment {
         if (TextUtils.isEmpty(query) || artistTaskRunned) return;
         query = query.trim();
 
-        SearchBandTask task = new SearchBandTask(query, page, baseActivity){
-            public LoadDialog dialog;
+        SearchBandTask task = new SearchBandTask(query, page, baseActivity, page == null){
 
             @Override
             protected void onPreExecute() {
                 //If page == null it means that it is new request, else its updating of list (adding new page)
                 artistTaskRunned = true;
-                if (page == null) {
-                    dialog = new LoadDialog(baseActivity, this);
-                    dialog.show();
-                }
+                super.onPreExecute();
             }
 
             @Override
             protected void onPostExecute(List<SearchBandModel> result) {
-                if(dialog != null) dialog.dismiss();
-                dialog = null;
+                super.onPostExecute(result);
                 artistTaskRunned = false;
                 artistsPageAvailable = 0;
 
@@ -180,23 +174,14 @@ public class SearchArtistFragment extends BaseFragment {
             if (getUserTaskRunned) return;
 
             SearchBandModel model = artistsList.get(position - artistsListView.getHeaderViewsCount());
-            GetBandTask task = new GetBandTask(baseActivity, model) {
-                public LoadDialog dialog;
-
-                @Override
-                protected void onPreExecute() {
-                    if (dialog == null){
-                        dialog = new LoadDialog(baseActivity, this);
-                    }
-                    dialog.show();
-                }
+            GetBandTask task = new GetBandTask(baseActivity, model, true) {
 
                 @Override
                 protected void onPostExecute(BandInfoModel bandInfoModel) {
+                    super.onPostExecute(bandInfoModel);
                     if (isCancelled()) return;
 
                     getUserTaskRunned = false;
-                    if (dialog != null) dialog.dismiss();
                 }
 
                 @Override

@@ -18,8 +18,8 @@ public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>
     private String searchQuery;
     private Integer page;
 
-    public SearchBandTask(String searchQuery, Integer page, Context context) {
-        super(context);
+    public SearchBandTask(String searchQuery, Integer page, Context context, boolean isShowLoader) {
+        super(context, isShowLoader);
         this.searchQuery = searchQuery;
         this.page = page;
     }

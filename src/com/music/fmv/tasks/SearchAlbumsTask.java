@@ -3,7 +3,6 @@ package com.music.fmv.tasks;
 import android.content.Context;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.SearchAlbumModel;
-import com.music.fmv.models.SearchBandModel;
 
 import java.util.List;
 
@@ -16,8 +15,8 @@ public abstract class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumMod
     private String searchQuery;
     private Integer page;
 
-    public SearchAlbumsTask(Context context, String searchQuery, Integer page) {
-        super(context);
+    public SearchAlbumsTask(Context context, String searchQuery, Integer page, boolean isShowLoader) {
+        super(context, isShowLoader);
         this.searchQuery = searchQuery;
         this.page = page;
     }

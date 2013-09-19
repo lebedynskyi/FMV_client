@@ -15,8 +15,8 @@ public abstract class SearchSongsTask  extends BaseAsyncTask<ArrayList<PlayableS
     private final String query;
     private final Integer page;
 
-    protected SearchSongsTask(Context context, String query, Integer page) {
-        super(context);
+    protected SearchSongsTask(Context context, String query, Integer page, boolean isShowLoader) {
+        super(context, isShowLoader);
         this.query = query;
         this.page = page;
     }

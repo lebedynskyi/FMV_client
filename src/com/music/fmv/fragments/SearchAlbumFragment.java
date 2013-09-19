@@ -5,7 +5,9 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
@@ -14,7 +16,6 @@ import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.tasks.SearchAlbumsTask;
 import com.music.fmv.utils.ViewUtils;
-import com.music.fmv.views.LoadDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,21 +58,15 @@ public class SearchAlbumFragment extends BaseFragment {
         if (TextUtils.isEmpty(query) || albumTaskRunned) return;
         query = query.trim();
 
-        SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page){
-            public LoadDialog dialog;
-
+        SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page, page == null){
             protected void onPreExecute(){
+                super.onPreExecute();
                 albumTaskRunned = true;
-                if (page == null) {
-                    dialog = new LoadDialog(baseActivity, this);
-                    dialog.show();
-                }
             }
 
             @Override
             protected void onPostExecute(List<SearchAlbumModel> albums) {
-                if(dialog != null) dialog.dismiss();
-                dialog = null;
+                super.onPostExecute(albums);
                 albumPageAvailable = SearchAlbumModel.AVAILABLE_PAGES;
                 albumTaskRunned = false;
 

@@ -5,7 +5,10 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
@@ -15,7 +18,6 @@ import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.tasks.SearchSongsTask;
 import com.music.fmv.utils.ViewUtils;
-import com.music.fmv.views.LoadDialog;
 
 import java.util.ArrayList;
 
@@ -70,21 +72,16 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
         if (TextUtils.isEmpty(query) || songTaskRunned) return;
         query = query.trim();
 
-        SearchSongsTask task = new SearchSongsTask(baseActivity, query, page) {
-            public LoadDialog dialog;
+        SearchSongsTask task = new SearchSongsTask(baseActivity, query, page, page == null) {
             @Override
             protected void onPreExecute() {
+                super.onPreExecute();
                 songTaskRunned = true;
-                if (page == null) {
-                    dialog = new LoadDialog(baseActivity, this);
-                    dialog.show();
-                }
             }
 
             @Override
             protected void onPostExecute(ArrayList<PlayableSong> songs) {
-                if(dialog != null) dialog.dismiss();
-                dialog = null;
+                super.onPostExecute(songs);
                 songsPageAvailable = PlayableSong.PAGE_AVAILABLE;
                 songTaskRunned = false;
 

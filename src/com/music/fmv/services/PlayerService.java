@@ -273,11 +273,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
             }
 
             @Override public void onError(String name) {}
-
-            @Override
-            public void onChunkDownloaded(byte[] chunk, int total, Integer fileLength) {
-
-            }
         };
     }
 }

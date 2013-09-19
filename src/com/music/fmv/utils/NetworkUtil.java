@@ -121,7 +121,6 @@ public final class NetworkUtil {
 
                 if (curPercent != lastPercentNotify && listener != null && curPercent % 10 == 0){
                     listener.onDownload(f.getName(), curPercent, 100);
-                    listener.onChunkDownloaded(data, total, fileLength);
                     lastPercentNotify = curPercent;
                 }
             }
