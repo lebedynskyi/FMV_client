@@ -23,12 +23,11 @@ public interface Player {
     public void play(List<PlayableSong> songs, int position);
     public PlayerStatus getStatus();
     public void setPlayerListener(PlayerListener listener);
+    public void add(PlayableSong model);
 
     public interface PlayerListener{
         public void onSongPlaying(PlayableSong song);
         public void onPlayingStopped();
-        public void onBuffering(PlayableSong song, int cur, int max);
-        public void bufferingFinished(PlayableSong song);
         public void needRefreshControls();
     }
 
@@ -46,9 +45,9 @@ public interface Player {
             this.currentProgress = currentProgress;
             this.currentSong = currentSong;
             this.currentQueue = currentQueue;
-            isShuffle = shuffle;
-            isLoop = loop;
-            isPlaying = playing;
+            this.isShuffle = shuffle;
+            this.isLoop = loop;
+            this.isPlaying = playing;
         }
 
         public int getDuration() {

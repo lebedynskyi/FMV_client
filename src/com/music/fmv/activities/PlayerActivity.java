@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.music.fmv.R;
@@ -14,7 +13,6 @@ import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * User: vitaliylebedinskiy
@@ -62,38 +60,31 @@ public class PlayerActivity extends BaseActivity {
         super.onStart();
         player = mCore.getPlayerManager().getPlayer();
         player.setPlayerListener(playerListener);
-        refresher = new RefreshTimer(1 * 60 * 1000, 500);
-        if (player != null) {
-            playerListener.needRefreshControls();
-            Player.PlayerStatus status = player.getStatus();
-            if (status != null) {
-                playerListener.onSongPlaying(status.getCurrentSong());
-                progressSlider.setMax(status.getDuration());
-                durationTV.setText(TIME_SD.format(new Date(status.getDuration())));
-                curProgressTV.setText(TIME_SD.format(status.getCurrentProgress()));
-                if (status.isPlaying()) {
-                    pausePlayBTN.setBackgroundDrawable(pauseDrawable);
-                } else {
-                    pausePlayBTN.setBackgroundDrawable(playDrawable);
-                }
-            }
+        playerListener.needRefreshControls();
+
+        Player.PlayerStatus status = player.getStatus();
+        if (status != null) {
+            playerListener.onSongPlaying(status.getCurrentSong());
         }
+
         refreshProgress();
+
+        refresher = new RefreshTimer(1 * 60 * 1000, 500);
         refresher.start();
     }
 
     public void initViews() {
         shuffleBTN = findViewById(R.id.shuffle);
-        View prev = findViewById(R.id.prev);
         pausePlayBTN = findViewById(R.id.play_pause);
-        View next = findViewById(R.id.next);
         loopBTN = findViewById(R.id.loop);
-
         shuffleBTN.setOnClickListener(controlsListener);
-        prev.setOnClickListener(controlsListener);
         pausePlayBTN.setOnClickListener(controlsListener);
-        next.setOnClickListener(controlsListener);
         loopBTN.setOnClickListener(controlsListener);
+
+        View prev = findViewById(R.id.prev);
+        View next = findViewById(R.id.next);
+        prev.setOnClickListener(controlsListener);
+        next.setOnClickListener(controlsListener);
 
         songCover = (ImageView) findViewById(R.id.song_image);
         imageContainer = findViewById(R.id.image_container);
@@ -103,6 +94,7 @@ public class PlayerActivity extends BaseActivity {
         durationTV = (TextView) findViewById(R.id.full_time);
         curProgressTV = (TextView) findViewById(R.id.current_time);
         progressSlider = (SeekBar) findViewById(R.id.curr_progress);
+        progressSlider.setOnSeekBarChangeListener(seekBarListener);
 
         pauseDrawable = getResources().getDrawable(R.drawable.player_pause_selector);
         playDrawable = getResources().getDrawable(R.drawable.player_play_selector);
@@ -110,22 +102,14 @@ public class PlayerActivity extends BaseActivity {
         loopActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
         shuffleNormDrawable = getResources().getDrawable(R.drawable.player_shuffle_selector);
         shuffleActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
-        progressSlider.setOnSeekBarChangeListener(seekBarListener);
     }
 
     private void refreshProgress() {
-        if (player == null) {
-            return;
-        }
-
         Player.PlayerStatus status = player.getStatus();
         if (status != null) {
             progressSlider.setProgress(status.getCurrentProgress());
+            curProgressTV.setText(TIME_SD.format(status.getCurrentProgress()));
         }
-    }
-
-    private void fillEmptyPlayer() {
-
     }
 
     @Override
@@ -136,16 +120,6 @@ public class PlayerActivity extends BaseActivity {
             refresher.cancel();
             refresher = null;
         }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        int width = imageContainer.getWidth();
-        int height = imageContainer.getHeight();
-        int minimum = width < height ? width : height;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(minimum, minimum);
-        songCover.setLayoutParams(params);
     }
 
     private View.OnClickListener controlsListener = new View.OnClickListener() {
@@ -175,6 +149,7 @@ public class PlayerActivity extends BaseActivity {
         public void needRefreshControls() {
             Player.PlayerStatus status = player.getStatus();
             if (status == null) return;
+
             if (status.isPlaying()) {
                 pausePlayBTN.setBackgroundDrawable(pauseDrawable);
             } else pausePlayBTN.setBackgroundDrawable(playDrawable);
@@ -191,17 +166,15 @@ public class PlayerActivity extends BaseActivity {
         @Override
         public void onSongPlaying(PlayableSong song) {
             if (song != null) {
-                songNameTV.setText(song.getTitle());
+                songNameTV.setText(song.getName());
                 songArtistTV.setText(song.getArtist());
                 pausePlayBTN.setBackgroundDrawable(pauseDrawable);
             }
 
-            if (player != null) {
-                Player.PlayerStatus status = player.getStatus();
-                if (status != null) {
-                    durationTV.setText(TIME_SD.format(status.getDuration()));
-                    progressSlider.setMax(status.getDuration());
-                }
+            Player.PlayerStatus status = player.getStatus();
+            if (status != null) {
+                durationTV.setText(TIME_SD.format(status.getDuration()));
+                progressSlider.setMax(status.getDuration());
             }
         }
 
@@ -209,16 +182,6 @@ public class PlayerActivity extends BaseActivity {
         public void onPlayingStopped() {
             pausePlayBTN.setBackgroundDrawable(playDrawable);
             progressSlider.setProgress(0);
-        }
-
-        @Override
-        public void onBuffering(PlayableSong song, int cur, int max) {
-            progressSlider.setSecondaryProgress(cur);
-        }
-
-        @Override
-        public void bufferingFinished(PlayableSong song) {
-            progressSlider.setSecondaryProgress(100);
         }
     };
 
@@ -248,14 +211,7 @@ public class PlayerActivity extends BaseActivity {
             }
         }
 
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
+        @Override public void onStartTrackingTouch(SeekBar seekBar) { }
+        @Override public void onStopTrackingTouch(SeekBar seekBar) {}
     };
 }

@@ -34,7 +34,7 @@ public class SongLoader implements IDownlaoder{
             NetworkUtil.downloadFile(file, songUrl, listener);
         } catch (Exception e) {
             e.printStackTrace();
-            listener.onError(song.getTitle());
+            listener.onError(song.getName());
         }
         if (listener != null) listener.onDownloadFinished();
     }

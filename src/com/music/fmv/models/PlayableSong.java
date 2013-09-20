@@ -17,7 +17,7 @@ public class PlayableSong extends BaseSerializableModel{
 
     private String url;
     private String artist;
-    private String title;
+    private String name;
     private int duration;
     private String id;
     private String rate;
@@ -46,12 +46,12 @@ public class PlayableSong extends BaseSerializableModel{
         this.artist = artist;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getDuration() {
@@ -89,10 +89,10 @@ public class PlayableSong extends BaseSerializableModel{
     }
 
     public String getFutureFileName() {
-        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(artist))  return "Unknown song";
-        if (TextUtils.isEmpty(title)) return artist;
-        if (TextUtils.isEmpty(artist)) return title;
-        return artist + " - " + title + ".mp3";
+        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(artist))  return "Unknown song";
+        if (TextUtils.isEmpty(name)) return artist;
+        if (TextUtils.isEmpty(artist)) return name;
+        return artist + " - " + name + ".mp3";
     }
 
     @Override
@@ -102,13 +102,20 @@ public class PlayableSong extends BaseSerializableModel{
 
         PlayableSong that = (PlayableSong) o;
 
-        return !(artist != null ? !artist.equals(that.artist) : that.artist != null) && !(title != null ? !title.equals(that.title) : that.title != null);
+        return !(artist != null ? !artist.equals(that.artist) : that.artist != null) && !(name != null ? !name.equals(that.name) : that.name != null);
     }
 
     @Override
     public int hashCode() {
         int result = artist != null ? artist.hashCode() : 0;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        if (artist == null) return name == null ? "" : name;
+        if (name == null) return artist;
+        return artist + " - " + name;
     }
 }

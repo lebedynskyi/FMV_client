@@ -9,7 +9,6 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
-import com.music.fmv.models.SearchAlbumModel;
 
 import java.util.ArrayList;
 
@@ -73,7 +72,7 @@ public class SearchSongAdapter extends BaseAdapter{
         holder.play.setOnClickListener(new ButtonListener(song, position));
 
         holder.owner.setText(song.getArtist());
-        holder.name.setText(song.getTitle());
+        holder.name.setText(song.getName());
         holder.duration.setText(song.getNiceDuration());
 
         //TODO maybe i should use cacheManager

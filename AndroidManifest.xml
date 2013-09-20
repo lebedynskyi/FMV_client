@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.PlayerActivity" android:configChanges="orientation" android:launchMode="singleInstance"/>
+        <activity android:name=".activities.PlayerActivity" android:screenOrientation="nosensor" android:launchMode="singleInstance"/>
         <activity android:name=".activities.BandInfoActivity" android:configChanges="orientation"/>
         <activity android:name=".activities.AlbumInfoActivity"  android:configChanges="orientation"/>
         <activity android:name=".activities.ArtistSongsActivity" android:configChanges="orientation"/>

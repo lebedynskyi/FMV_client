@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.core.managers.*;
-import com.music.fmv.models.PlayableSong;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
@@ -105,7 +104,7 @@ public final class Core {
         updateListeners.add(new WeakReference<IUpdateListener>(listener));
     }
 
-    public void callUpdateOnListeners(){
+    public void callUpdateUI(){
         Iterator<WeakReference<IUpdateListener>> it = updateListeners.iterator();
         while (it.hasNext()){
             WeakReference<IUpdateListener> ref = it.next();
@@ -117,7 +116,7 @@ public final class Core {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    l.canUpdate();
+                    l.needUpdate();
                 }
             });
         }
@@ -145,6 +144,6 @@ public final class Core {
     }
 
     public interface IUpdateListener {
-        public void canUpdate();
+        public void needUpdate();
     }
 }

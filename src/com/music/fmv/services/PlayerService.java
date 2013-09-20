@@ -4,17 +4,19 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.widget.Toast;
 import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
+import com.music.fmv.utils.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,13 +26,14 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, Player {
+public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, Player {
 
     private MediaPlayer mPlayer;
     private Core core;
     private final ArrayList<PlayableSong> playerQueue = new ArrayList<PlayableSong>();
     private PlayerListener playerListener;
 
+    private Set<MediaPlayer> preparedPlayers = new HashSet<MediaPlayer>(2);
     private PlayableSong currentSong;
     private boolean isShuffle;
 
@@ -77,7 +80,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public void next() {
         int curPosition = playerQueue.indexOf(currentSong);
 
-        if (curPosition +1 < playerQueue.size() && curPosition != -1) {
+        if (curPosition + 1 < playerQueue.size() && curPosition != -1) {
             playSong(playerQueue.get(curPosition + 1));
         }
     }
@@ -103,6 +106,18 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
+    public void add(PlayableSong model) {
+        if (mPlayer == null){
+            ArrayList<PlayableSong> ss = new ArrayList<PlayableSong>();
+            ss.add(model);
+            play(ss, 0);
+            return;
+        }
+
+        playerQueue.add(model);
+    }
+
+    @Override
     public boolean isShuffle() {
         return isShuffle;
     }
@@ -125,11 +140,13 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        releasePlayer();
         next();
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        preparedPlayers.add(mp);
         mp.start();
     }
 
@@ -145,12 +162,18 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public PlayerStatus getStatus() {
-        if (mPlayer == null) return null;
-        return new PlayerStatus(mPlayer.getDuration(), mPlayer.getCurrentPosition(), currentSong,
-                playerQueue, isShuffle, mPlayer.isLooping(), mPlayer.isPlaying());
+        if (mPlayer != null && playerQueue.contains(mPlayer)){
+            return new PlayerStatus(mPlayer.getDuration(), mPlayer.getCurrentPosition(), currentSong,
+                    playerQueue, isShuffle, mPlayer.isLooping(), mPlayer.isPlaying());
+        }
+        return null;
     }
 
     private synchronized void playSong(final PlayableSong song) {
+        if (!playerQueue.contains(song)){
+             playerQueue.add(song);
+        }
+
         releasePlayer();
         currentSong = song;
         notifyNewSong(song);
@@ -176,10 +199,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private void playFromPath(String source) {
         try {
             mPlayer = new MediaPlayer();
-            mPlayer.setDataSource(source);
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnCompletionListener(this);
+            mPlayer.setOnErrorListener(this);
+            mPlayer.setDataSource(this, Uri.parse(source));
             mPlayer.prepareAsync();
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,6 +214,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private void releasePlayer() {
         if (mPlayer != null) {
+            preparedPlayers.remove(mPlayer);
             mPlayer.stop();
             mPlayer.release();
             mPlayer = null;
@@ -203,7 +228,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private void showNotification() {
         if (currentSong != null) {
-            core.getNotificationManager().notifyPlayer(currentSong.getTitle(), currentSong.getArtist());
+            core.getNotificationManager().notifyPlayer(currentSong.getName(), currentSong.getArtist());
         }
     }
 
@@ -215,6 +240,15 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (playerListener != null) playerListener.onSongPlaying(song);
     }
 
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!@#$%^&*()_++++++++++++++++++++++++++++");
+        System.out.println("mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
+        Log.e("PLAYTER", "mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]"  );
+        System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!@#$%^&*()_++++++++++++++++++++++++++++");
+        System.err.println("mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
+        return false;
+    }
 
     private class AsyncHttpRunner extends Thread{
         private PlayableSong song;
@@ -227,13 +261,15 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         public void run() {
             try {
                 String songUrl = new Api().getUrlOfSong(song.getId());
-                song.setUrl(songUrl);
-                core.getHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        playSong(song);
-                    }
-                });
+                if (!TextUtils.isEmpty(songUrl)){
+                    song.setUrl(songUrl);
+                    core.getHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            playFromPath(song.getUrl());
+                        }
+                    });
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

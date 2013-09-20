@@ -48,7 +48,7 @@ public class SearchFragment extends BaseFragment {
         fragments.add(SONG_TAB, new SearchSongsFragment());
         pager.setAdapter(new FragmentAdapter(getActivity().getSupportFragmentManager(), fragments));
         ViewUtils.selectButton(artistBtn, albumButton, songsButton);
-        baseActivity.sendScreenCount("Artist tab");
+        baseActivity.sendScreenStatistic("Artist tab");
     }
 
 
@@ -58,17 +58,17 @@ public class SearchFragment extends BaseFragment {
             switch (v.getId()){
                 case R.id.artist_tab:
                     pager.setCurrentItem(ARTIST_TAB);
-                    baseActivity.sendScreenCount("Artist tab");
+                    baseActivity.sendScreenStatistic("Artist tab");
                     ViewUtils.selectButton(artistBtn, albumButton, songsButton);
                     break;
                 case R.id.album_tab:
                     pager.setCurrentItem(ALBUM_TAB);
-                    baseActivity.sendScreenCount("Album tab");
+                    baseActivity.sendScreenStatistic("Album tab");
                     ViewUtils.selectButton(albumButton, artistBtn, songsButton);
                     break;
                 case R.id.song_tab:
                     pager.setCurrentItem(SONG_TAB);
-                    baseActivity.sendScreenCount("Songs tab");
+                    baseActivity.sendScreenStatistic("Songs tab");
                     ViewUtils.selectButton(songsButton, albumButton, artistBtn);
             }
         }

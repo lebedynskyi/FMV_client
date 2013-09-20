@@ -54,7 +54,7 @@ public abstract class BaseActivity extends FragmentActivity{
         }, 500);
     }
 
-    public void sendScreenCount(String screenName){
+    public void sendScreenStatistic(String screenName){
         tracker.set(Fields.SCREEN_NAME, screenName + " -> " + this.getClass().getName());
         tracker.send(MapBuilder.createAppView().build());
     }

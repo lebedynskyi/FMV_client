@@ -26,7 +26,6 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
 
     @Override
     protected void onPreExecute() {
-        super.onPreExecute();
         if (showLoader){
             loadDialog = new LoadDialog(context, this);
             loadDialog.show();
@@ -35,7 +34,6 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
 
     @Override
     protected void onPostExecute(T t) {
-        super.onPostExecute(t);
         if (loadDialog != null) loadDialog.dismiss();
     }
 

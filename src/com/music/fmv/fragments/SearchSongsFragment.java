@@ -187,7 +187,8 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
 
         @Override
         public void addToQueueClicked(PlayableSong model) {
-            Toast.makeText(baseActivity, "Add to queue " + model.getTitle(), Toast.LENGTH_SHORT).show();
+            core.getPlayerManager().getPlayer().add(model);
+            Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -197,7 +198,7 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
     };
 
     @Override
-    public void canUpdate() {
+    public void needUpdate() {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }

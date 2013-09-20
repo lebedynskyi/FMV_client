@@ -79,25 +79,25 @@ public class MainActivity extends BaseActivity {
     public void searchTabClicked() {
         ViewUtils.selectButton(searchBTN, musicBTN, historyBTN, settingsBTN);
         pager.setCurrentItem(SEARCH_TAB);
-        sendScreenCount("Search tab");
+        sendScreenStatistic("Search tab");
     }
 
     public void musicTabClicked() {
         ViewUtils.selectButton(musicBTN, searchBTN, historyBTN, settingsBTN);
         pager.setCurrentItem(MUSIC_TAB);
-        sendScreenCount("Music tab");
+        sendScreenStatistic("Music tab");
     }
 
     public void settingsTabClicked() {
         ViewUtils.selectButton(settingsBTN, searchBTN, musicBTN, historyBTN);
         pager.setCurrentItem(SETTINGS_TAB);
-        sendScreenCount("Settings tab");
+        sendScreenStatistic("Settings tab");
     }
 
     public void historyClicked() {
         ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
         pager.setCurrentItem(HISTORY_TAB);
-        sendScreenCount("History tab");
+        sendScreenStatistic("History tab");
     }
 
     //Listener for buttons on the bottom of screen (Tabs)

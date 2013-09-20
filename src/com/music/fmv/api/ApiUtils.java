@@ -158,7 +158,7 @@ public class ApiUtils {
                 song.setId(songData.optString("id"));
                 song.setArtist(songData.optString("owner"));
                 song.setDuration(Integer.parseInt(songData.optString("duration")));
-                song.setTitle(songData.optString("name"));
+                song.setName(songData.optString("name"));
                 song.setRate(songData.optString("rate"));
                 songs.add(song);
             }catch (Exception e){
