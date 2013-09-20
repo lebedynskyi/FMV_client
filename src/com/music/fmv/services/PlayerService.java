@@ -7,12 +7,11 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.widget.Toast;
+import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
-import com.music.fmv.tasks.threads.IDownloadListener;
 
-import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "Player created", Toast.LENGTH_SHORT).show();
         core = Core.getInstance(this);
     }
 
@@ -47,7 +45,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         releasePlayer();
         playerQueue.clear();
         clearNotify();
-        Toast.makeText(this, "Player destroyed", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 
@@ -79,12 +76,9 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     public void next() {
         int curPosition = playerQueue.indexOf(currentSong);
-        int newPosition = curPosition + 1;
 
-        if (newPosition >= playerQueue.size() || curPosition == -1) {
-            core.getNotificationManager().removePlayer();
-        } else {
-            playSong(playerQueue.get(newPosition));
+        if (curPosition +1 < playerQueue.size() && curPosition != -1) {
+            playSong(playerQueue.get(curPosition + 1));
         }
     }
 
@@ -129,7 +123,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return mPlayer != null && mPlayer.isLooping();
     }
 
-    //Players listeners
     @Override
     public void onCompletion(MediaPlayer mp) {
         next();
@@ -138,14 +131,14 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
-        notifyNewSong(currentSong);
     }
 
     @Override
     public void play(List<PlayableSong> songs, int position) {
-        if (songs == null || songs.size() == 0 || position >= songs.size()) return;
+        if (songs == null || songs.size() == 0 || position >= songs.size()) {
+            return;
+        }
         playerQueue.clear();
-        releasePlayer();
         playerQueue.addAll(songs);
         playSong(songs.get(position));
     }
@@ -158,6 +151,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     private synchronized void playSong(final PlayableSong song) {
+        releasePlayer();
         currentSong = song;
         notifyNewSong(song);
         showNotification();
@@ -167,30 +161,22 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     private void playFromFile(PlayableSong song) {
-        playFromSource(core.getCacheManager().getSongPath(song));
+        playFromPath(core.getCacheManager().getSongPath(song));
     }
 
-    //TODO redesign for FileDescritor
     private void playAsyncFromHttp(final PlayableSong song) {
         if (!TextUtils.isEmpty(song.getUrl())) {
-            playFromSource(song.getUrl());
-            return;
+            playFromPath(song.getUrl());
+        }else {
+            AsyncHttpRunner runner = new AsyncHttpRunner(song);
+            runner.start();
         }
-        AsyncHttpRunner runner = new AsyncHttpRunner(song);
-        runner.start();
     }
 
-    private void playFromSource(Object source) {
+    private void playFromPath(String source) {
         try {
-            releasePlayer();
             mPlayer = new MediaPlayer();
-
-            if (source instanceof String) {
-                mPlayer.setDataSource((String) source);
-            } else if (source instanceof FileDescriptor) {
-                mPlayer.setDataSource((FileDescriptor) source);
-            } else throw new RuntimeException("Unknown type of source");
-
+            mPlayer.setDataSource(source);
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnCompletionListener(this);
@@ -232,7 +218,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private class AsyncHttpRunner extends Thread{
         private PlayableSong song;
-        private boolean needIgnore;
 
         private AsyncHttpRunner(PlayableSong song) {
             this.song = song;
@@ -241,38 +226,17 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         @Override
         public void run() {
             try {
-                core.getDownloadManager().download(song, downloadListener);
+                String songUrl = new Api().getUrlOfSong(song.getId());
+                song.setUrl(songUrl);
+                core.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        playSong(song);
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        private IDownloadListener downloadListener = new IDownloadListener() {
-            @Override
-            public void onDownload(String name, final int cur, final int max) {
-                if (playerListener != null) {
-                    core.getHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            playerListener.onBuffering(song, cur, max);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onDownloadFinished() {
-                if (playerListener != null) {
-                    core.getHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            playerListener.bufferingFinished(song);
-                        }
-                    });
-                }
-            }
-
-            @Override public void onError(String name) {}
-        };
     }
 }
