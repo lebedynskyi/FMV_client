@@ -19,6 +19,7 @@ import com.music.fmv.services.PlayerService;
 public class PlayerManager extends Manager{
     private Player player;
     private SourceConnection connection;
+    private PostInitializationListener initListener;
 
 
     public PlayerManager(Core coreManager){
@@ -27,8 +28,11 @@ public class PlayerManager extends Manager{
         bindToPlayer();
     }
 
-    public Player getPlayer(){
-        if (player == null)  bindToPlayer();
+    public Player getPlayer(PostInitializationListener initializationListener){
+        if (player == null)  {
+        this.initListener = initializationListener;
+        bindToPlayer();
+    }
         return player;
     }
 
@@ -42,6 +46,7 @@ public class PlayerManager extends Manager{
         public void onServiceConnected(ComponentName name, IBinder service) {
             Bind b = (Bind)service;
             player = b.getService();
+            if (initListener != null) initListener.onPlayerCreated(player);
         }
         @Override public void onServiceDisconnected(ComponentName name) {
             player = null;
@@ -61,5 +66,9 @@ public class PlayerManager extends Manager{
 
     private void bindToPlayer(){
         core.getContext().bindService(new Intent(core.getContext(), PlayerService.class),connection,Service.BIND_AUTO_CREATE);
+    }
+
+    public interface PostInitializationListener{
+        public void onPlayerCreated(Player p);
     }
 }

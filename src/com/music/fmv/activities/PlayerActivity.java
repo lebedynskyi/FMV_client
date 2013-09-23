@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
+import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
 
@@ -58,19 +59,24 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        player = mCore.getPlayerManager().getPlayer();
-        player.setPlayerListener(playerListener);
+//        playerListener.needRefreshControls();
+//        refreshProgress();
+//        refresher = new RefreshTimer(1 * 60 * 1000, 500);
+//        refresher.start();
         playerListener.needRefreshControls();
 
+
+        refreshProgress();
+        refresher = new RefreshTimer(1 * 60 * 1000, 500);
+        refresher.start();
+        player = mCore.getPlayerManager().getPlayer(initListener);
+
+        if (player == null) return;
+        player.setPlayerListener(playerListener);
         Player.PlayerStatus status = player.getStatus();
         if (status != null) {
             playerListener.onSongPlaying(status.getCurrentSong());
         }
-
-        refreshProgress();
-
-        refresher = new RefreshTimer(1 * 60 * 1000, 500);
-        refresher.start();
     }
 
     public void initViews() {
@@ -105,6 +111,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private void refreshProgress() {
+        if (player == null) return;
         Player.PlayerStatus status = player.getStatus();
         if (status != null) {
             progressSlider.setProgress(status.getCurrentProgress());
@@ -147,6 +154,7 @@ public class PlayerActivity extends BaseActivity {
     private Player.PlayerListener playerListener = new Player.PlayerListener() {
         @Override
         public void needRefreshControls() {
+            if (player == null) return;
             Player.PlayerStatus status = player.getStatus();
             if (status == null) return;
 
@@ -213,5 +221,25 @@ public class PlayerActivity extends BaseActivity {
 
         @Override public void onStartTrackingTouch(SeekBar seekBar) { }
         @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+    };
+
+
+    private PlayerManager.PostInitializationListener initListener = new PlayerManager.PostInitializationListener(){
+        @Override
+        public void onPlayerCreated(Player p) {
+            PlayerActivity.this.player = p;
+            player = mCore.getPlayerManager().getPlayer(this);
+            if (player == null){
+                return;
+            }
+
+            player.setPlayerListener(playerListener);
+            Player.PlayerStatus status = player.getStatus();
+            if (status != null) {
+                playerListener.onSongPlaying(status.getCurrentSong());
+            }
+            playerListener.needRefreshControls();
+            refreshProgress();
+        }
     };
 }

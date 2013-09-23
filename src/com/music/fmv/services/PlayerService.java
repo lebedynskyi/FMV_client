@@ -67,6 +67,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
                 mPlayer.start();
                 showNotification();
             }
+        }else {
+            playSong(currentSong);
         }
         notifyStateCallback();
     }
@@ -82,6 +84,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
         if (curPosition + 1 < playerQueue.size() && curPosition != -1) {
             playSong(playerQueue.get(curPosition + 1));
+        }else {
+            releasePlayer();
+            clearNotify();
+            notifyStateCallback();
         }
     }
 
@@ -148,6 +154,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public void onPrepared(MediaPlayer mp) {
         preparedPlayers.add(mp);
         mp.start();
+        notifyNewSong(currentSong);
     }
 
     @Override
@@ -162,14 +169,22 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public PlayerStatus getStatus() {
-        if (mPlayer != null && playerQueue.contains(mPlayer)){
-            return new PlayerStatus(mPlayer.getDuration(), mPlayer.getCurrentPosition(), currentSong,
-                    playerQueue, isShuffle, mPlayer.isLooping(), mPlayer.isPlaying());
+        int duration = 0;
+        int currentPos = 0;
+        boolean isPlaying = false;
+        boolean isLoop = false;
+
+        if (mPlayer != null && preparedPlayers.contains(mPlayer)){
+            duration = mPlayer.getDuration();
+            currentPos = mPlayer.getCurrentPosition();
+            isPlaying = mPlayer.isPlaying();
+            isLoop = mPlayer.isLooping();
         }
-        return null;
+        return new PlayerStatus(duration, currentPos, currentSong,playerQueue, isShuffle, isLoop, isPlaying);
     }
 
     private synchronized void playSong(final PlayableSong song) {
+        if (song == null) return;
         if (!playerQueue.contains(song)){
              playerQueue.add(song);
         }
@@ -242,10 +257,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!@#$%^&*()_++++++++++++++++++++++++++++");
-        System.out.println("mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
-        Log.e("PLAYTER", "mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]"  );
-        System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!@#$%^&*()_++++++++++++++++++++++++++++");
+        System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!   ERROR  ++++++++++++++++++++++++++++");
         System.err.println("mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
         return false;
     }

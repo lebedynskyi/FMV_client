@@ -181,13 +181,13 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
     private SearchSongAdapter.AdapterCallback adapterCallback = new SearchSongAdapter.AdapterCallback() {
         @Override
         public void playClicked(PlayableSong model, int pos) {
-            core.getPlayerManager().getPlayer().play(songsInAdapter, pos);
+            core.getPlayerManager().getPlayer(null).play(songsInAdapter, pos);
             mMediator.startPlayerActivity();
         }
 
         @Override
         public void addToQueueClicked(PlayableSong model) {
-            core.getPlayerManager().getPlayer().add(model);
+            core.getPlayerManager().getPlayer(null).add(model);
             Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }
 
