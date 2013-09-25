@@ -82,24 +82,24 @@
                 android:id="@+id/loop" android:background="@drawable/player_loop_selector"
                 android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
     </RelativeLayout>
+    <com.sileria.android.view.SlidingTray
+            android:id="@+id/drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-    <SlidingDrawer android:id="@+id/songs_drawer"
-                   android:orientation="horizontal"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-            android:handle="@+id/songs_slider_handler"
-            android:content="@+id/songs_content">
-        <Button android:id="@+id/songs_slider_handler"
+            android:handle="@+id/handle"
+            android:content="@+id/content">
+
+        <Button
+                android:id="@+id/handle"
+                android:text="Push me"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        <LinearLayout android:id="@+id/songs_content"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-            <TextView android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"/>
-            <ListView android:id="@+id/songs_list_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                </LinearLayout>
-    </SlidingDrawer>
+                android:layout_height="wrap_content" />
+
+        <ImageView
+                android:id="@+id/content"
+                android:src="@drawable/icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+    </com.sileria.android.view.SlidingTray>
 </RelativeLayout>

@@ -1,12 +1,12 @@
 package com.music.fmv.core;
 
-import android.app.Application;
 import android.graphics.Bitmap;
 import com.nostra13.universalimageloader.cache.disc.impl.FileCountLimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.sileria.android.Application;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ import java.io.File;
  * Date: 7/19/13
  * Time: 12:16 PM
  */
-public class App extends Application{
+public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

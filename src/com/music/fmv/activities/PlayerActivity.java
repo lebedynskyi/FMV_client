@@ -12,6 +12,8 @@ import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
+import com.sileria.android.view.SlidingTray;
+import com.sileria.util.Side;
 
 import java.text.SimpleDateFormat;
 
@@ -59,10 +61,6 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        playerListener.needRefreshControls();
-//        refreshProgress();
-//        refresher = new RefreshTimer(1 * 60 * 1000, 500);
-//        refresher.start();
         playerListener.needRefreshControls();
 
 
@@ -108,6 +106,9 @@ public class PlayerActivity extends BaseActivity {
         loopActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
         shuffleNormDrawable = getResources().getDrawable(R.drawable.player_shuffle_selector);
         shuffleActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
+
+        SlidingTray tray = (SlidingTray) findViewById(R.id.drawer);
+        tray.setHandlePosition(Side.TOP);
     }
 
     private void refreshProgress() {
