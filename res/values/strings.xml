@@ -24,4 +24,5 @@
     <string name="already_in_queue">The song is downloading already</string>
     <string name="waiting">Waiting\.\.\.</string>
     <string name="song_added_to_current_list">The song %s has added to current play list</string>
+    <string name="back">Back</string>
 </resources>

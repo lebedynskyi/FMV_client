@@ -9,7 +9,6 @@ import android.widget.RemoteViews;
 import com.music.fmv.R;
 import com.music.fmv.activities.PlayerActivity;
 import com.music.fmv.core.Core;
-import com.music.fmv.services.PlayerService;
 
 /**
  * User: vitaliylebedinskiy
@@ -20,9 +19,6 @@ public class NotifyManager extends Manager{
     private static final int DOWNLOAD_NOTIFY_ID = 1350;
     private static final int PLAYER_NOTIFY_ID = 1357;
 
-    private static PendingIntent prevPendIntent;
-    private static PendingIntent pausePendIntent;
-    private static PendingIntent nextPendIntent;
     private NotificationManager mNotifyManager;
 
     public NotifyManager(Core coreManager) {
@@ -64,27 +60,6 @@ public class NotifyManager extends Manager{
                 .setTicker(songOwner + " - " + songName);
         mNotifyManager.notify(PLAYER_NOTIFY_ID, mBuilder.build());
     }
-
-//    private void createPausePending() {
-//        Intent intent = new Intent();
-//        intent.setAction(PlayerService.RECEIVER_ACTION);
-//        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PAUSE);
-//        pausePendIntent = PendingIntent.getBroadcast(core.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//    }
-//
-//    private void createNextPending() {
-//        Intent intent = new Intent();
-//        intent.setAction(PlayerService.RECEIVER_ACTION);
-//        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.NEXT);
-//        nextPendIntent = PendingIntent.getBroadcast(core.getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//    }
-//
-//    private void createPrevPending() {
-//        Intent intent = new Intent();
-//        intent.setAction(PlayerService.RECEIVER_ACTION);
-//        intent.putExtra(PlayerService.ACTION_KEY, PlayerService.NOTIFICATION_ACTIONS.PREV);
-//        prevPendIntent = PendingIntent.getBroadcast(core.getContext(), 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//    }
 
     public void notifyErrorDownloading(String name) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());

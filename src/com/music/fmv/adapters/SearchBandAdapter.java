@@ -1,14 +1,13 @@
 package com.music.fmv.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
+import com.music.fmv.widgets.FixedBaseAdapter;
 import com.music.fmv.models.SearchBandModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -20,30 +19,19 @@ import java.util.List;
  * Time: 6:05 PM
  */
 
-public class SearchBandAdapter extends BaseAdapter {
-    private final LayoutInflater inflater;
+public class SearchBandAdapter extends FixedBaseAdapter<SearchBandModel> {
     private List<SearchBandModel> mList;
     private ImageLoader imageLoader;
 
     public SearchBandAdapter(List<SearchBandModel> mList, Context context) {
+        super(mList, context);
         this.mList = mList;
-        this.inflater = LayoutInflater.from(context);
         imageLoader = ImageLoader.getInstance();
     }
 
     @Override
-    public int getCount() {
-        return mList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
+    public SearchBandModel getItem(int position) {
         return mList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @Override
@@ -51,7 +39,7 @@ public class SearchBandAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.search_band_row, parent, false);
+            convertView = inflateView(R.layout.search_band_row, parent);
             holder.briefDescr = (TextView) convertView.findViewById(R.id.band_descr);
             holder.icon = (ImageView) convertView.findViewById(R.id.band_icon);
             holder.name = (TextView) convertView.findViewById(R.id.band_name);

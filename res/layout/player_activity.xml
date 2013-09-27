@@ -3,7 +3,8 @@
 <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
-        android:padding="5dp" android:background="@color/black">
+        xmlns:glow_btn="http://schemas.android.com/apk/res/com.music.fmv"
+        android:paddingLeft="5dp" android:paddingRight="5dp" android:paddingTop="5dp" android:background="@color/black">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/curr_progress" android:layout_toRightOf="@+id/current_time"
                 android:layout_toLeftOf="@+id/full_time" android:layout_centerVertical="true"
-                android:layout_margin="5dp" android:layout_marginRight="5dp"/>
+                android:layout_margin="5dp"/>
     </RelativeLayout>
     <RelativeLayout
             android:layout_width="fill_parent"
@@ -82,7 +83,7 @@
                 android:id="@+id/loop" android:background="@drawable/player_loop_selector"
                 android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
     </RelativeLayout>
-    <com.sileria.android.view.SlidingTray
+    <com.music.fmv.widgets.FixedSlidigTray
             android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -90,16 +91,41 @@
             android:handle="@+id/handle"
             android:content="@+id/content">
 
-        <Button
+        <RelativeLayout
                 android:id="@+id/handle"
-                android:text="Push me"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="fill_parent"
+                android:background="@color/player_header_black"
+                android:layout_height="60dp">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:id="@+id/back_btn"
+                    android:gravity="center_vertical"
+                    android:onClick="backClicked"
+                    android:layout_height="match_parent">
+                <ImageView android:layout_width="30dp"
+                        android:layout_height="30dp"/>
+                <com.music.fmv.views.GlowButton
+                        glow_btn:text="@string/back"
+                        android:layout_weight="0"
+                        glow_btn:selectable="false"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"/>
+                    </LinearLayout>
+            <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/play_list_container"
+                    android:onClick="playListClicked"
+                    android:layout_alignRight="@id/back_btn">
+            </LinearLayout>
+        </RelativeLayout>
 
-        <ImageView
+        <LinearLayout
                 android:id="@+id/content"
-                android:src="@drawable/icon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-    </com.sileria.android.view.SlidingTray>
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+            <ListView android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:id="@+id/player_play_list"/>
+        </LinearLayout>
+    </com.music.fmv.widgets.FixedSlidigTray>
 </RelativeLayout>

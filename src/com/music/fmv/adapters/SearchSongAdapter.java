@@ -1,13 +1,12 @@
 package com.music.fmv.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.TextView;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
-import com.music.fmv.core.Core;
+import com.music.fmv.widgets.FixedBaseAdapter;
 import com.music.fmv.models.PlayableSong;
 
 import java.util.ArrayList;
@@ -17,18 +16,14 @@ import java.util.ArrayList;
  * Date: 8/1/13
  * Time: 2:43 PM
  */
-public class SearchSongAdapter extends BaseAdapter{
-    private ArrayList<PlayableSong> mData;
-    private LayoutInflater inflater;
+
+public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
     private AdapterCallback callback;
     private SwipeListView listView;
-    private Core core;
 
     public SearchSongAdapter(Context c ,ArrayList<PlayableSong> list, SwipeListView listView){
+        super(list, c);
         this.listView = listView;
-        mData = list;
-        inflater = LayoutInflater.from(c);
-        core = Core.getInstance(c);
     }
 
     public void setCallback(AdapterCallback callback) {
@@ -36,18 +31,8 @@ public class SearchSongAdapter extends BaseAdapter{
     }
 
     @Override
-    public int getCount() {
-        return mData.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
+    public PlayableSong getItem(int position) {
         return mData.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @Override
@@ -55,7 +40,7 @@ public class SearchSongAdapter extends BaseAdapter{
         ViewHolder holder = null;
         if (convertView == null){
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.search_songs_row, parent, false);
+            convertView = inflateView(R.layout.search_songs_row, parent);
             holder.owner = (TextView) convertView.findViewById(R.id.song_owner);
             holder.duration = (TextView) convertView.findViewById(R.id.duration);
             holder.isCached = convertView.findViewById(R.id.is_cached);
@@ -75,8 +60,7 @@ public class SearchSongAdapter extends BaseAdapter{
         holder.name.setText(song.getName());
         holder.duration.setText(song.getNiceDuration());
 
-        //TODO maybe i should use cacheManager
-        if (song.getAbsolutheFile(core.getSettingsManager().getDownloadFolder()).exists()){
+        if (core.getCacheManager().isSongExists(song)){
             holder.isCached.setVisibility(View.VISIBLE);
         }else holder.isCached.setVisibility(View.GONE);
 

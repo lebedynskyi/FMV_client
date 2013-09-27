@@ -1,16 +1,14 @@
 package com.music.fmv.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
+import com.music.fmv.widgets.FixedBaseAdapter;
 import com.music.fmv.models.SearchAlbumModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -21,17 +19,15 @@ import java.util.ArrayList;
  * Date: 7/22/13
  * Time: 3:45 PM
  */
-public class SearchAlbumsAdapter extends BaseAdapter {
-    private final LayoutInflater inflater;
+public class SearchAlbumsAdapter extends FixedBaseAdapter<SearchAlbumModel> {
     private final SwipeListView listView;
-    private ArrayList<SearchAlbumModel> mData;
     private ImageLoader imageLoader;
     private AdapterCallback callback;
 
     public SearchAlbumsAdapter(ArrayList<SearchAlbumModel> mData, Context context, SwipeListView lv) {
+        super(mData, context);
         this.listView = lv;
         this.mData = mData;
-        this.inflater = LayoutInflater.from(context);
         this.imageLoader = ImageLoader.getInstance();
     }
 
@@ -40,25 +36,15 @@ public class SearchAlbumsAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return mData.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
+    public SearchAlbumModel getItem(int position) {
         return mData.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.search_album_row, parent, false);
+            convertView = inflateView(R.layout.search_album_row, parent);
             holder = new ViewHolder();
             holder.descr = (TextView) convertView.findViewById(R.id.alum_brief);
             holder.icon = (ImageView) convertView.findViewById(R.id.album_icon);
@@ -125,14 +111,10 @@ public class SearchAlbumsAdapter extends BaseAdapter {
         }
     }
 
-
     public interface AdapterCallback {
         public void playClicked(SearchAlbumModel model);
-
         public void addToQueueClicked(SearchAlbumModel model);
-
         public void showClicked(SearchAlbumModel mdel);
-
         public void downloadClicked(SearchAlbumModel model);
     }
 }

@@ -5,15 +5,17 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.music.fmv.R;
+import com.music.fmv.adapters.PlayerPlayListAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
+import com.music.fmv.widgets.FixedSlidigTray;
 import com.sileria.android.view.SlidingTray;
-import com.sileria.util.Side;
 
 import java.text.SimpleDateFormat;
 
@@ -42,7 +44,7 @@ public class PlayerActivity extends BaseActivity {
     private Player player;
 
     //TODO create selectors
-    //background for buttons
+    //backgrounds for buttons
     private Drawable pauseDrawable;
     private Drawable playDrawable;
     private Drawable loopNormDrawable;
@@ -51,6 +53,9 @@ public class PlayerActivity extends BaseActivity {
     private Drawable shuffleActiveDrawable;
 
     private RefreshTimer refresher;
+    private FixedSlidigTray playListTray;
+    private boolean fromNitification;
+    private View backBTN;
 
     @Override
     protected void onCreated(Bundle state) {
@@ -63,11 +68,12 @@ public class PlayerActivity extends BaseActivity {
         super.onStart();
         playerListener.needRefreshControls();
 
-
         refreshProgress();
         refresher = new RefreshTimer(1 * 60 * 1000, 500);
         refresher.start();
         player = mCore.getPlayerManager().getPlayer(initListener);
+
+        fromNitification = getIntent().getIntExtra(FROM_NOTIFY_FLAG, -1) != -1;
 
         if (player == null) return;
         player.setPlayerListener(playerListener);
@@ -75,6 +81,28 @@ public class PlayerActivity extends BaseActivity {
         if (status != null) {
             playerListener.onSongPlaying(status.getCurrentSong());
         }
+    }
+
+    private void initPlayList() {
+        if (player != null){
+            Player.PlayerStatus status = player.getStatus();
+            if (status == null) return;
+
+            ListView playList = (ListView) playListTray.getContent().findViewById(R.id.player_play_list);
+            playList.setAdapter(new PlayerPlayListAdapter(status.getCurrentQueue(), this));
+        }
+    }
+
+    public void backClicked(View v){
+        if(fromNitification){
+            mMediator.startMain();
+            finish();
+        }
+        super.onBackPressed();
+    }
+
+    public void playListClicked(View v){
+        slidingTrayListener.onClick(v);
     }
 
     public void initViews() {
@@ -107,8 +135,11 @@ public class PlayerActivity extends BaseActivity {
         shuffleNormDrawable = getResources().getDrawable(R.drawable.player_shuffle_selector);
         shuffleActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
 
-        SlidingTray tray = (SlidingTray) findViewById(R.id.drawer);
-        tray.setHandlePosition(Side.TOP);
+        playListTray= (FixedSlidigTray) findViewById(R.id.drawer);
+        playListTray.getHandle().setOnClickListener(slidingTrayListener);
+        backBTN = playListTray.getHandle().findViewById(R.id.back_btn);
+        playListTray.setOnDrawerOpenListener(trayOpenListener);
+        playListTray.setOnDrawerCloseListener(trayCloseListener);
     }
 
     private void refreshProgress() {
@@ -178,6 +209,7 @@ public class PlayerActivity extends BaseActivity {
                 songNameTV.setText(song.getName());
                 songArtistTV.setText(song.getArtist());
                 pausePlayBTN.setBackgroundDrawable(pauseDrawable);
+                startImageTask();
             }
 
             Player.PlayerStatus status = player.getStatus();
@@ -193,6 +225,10 @@ public class PlayerActivity extends BaseActivity {
             progressSlider.setProgress(0);
         }
     };
+
+    private void startImageTask() {
+        //TODO implemented
+    }
 
     private class RefreshTimer extends CountDownTimer {
         public RefreshTimer(long millisInFuture, long countDownInterval) {
@@ -239,8 +275,33 @@ public class PlayerActivity extends BaseActivity {
             if (status != null) {
                 playerListener.onSongPlaying(status.getCurrentSong());
             }
+
             playerListener.needRefreshControls();
             refreshProgress();
+        }
+    };
+
+    private View.OnClickListener slidingTrayListener  = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            initPlayList();
+            if (playListTray.isOpened()){
+                playListTray.animateClose();
+            }else playListTray.animateOpen();
+        }
+    };
+
+    private SlidingTray.OnDrawerOpenListener trayOpenListener = new SlidingTray.OnDrawerOpenListener() {
+        @Override
+        public void onDrawerOpened() {
+            backBTN.setVisibility(View.GONE);
+        }
+    };
+
+    private SlidingTray.OnDrawerCloseListener trayCloseListener = new SlidingTray.OnDrawerCloseListener() {
+        @Override
+        public void onDrawerClosed() {
+            backBTN.setVisibility(View.VISIBLE);
         }
     };
 }

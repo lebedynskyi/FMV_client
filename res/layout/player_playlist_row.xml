@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:tag="front"
+                android:background="@drawable/white_background"
+                android:layout_height="70dp" android:padding="5dp">
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/song_name"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical|left"
+            android:textSize="22sp"
+            android:textColor="@color/black" android:layout_toLeftOf="@+id/duration"
+            android:text="dsaDAsdADdASDas"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/song_owner"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical|left"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_below="@+id/song_name"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/duration"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical|left"
+            android:textSize="13sp" android:layout_alignParentRight="true"/>
+    <ImageView android:layout_width="30dp" android:layout_height="30dp" android:id="@+id/is_cached"
+               android:layout_alignParentEnd="false" android:layout_alignParentRight="true"
+               android:layout_alignParentBottom="true" android:src="@drawable/back_item_in_cache"/>
+</RelativeLayout>
