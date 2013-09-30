@@ -4,6 +4,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:glow_btn="http://schemas.android.com/apk/res/com.music.fmv"
+        xmlns:sliding_tray="http://schemas.android.com/apk/res/com.music.fmv"
         android:paddingLeft="5dp" android:paddingRight="5dp" android:paddingTop="5dp" android:background="@color/black">
     <LinearLayout
             android:orientation="vertical"
@@ -83,13 +84,14 @@
                 android:id="@+id/loop" android:background="@drawable/player_loop_selector"
                 android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
     </RelativeLayout>
-    <com.music.fmv.widgets.FixedSlidigTray
+    <com.music.fmv.widgets.SlidingTray
             android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
-            android:handle="@+id/handle"
-            android:content="@+id/content">
+            sliding_tray:handle="@+id/handle"
+            sliding_tray:content="@+id/content"
+            sliding_tray:orientation="top">
 
         <RelativeLayout
                 android:id="@+id/handle"
@@ -123,9 +125,13 @@
                 android:id="@+id/content"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent">
-            <ListView android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:id="@+id/player_play_list"/>
+            <ImageView android:src="@drawable/icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"/>
+            <!--<ListView android:layout_width="match_parent"-->
+                      <!--android:layout_height="match_parent"-->
+                      <!--android:id="@+id/player_play_list"/>-->
         </LinearLayout>
-    </com.music.fmv.widgets.FixedSlidigTray>
+    </com.music.fmv.widgets.SlidingTray>
 </RelativeLayout>

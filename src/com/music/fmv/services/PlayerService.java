@@ -11,7 +11,6 @@ import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
-import com.music.fmv.utils.Log;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -257,7 +256,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!   ERROR  ++++++++++++++++++++++++++++");
+        System.err.println("+++++++++++++++++++++++++++   ERROR  ++++++++++++++++++++++++++++");
         System.err.println("mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
         return false;
     }

@@ -14,5 +14,6 @@
     <color name="back_item_start">#ffdfdfdf</color>
     <color name="back_item_end">#ffd1d1d1</color>
 
-    <color name="player_header_black">#b3000000</color>
+    <!--<color name="player_header_black">#b3000000</color>-->
+    <color name="player_header_black">#ff82cdff</color>
 </resources>

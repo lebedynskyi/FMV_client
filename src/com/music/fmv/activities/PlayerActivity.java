@@ -5,17 +5,13 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.music.fmv.R;
-import com.music.fmv.adapters.PlayerPlayListAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
-import com.music.fmv.widgets.FixedSlidigTray;
-import com.sileria.android.view.SlidingTray;
 
 import java.text.SimpleDateFormat;
 
@@ -53,7 +49,6 @@ public class PlayerActivity extends BaseActivity {
     private Drawable shuffleActiveDrawable;
 
     private RefreshTimer refresher;
-    private FixedSlidigTray playListTray;
     private boolean fromNitification;
     private View backBTN;
 
@@ -88,8 +83,6 @@ public class PlayerActivity extends BaseActivity {
             Player.PlayerStatus status = player.getStatus();
             if (status == null) return;
 
-            ListView playList = (ListView) playListTray.getContent().findViewById(R.id.player_play_list);
-            playList.setAdapter(new PlayerPlayListAdapter(status.getCurrentQueue(), this));
         }
     }
 
@@ -102,7 +95,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     public void playListClicked(View v){
-        slidingTrayListener.onClick(v);
+
     }
 
     public void initViews() {
@@ -135,11 +128,11 @@ public class PlayerActivity extends BaseActivity {
         shuffleNormDrawable = getResources().getDrawable(R.drawable.player_shuffle_selector);
         shuffleActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
 
-        playListTray= (FixedSlidigTray) findViewById(R.id.drawer);
-        playListTray.getHandle().setOnClickListener(slidingTrayListener);
-        backBTN = playListTray.getHandle().findViewById(R.id.back_btn);
-        playListTray.setOnDrawerOpenListener(trayOpenListener);
-        playListTray.setOnDrawerCloseListener(trayCloseListener);
+//        playListTray= (FixedSlidigTray) findViewById(R.id.drawer);
+//        playListTray.getHandle().setOnClickListener(slidingTrayListener);
+//        backBTN = playListTray.getHandle().findViewById(R.id.back_btn);
+//        playListTray.setOnDrawerOpenListener(trayOpenListener);
+//        playListTray.setOnDrawerCloseListener(trayCloseListener);
     }
 
     private void refreshProgress() {
@@ -278,30 +271,6 @@ public class PlayerActivity extends BaseActivity {
 
             playerListener.needRefreshControls();
             refreshProgress();
-        }
-    };
-
-    private View.OnClickListener slidingTrayListener  = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            initPlayList();
-            if (playListTray.isOpened()){
-                playListTray.animateClose();
-            }else playListTray.animateOpen();
-        }
-    };
-
-    private SlidingTray.OnDrawerOpenListener trayOpenListener = new SlidingTray.OnDrawerOpenListener() {
-        @Override
-        public void onDrawerOpened() {
-            backBTN.setVisibility(View.GONE);
-        }
-    };
-
-    private SlidingTray.OnDrawerCloseListener trayCloseListener = new SlidingTray.OnDrawerCloseListener() {
-        @Override
-        public void onDrawerClosed() {
-            backBTN.setVisibility(View.VISIBLE);
         }
     };
 }
