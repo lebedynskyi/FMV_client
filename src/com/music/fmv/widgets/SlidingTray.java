@@ -154,6 +154,7 @@ public class SlidingTray extends ViewGroup {
     private final int mMaximumMajorVelocity;
     private final int mMaximumAcceleration;
     private final int mVelocityUnits;
+    private int mLastDeltaY;
 
     /**
      * Construct a <code>MultipleOrientationSlidingDrawer</code> object programmatically with the specified
@@ -779,10 +780,6 @@ public class SlidingTray extends ViewGroup {
                     }
 
                     if (deltaY != 0) {
-                        if (deltaY < -100) deltaY = -110;
-
-                        if (deltaY > 110 ) deltaY = 110;
-
                         handle.offsetTopAndBottom(deltaY);
                         Log.e("SLIDER!!!!!!!!!!!!!!!", String.format("deltaY = %s", deltaY));
                     }
@@ -798,8 +795,8 @@ public class SlidingTray extends ViewGroup {
                     region.union(0, frame.bottom - deltaY, getWidth(), frame.bottom - deltaY + mContent.getHeight());
 
                     // todo fix the region calc.
-                    invalidate( region );
-//                    invalidate();
+//                    invalidate( region );
+                    invalidate();
                 }
                 break;
 
