@@ -84,7 +84,7 @@
                 android:id="@+id/loop" android:background="@drawable/player_loop_selector"
                 android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
     </RelativeLayout>
-    <com.music.fmv.widgets.SlidingTray
+    <com.music.fmv.widgets.FixedSlidingTray
             android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -97,7 +97,7 @@
                 android:id="@+id/handle"
                 android:layout_width="fill_parent"
                 android:background="@color/player_header_black"
-                android:layout_height="60dp">
+                android:layout_height="50dp">
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:id="@+id/back_btn"
@@ -133,5 +133,5 @@
                       <!--android:layout_height="match_parent"-->
                       <!--android:id="@+id/player_play_list"/>-->
         </LinearLayout>
-    </com.music.fmv.widgets.SlidingTray>
+    </com.music.fmv.widgets.FixedSlidingTray>
 </RelativeLayout>

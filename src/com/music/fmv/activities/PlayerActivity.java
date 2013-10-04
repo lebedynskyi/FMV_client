@@ -12,6 +12,7 @@ import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.managers.PlayerManager;
 import com.music.fmv.models.PlayableSong;
 import com.music.fmv.services.Player;
+import com.music.fmv.widgets.FixedSlidingTray;
 
 import java.text.SimpleDateFormat;
 
@@ -127,6 +128,15 @@ public class PlayerActivity extends BaseActivity {
         loopActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
         shuffleNormDrawable = getResources().getDrawable(R.drawable.player_shuffle_selector);
         shuffleActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
+
+        View handle = findViewById(R.id.handle);
+        final FixedSlidingTray tray = (FixedSlidingTray) findViewById(R.id.drawer);
+        handle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tray.animateOpen();
+            }
+        });
 
 //        playListTray= (FixedSlidigTray) findViewById(R.id.drawer);
 //        playListTray.getHandle().setOnClickListener(slidingTrayListener);

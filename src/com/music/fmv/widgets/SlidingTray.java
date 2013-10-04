@@ -896,7 +896,7 @@ public class SlidingTray extends ViewGroup {
         }
     }
 
-    private void prepareContent() {
+    protected void prepareContent() {
         if (mAnimating) {
             return;
         }
