@@ -57,6 +57,18 @@ public abstract class BaseActivity extends ActionBarActivity{
         }, 500);
     }
 
+    @Override
+    public void setTitle(int titleId) {
+        setTitle(getString(titleId));
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        if (actionBar != null){
+            actionBar.setTitle(title);
+        }
+    }
+
     public void sendScreenStatistic(String screenName){
         tracker.set(Fields.SCREEN_NAME, screenName + " -> " + this.getClass().getName());
         tracker.send(MapBuilder.createAppView().build());

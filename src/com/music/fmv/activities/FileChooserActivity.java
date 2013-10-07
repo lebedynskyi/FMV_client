@@ -1,39 +1,22 @@
-/* 
- * Copyright (C) 2013 Paul Burke
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
- */ 
-
 package com.music.fmv.activities;
 
-import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.music.fmv.R;
+import com.music.fmv.core.BaseActivity;
 import com.music.fmv.fragments.FileListFragment;
 
 import java.io.File;
@@ -46,14 +29,9 @@ import java.io.File;
  * @author paulburke (ipaulpro)
  * 
  */
-public class FileChooserActivity extends FragmentActivity implements
-		OnBackStackChangedListener {
-
+public class FileChooserActivity extends BaseActivity implements OnBackStackChangedListener {
     public static final String PATH = "path";
 	public static final String EXTERNAL_BASE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-
-
-    private static final boolean HAS_ACTIONBAR = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
 
 	private FragmentManager mFragmentManager;
 	private BroadcastReceiver mStorageListener = new BroadcastReceiver() {
@@ -67,9 +45,7 @@ public class FileChooserActivity extends FragmentActivity implements
 	private String mPath;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
+	protected void onCreated(Bundle savedInstanceState) {
 		setContentView(R.layout.chooser);
 
 		mFragmentManager = getSupportFragmentManager();
@@ -118,19 +94,16 @@ public class FileChooserActivity extends FragmentActivity implements
 		}
 		
 		setTitle(mPath);
-		if (HAS_ACTIONBAR) invalidateOptionsMenu();
+		invalidateOptionsMenu();
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-        if (HAS_ACTIONBAR) {
-            boolean hasBackStack = mFragmentManager.getBackStackEntryCount() > 0;
-            
-            ActionBar actionBar = getActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(hasBackStack);
-            actionBar.setHomeButtonEnabled(hasBackStack);
-        }
-	    
+        boolean hasBackStack = mFragmentManager.getBackStackEntryCount() > 0;
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(hasBackStack);
+        actionBar.setHomeButtonEnabled(hasBackStack);
 	    return true;
 	}
 	

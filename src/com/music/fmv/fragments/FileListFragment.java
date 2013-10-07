@@ -21,8 +21,11 @@ import android.os.Environment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import com.music.fmv.R;
 import com.music.fmv.activities.FileChooserActivity;
 import com.music.fmv.adapters.FileListAdapter;
@@ -39,8 +42,7 @@ import java.util.List;
  * @author paulburke (ipaulpro)
  * 
  */
-public class FileListFragment extends ListFragment implements
-		LoaderManager.LoaderCallbacks<List<File>> {
+public class FileListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<File>> {
 
 	private static final int LOADER_ID = 0;
 
@@ -65,21 +67,28 @@ public class FileListFragment extends ListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		mAdapter = new FileListAdapter(getActivity());
 		mPath = getArguments() != null ? getArguments().getString(
 				FileChooserActivity.PATH) : Environment
 				.getExternalStorageDirectory().getAbsolutePath();
 	}
 
-	@Override
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup layout = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
+        ViewGroup progressContainer = (ViewGroup) layout.getChildAt(0);
+        ((ProgressBar)progressContainer.getChildAt(0)).setIndeterminateDrawable(getResources().getDrawable(R.drawable.blue_rotate));
+        return layout;
+    }
+
+    @Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		setEmptyText(getString(R.string.empty_directory));
 		setListAdapter(mAdapter);
 		setListShown(false);
 
 		getLoaderManager().initLoader(LOADER_ID, null, this);
-		
+
 		super.onActivityCreated(savedInstanceState);
 	}
 

@@ -12,10 +12,20 @@
         <item name="android:layout_marginLeft">@dimen/list_item_padding</item>
 	</style>
 
-    <style name="AppCompatNoActionBar" parent="Theme.AppCompat.Light">
+    <style name="MyAppCompateTheme" parent="Theme.AppCompat.Light">
+        <item name="android:progressBarStyle">@style/NiceProgressBar</item>
+        <item name="progressBarStyle">@style/NiceProgressBar</item>
+    </style>
+
+    <style name="AppCompatNoActionBar" parent="MyAppCompateTheme">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-
         <item name="windowActionBar">false</item>
+    </style>
+
+    <!--Widgets-->
+    <style name="NiceProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/blue_rotate</item>
+        <item name="android:progressDrawable">@drawable/blue_rotate</item>
     </style>
 </resources>
