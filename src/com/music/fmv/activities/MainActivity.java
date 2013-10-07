@@ -31,6 +31,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreated(Bundle state) {
+        hideActionBar();
         setContentView(R.layout.main_activity);
         pager = (ViewPager) findViewById(R.id.pager);
 

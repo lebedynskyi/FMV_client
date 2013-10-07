@@ -14,6 +14,10 @@ import android.view.WindowManager;
  * To change this template use File | Settings | File Templates.
  */
 public class FixedSlidingTray extends SlidingTray{
+    private static final int SCROLL_SIZE = 30;
+    private static final int SCROLL_DELAY = 5;
+
+
     private int deviceHeight;
 
     public FixedSlidingTray(Context context, View handle, View content, Orientation orientation) {
@@ -54,7 +58,8 @@ public class FixedSlidingTray extends SlidingTray{
 
     @Override
     public void animateClose() {
-        super.animateClose();
+        Closer closer = new Closer();
+        closer.start();
     }
 
 
@@ -76,12 +81,12 @@ public class FixedSlidingTray extends SlidingTray{
            int maxY = (getHeight() - getHandle().getHeight()) * -1;
            int currY = getScrollY();
            while (currY > maxY){
-               currY -= 25;
+               currY -= SCROLL_SIZE;
                 if (currY <= maxY){
                     screollInUI(0, maxY);
                 }else screollInUI(0, currY);
                try {
-                   sleep(5);
+                   sleep(SCROLL_DELAY);
                } catch (InterruptedException e) {
                    e.printStackTrace();
                }
@@ -96,6 +101,45 @@ public class FixedSlidingTray extends SlidingTray{
            });
        }
    }
+
+    private class Closer extends Thread {
+        @Override
+        public void run() {
+
+            //Make content visible
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    prepareContent();
+                    getContent().setVisibility(VISIBLE);
+                    invalidate();
+                }
+            });
+
+            //calculate height for scroll
+            int maxY = (getHeight() - getHandle().getHeight());
+            int currY = getScrollY();
+            while (currY < maxY){
+                currY += SCROLL_SIZE;
+                if (currY >= maxY){
+                    screollInUI(0, maxY);
+                }else screollInUI(0, currY);
+                try {
+                    sleep(SCROLL_DELAY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    close();
+                    scrollTo(0,0);
+                }
+            });
+        }
+    }
 
     private void screollInUI(final int x, final int y) {
         post(new Runnable() {

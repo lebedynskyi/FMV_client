@@ -31,10 +31,10 @@ public class Api {
     public static final String API_URL = TEST_URL;
 
     //commands for api
-    public static final String SEARCH_BAND_COMMAND = "artist.search";
-    public static final String GET_BAND_COMMAND = "artist.get";
+    public static final String SEARCH_BAND_COMMAND =   "artist.search";
+    public static final String GET_BAND_COMMAND =      "artist.get";
     public static final String SEARCH_ALBUMS_COMMAND = "albums.search";
-    public static final String SEARCH_SONGS_COMMAND = "songs.search";
+    public static final String SEARCH_SONGS_COMMAND =  "songs.search";
 
 
     //returns List<SearchBandModel>

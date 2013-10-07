@@ -44,8 +44,8 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
     }
 
     @Override
-    protected void createView(Bundle savedInstanceState) {
-        mainView = inflateView(R.layout.search_songs_fragment);
+    protected View createView(Bundle savedInstanceState) {
+        View mainView = inflateView(R.layout.search_songs_fragment);
         rotateFooter = inflateView(R.layout.rotate_footer);
 
         emptyView = (TextView) mainView.findViewById(R.id.empty_view);
@@ -59,6 +59,7 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
         songsListView.setAdapter(adapter);
         songsListView.setSwipeListViewListener(listViewListener);
         songsListView.setOnScrollListener(scrollListener);
+        return mainView;
     }
 
     private AdapterView.OnItemClickListener songsListener = new AdapterView.OnItemClickListener() {

@@ -134,15 +134,11 @@ public class PlayerActivity extends BaseActivity {
         handle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tray.animateOpen();
+                if (tray.isOpened()){
+                    tray.animateClose();
+                }else tray.animateOpen();
             }
         });
-
-//        playListTray= (FixedSlidigTray) findViewById(R.id.drawer);
-//        playListTray.getHandle().setOnClickListener(slidingTrayListener);
-//        backBTN = playListTray.getHandle().findViewById(R.id.back_btn);
-//        playListTray.setOnDrawerOpenListener(trayOpenListener);
-//        playListTray.setOnDrawerCloseListener(trayCloseListener);
     }
 
     private void refreshProgress() {

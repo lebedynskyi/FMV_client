@@ -41,7 +41,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.inflater = inflater;
-        createView(savedInstanceState);
+        mainView = createView(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(mainView, getActivity());
         return mainView;
     }
@@ -61,5 +61,5 @@ public abstract class BaseFragment extends Fragment {
         return v;
     }
 
-    protected abstract void createView(Bundle savedInstanceState);
+    protected abstract View createView(Bundle savedInstanceState);
 }

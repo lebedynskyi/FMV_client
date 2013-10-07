@@ -1,0 +1,98 @@
+10
+
+dir
+221
+http://svn.webssa.com/svn/brink-android/trunk/appcompat/res
+http://svn.webssa.com/svn/brink-android
+
+
+
+2013-08-16T15:06:24.412506Z
+17
+vlebedynskyi
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+fa7c43ac-a938-48fa-ad35-a50c42b0cc6d
+
+
+
+
+
+
+0
+
+anim
+dir
+
+color
+dir
+
+drawable
+dir
+
+drawable-hdpi
+dir
+
+drawable-mdpi
+dir
+
+drawable-xhdpi
+dir
+
+layout
+dir
+
+layout-v11
+dir
+
+layout-v14
+dir
+
+values
+dir
+
+values-land
+dir
+
+values-large
+dir
+
+values-sw600dp
+dir
+
+values-v11
+dir
+
+values-v14
+dir
+
+values-w360dp
+dir
+
+values-w480dp
+dir
+
+values-w500dp
+dir
+
+values-w600dp
+dir
+
+values-w720dp
+dir
+
+values-xlarge
+dir
+

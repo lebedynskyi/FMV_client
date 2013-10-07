@@ -38,8 +38,8 @@ public class SearchAlbumFragment extends BaseFragment {
     private TextView emptyView;
 
     @Override
-    protected void createView(Bundle savedInstanceState) {
-        mainView =inflateView(R.layout.search_album_fagment);
+    protected View  createView(Bundle savedInstanceState) {
+        View mainView =inflateView(R.layout.search_album_fagment);
         albumsListsView = (SwipeListView) mainView.findViewById(R.id.albums_list);
         adapter = new SearchAlbumsAdapter(albumsList, baseActivity, albumsListsView);
 
@@ -52,6 +52,7 @@ public class SearchAlbumFragment extends BaseFragment {
         albumsListsView.setOnScrollListener(scrollListener);
         albumsListsView.setSwipeListViewListener(albumsLIstener);
         rotateFooter = inflateView(R.layout.rotate_footer);
+        return mainView;
     }
 
     private void searchAlbum(String query, final Integer page){

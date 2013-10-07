@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/brink-android/!svn/ver/119/trunk/appcompat
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/brink-android/!svn/ver/17/trunk/appcompat/README.txt
+END
+AndroidManifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/brink-android/!svn/ver/17/trunk/appcompat/AndroidManifest.xml
+END
+project.properties
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/brink-android/!svn/ver/17/trunk/appcompat/project.properties
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/brink-android/!svn/ver/17/trunk/appcompat/.project
+END
+appcompat.iml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/brink-android/!svn/ver/119/trunk/appcompat/appcompat.iml
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/brink-android/!svn/ver/17/trunk/appcompat/.classpath
+END

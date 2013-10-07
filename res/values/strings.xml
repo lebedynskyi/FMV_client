@@ -22,7 +22,22 @@
     <string name="downloading_finish">All songs downloaded successfully</string>
     <string name="file_already_exists">The song already downloaded</string>
     <string name="already_in_queue">The song is downloading already</string>
-    <string name="waiting">Waiting\.\.\.</string>
+    <string name="waiting">Waiting...</string>
     <string name="song_added_to_current_list">The song %s has added to current play list</string>
     <string name="back">Back</string>
+    <string name="show_playlist">Show playlist</string>
+    <string name="hide_playlist">Hide playlist</string>
+
+                                  <!--   Preferences !!!!!!!  -->
+    <string name="pref_storage_title">Storage settings:</string>
+    <string name="pref_song_folder">Song\'s folder</string>
+    <string name="pref_song_folder_descr">Folder for saving songs after downloading</string>
+    <string name="pref_use_one_folder">Use one folder</string>
+    <string name="pref_use_one_folder_descr">All file will be saved in separeted folder like songs, albums etc</string>
+
+                                         <!--File chooser-->
+    <string name="empty_directory">Empty Directory</string>
+    <string name="storage_removed">Storage was removed or unmounted.</string>
+    <string name="choose_file">Select a file</string>
+    <string name="error_selecting_file">Error selecting File</string>
 </resources>

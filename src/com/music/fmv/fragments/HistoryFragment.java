@@ -1,6 +1,7 @@
 package com.music.fmv.fragments;
 
 import android.os.Bundle;
+import android.view.View;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseFragment;
 
@@ -12,7 +13,8 @@ import com.music.fmv.core.BaseFragment;
 public class HistoryFragment extends BaseFragment {
 
     @Override
-    protected void createView(Bundle savedInstanceState) {
-        mainView = inflateView(R.layout.history_fragment);
+    protected View createView(Bundle savedInstanceState) {
+        View view = inflateView(R.layout.history_fragment);
+        return view;
     }
 }

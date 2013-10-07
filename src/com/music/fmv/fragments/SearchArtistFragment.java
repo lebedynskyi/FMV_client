@@ -38,8 +38,8 @@ public class SearchArtistFragment extends BaseFragment {
     private TextView emptyView;
 
     @Override
-    protected void createView(Bundle savedInstanceState) {
-        mainView = inflateView(R.layout.search_artist_fragment);
+    protected View createView(Bundle savedInstanceState) {
+        View mainView = inflateView(R.layout.search_artist_fragment);
         emptyView = (TextView) mainView.findViewById(R.id.empty_view);
         artistsListView = (ListView) mainView.findViewById(R.id.artists_list);
         artistsListView.addHeaderView(createSearchHeader(searchListener));
@@ -50,6 +50,7 @@ public class SearchArtistFragment extends BaseFragment {
         artistsListView.setOnItemClickListener(artistClickListener);
         //Initialization of footer view(ProgressBar)
         rotateFooter = inflateView(R.layout.rotate_footer);
+        return mainView;
     }
 
     private void processSearch(String s) {

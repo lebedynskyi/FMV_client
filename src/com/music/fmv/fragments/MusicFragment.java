@@ -1,8 +1,7 @@
 package com.music.fmv.fragments;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
+import android.view.View;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseFragment;
 
@@ -13,7 +12,8 @@ import com.music.fmv.core.BaseFragment;
  */
 public class MusicFragment extends BaseFragment {
     @Override
-    protected void createView(Bundle savedInstanceState) {
-        mainView = inflateView(R.layout.music_fragment);
+    protected View createView(Bundle savedInstanceState) {
+        View v = inflateView(R.layout.music_fragment);
+        return v;
     }
 }

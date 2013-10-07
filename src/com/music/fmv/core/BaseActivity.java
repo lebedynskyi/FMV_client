@@ -3,7 +3,8 @@ package com.music.fmv.core;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.analytics.tracking.android.*;
@@ -19,15 +20,17 @@ import com.music.fmv.widgets.CaptchaDialog;
  * Date: 7/12/13
  * Time: 5:38 PM
  */
-public abstract class BaseActivity extends FragmentActivity{
+public abstract class BaseActivity extends ActionBarActivity{
     protected Core mCore;
     protected ActivityMediator mMediator;
     protected Handler handler;
     protected Tracker tracker;
+    private ActionBar actionBar;
 
     @Override
     protected final void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        actionBar = getSupportActionBar();
         mCore = Core.getInstance(this);
         mMediator = new ActivityMediator(this);
         handler = new Handler();
@@ -57,6 +60,12 @@ public abstract class BaseActivity extends FragmentActivity{
     public void sendScreenStatistic(String screenName){
         tracker.set(Fields.SCREEN_NAME, screenName + " -> " + this.getClass().getName());
         tracker.send(MapBuilder.createAppView().build());
+    }
+
+    public void hideActionBar(){
+        if (actionBar != null){
+            actionBar.hide();
+        }
     }
 
     @Override

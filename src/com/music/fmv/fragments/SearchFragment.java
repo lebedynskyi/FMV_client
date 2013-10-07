@@ -29,8 +29,8 @@ public class SearchFragment extends BaseFragment {
     private GlowButton songsButton;
 
     @Override
-    protected void createView(Bundle savedInstanceState) {
-        mainView = inflateView(R.layout.search_fragment);
+    protected View createView(Bundle savedInstanceState) {
+        View mainView = inflateView(R.layout.search_fragment);
         pager = (CustomViewPager) mainView.findViewById(R.id.search_pager);
         pager.setCanScroll(false);
 
@@ -49,6 +49,7 @@ public class SearchFragment extends BaseFragment {
         pager.setAdapter(new FragmentAdapter(getActivity().getSupportFragmentManager(), fragments));
         ViewUtils.selectButton(artistBtn, albumButton, songsButton);
         baseActivity.sendScreenStatistic("Artist tab");
+        return mainView;
     }
 
 
