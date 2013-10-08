@@ -11,8 +11,12 @@
             android:layout_height="40dp"
             android:src="@drawable/icon"/>
 
-    <TextView android:layout_height="match_parent"
-              android:layout_width="match_parent"
-            android:text="@string/choose_folder"
-            android:gravity="center_vertical"/>
+    <TextView
+            android:id="@+id/file_name"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/save_here"
+            style="@style/fileChooserName"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
 </LinearLayout>

@@ -1,9 +1,10 @@
 package com.music.fmv.activities;
 
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.widget.Toast;
 import com.music.fmv.R;
 
 /**
@@ -12,6 +13,8 @@ import com.music.fmv.R;
  * Time: 10:59 AM
  */
 public class SettingsActivity extends PreferenceActivity{
+    private FileChooserCallback fileChooserCallback;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +31,18 @@ public class SettingsActivity extends PreferenceActivity{
     }
 
     public void startChooserActivity(int requestCode){
-        Intent chooserIntent = new Intent(this, FileChooserActivity.class);
-        startActivityForResult(chooserIntent, requestCode);
+        if(fileChooserCallback != null) fileChooserCallback.onFileChooserClicked(requestCode);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void setFileChooserCallback(FileChooserCallback fileChooserCallback) {
+        this.fileChooserCallback = fileChooserCallback;
+    }
 
+    public void onFilePicked(int requestCode, Uri fileUri) {
+        Toast.makeText(this, fileUri.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    public static interface FileChooserCallback{
+        public void onFileChooserClicked(int reqCode);
     }
 }

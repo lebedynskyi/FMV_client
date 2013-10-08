@@ -1,19 +1,3 @@
-/* 
- * Copyright (C) 2012 Paul Burke
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
- */ 
-
 package com.music.fmv.fragments;
 
 import android.os.Bundle;
@@ -27,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.activities.FileChooserActivity;
 import com.music.fmv.adapters.FileListAdapter;
@@ -36,14 +19,6 @@ import com.music.fmv.utils.FileLoader;
 import java.io.File;
 import java.util.List;
 
-/**
- * Fragment that displays a list of Files in a given path.
- * 
- * @version 2012-10-28
- * 
- * @author paulburke (ipaulpro)
- * 
- */
 public class FileListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<File>> {
 
 	private static final int LOADER_ID = 0;
@@ -78,29 +53,30 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup layout = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
+
         ViewGroup progressContainer = (ViewGroup) layout.getChildAt(0);
         ((ProgressBar)progressContainer.getChildAt(0)).setIndeterminateDrawable(getResources().getDrawable(R.drawable.blue_rotate));
+
         ListView lv = (ListView) layout.findViewById(android.R.id.list);
+
         View chooseHeader = inflater.inflate(R.layout.file_list_header, null, false);
         lv.addHeaderView(chooseHeader);
+        lv.setAdapter(mAdapter);
+
         return layout;
     }
 
     @Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		setEmptyText(getString(R.string.empty_directory));
-		setListAdapter(mAdapter);
-		setListShown(false);
-
+        setListShown(false);
 		getLoaderManager().initLoader(LOADER_ID, null, this);
-
-		super.onActivityCreated(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
         if (position == 0){
-            Toast.makeText(getActivity(), "Folder picked", Toast.LENGTH_SHORT).show();
+            ((FileChooserActivity) getActivity()).onFolderPicked(new File(mPath));
             return;
         }
 
@@ -108,7 +84,7 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 		if (adapter != null) {
 			File file = (File) adapter.getItem(position);
 			mPath = file.getAbsolutePath();
-			((FileChooserActivity) getActivity()).onFileSelected(file);
+			((FileChooserActivity) getActivity()).onFolderClicked(file);
 		}
 	}
 

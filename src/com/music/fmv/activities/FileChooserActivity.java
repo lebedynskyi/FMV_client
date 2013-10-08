@@ -164,7 +164,7 @@ public class FileChooserActivity extends BaseActivity implements OnBackStackChan
 	 * 
 	 * @param file The file that was selected
 	 */
-	public void onFileSelected(File file) {
+	public void onFolderClicked(File file) {
 		if (file != null) {
 			if (file.isDirectory()) {
 				replaceFragment(file);
@@ -191,4 +191,8 @@ public class FileChooserActivity extends BaseActivity implements OnBackStackChan
 	private void unregisterStorageListener() {
 		unregisterReceiver(mStorageListener);
 	}
+
+    public void onFolderPicked(File file) {
+        finishWithResult(file);
+    }
 }

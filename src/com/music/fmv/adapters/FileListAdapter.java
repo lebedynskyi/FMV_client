@@ -49,10 +49,6 @@ public class FileListAdapter extends BaseAdapter {
 		mInflater = LayoutInflater.from(context);
 	}
 
-	public ArrayList<File> getListItems() {
-		return (ArrayList<File>) mFiles;
-	}
-
 	public void setListItems(List<File> files) {
 		this.mFiles = files;
 		notifyDataSetChanged();
@@ -104,6 +100,11 @@ public class FileListAdapter extends BaseAdapter {
 		}
 
 		final File file = mFiles.get(position);
+
+        if (!file.isDirectory()){
+            holder.iconView.setEnabled(false);
+            holder.nameView.setEnabled(false);
+        }
 
 		holder.nameView.setText(file.getName());
 		holder.iconView.setImageResource(file.isDirectory() ? ICON_FOLDER: ICON_FILE);
