@@ -99,8 +99,8 @@ public class SearchArtistFragment extends BaseFragment {
 
             @Override
             public void canceledByUser() {
+                super.canceledByUser();
                 artistTaskRunned= false;
-                cancel(true);
             }
         };
 

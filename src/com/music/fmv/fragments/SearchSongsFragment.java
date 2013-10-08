@@ -100,8 +100,8 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
 
             @Override
             public void canceledByUser() {
+                super.canceledByUser();
                 songTaskRunned = false;
-                cancel(true);
             }
         };
 

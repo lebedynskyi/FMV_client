@@ -1,7 +1,6 @@
 package com.music.fmv.fragments;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -56,7 +55,7 @@ public class SearchAlbumFragment extends BaseFragment {
     }
 
     private void searchAlbum(String query, final Integer page){
-        if (TextUtils.isEmpty(query) || albumTaskRunned) return;
+        if (query == null || query.trim().length() == 0 || albumTaskRunned) return;
         query = query.trim();
 
         SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page, page == null){
@@ -85,8 +84,8 @@ public class SearchAlbumFragment extends BaseFragment {
 
             @Override
             public void canceledByUser() {
+                super.canceledByUser();
                 albumTaskRunned = false;
-                cancel(true);
             }
         };
 
@@ -143,7 +142,6 @@ public class SearchAlbumFragment extends BaseFragment {
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             ViewUtils.hideSoftKeyboard(baseActivity);
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                String text = v.getText().toString();
                 searchAlbum(v.getText().toString(), null);
                 return true;
             }

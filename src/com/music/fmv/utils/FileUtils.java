@@ -445,27 +445,41 @@ public class FileUtils {
 
 		// Current directory File instance
 		final File pathDir = new File(path);
-		
-		// List file in this directory with the directory filter
-		final File[] dirs = pathDir.listFiles(mDirFilter);
-		if (dirs != null) {
-			// Sort the folders alphabetically
-			Arrays.sort(dirs, mComparator);
-			// Add each folder to the File list for the list adapter
-			for (File dir : dirs) list.add(dir);
-		}
 
-		// List file in this directory with the file filter
-		final File[] files = pathDir.listFiles(mFileFilter);
-		if (files != null) {
-			// Sort the files alphabetically
-			Arrays.sort(files, mComparator);
-			// Add each file to the File list for the list adapter
-			for (File file : files) list.add(file);
-		}		
-		
-		return list;
+		return getFileList(pathDir);
 	}
+
+    /**
+     * Get a list of Files in the give path
+     *
+     * @param pathDir
+     * @return Collection of files in give directory
+
+     * @author paulburke
+     */
+    public static List<File> getFileList(File pathDir) {
+        ArrayList<File> list = new ArrayList<File>();
+
+        // List file in this directory with the directory filter
+        final File[] dirs = pathDir.listFiles(mDirFilter);
+        if (dirs != null) {
+            // Sort the folders alphabetically
+            Arrays.sort(dirs, mComparator);
+            // Add each folder to the File list for the list adapter
+            for (File dir : dirs) list.add(dir);
+        }
+
+        // List file in this directory with the file filter
+        final File[] files = pathDir.listFiles(mFileFilter);
+        if (files != null) {
+            // Sort the files alphabetically
+            Arrays.sort(files, mComparator);
+            // Add each file to the File list for the list adapter
+            for (File file : files) list.add(file);
+        }
+
+        return list;
+    }
 
 	/**
 	 * Get the Intent for selecting content to be used in an Intent Chooser.

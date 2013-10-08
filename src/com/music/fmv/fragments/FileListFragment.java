@@ -24,8 +24,10 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.activities.FileChooserActivity;
 import com.music.fmv.adapters.FileListAdapter;
@@ -78,6 +80,9 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
         ViewGroup layout = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup progressContainer = (ViewGroup) layout.getChildAt(0);
         ((ProgressBar)progressContainer.getChildAt(0)).setIndeterminateDrawable(getResources().getDrawable(R.drawable.blue_rotate));
+        ListView lv = (ListView) layout.findViewById(android.R.id.list);
+        View chooseHeader = inflater.inflate(R.layout.file_list_header, null, false);
+        lv.addHeaderView(chooseHeader);
         return layout;
     }
 
@@ -94,7 +99,12 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		FileListAdapter adapter = (FileListAdapter) l.getAdapter();
+        if (position == 0){
+            Toast.makeText(getActivity(), "Folder picked", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        HeaderViewListAdapter adapter = (HeaderViewListAdapter) l.getAdapter();
 		if (adapter != null) {
 			File file = (File) adapter.getItem(position);
 			mPath = file.getAbsolutePath();

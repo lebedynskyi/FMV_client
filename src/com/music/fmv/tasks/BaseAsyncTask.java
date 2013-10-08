@@ -14,19 +14,19 @@ import com.music.fmv.views.LoadDialog;
  */
 public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
     protected Context context;
-    private boolean showLoader;
+    private boolean isShowDialog;
     protected Api api = new Api();
     protected boolean isError;
     private LoadDialog loadDialog;
 
-    protected BaseAsyncTask(Context context, boolean isShowLoader){
+    protected BaseAsyncTask(Context context, boolean showDialog){
         this.context = context;
-        showLoader = isShowLoader;
+        isShowDialog = showDialog;
     }
 
     @Override
     protected void onPreExecute() {
-        if (showLoader){
+        if (isShowDialog){
             loadDialog = new LoadDialog(context, this);
             loadDialog.show();
         }
@@ -37,5 +37,7 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
         if (loadDialog != null) loadDialog.dismiss();
     }
 
-    public abstract void canceledByUser();
+    public void canceledByUser(){
+        cancel(true);
+    }
 }

@@ -83,40 +83,36 @@ public class FileListAdapter extends BaseAdapter {
 		return position;
 	}
 
-	@Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-		View row = convertView;
-		ViewHolder holder = null;
+    @Override
+    public boolean isEnabled(int position) {
+        final File file = mFiles.get(position);
+        return file.isDirectory();
+    }
 
-		if (row == null) {
-			row = mInflater.inflate(R.layout.file, parent, false);
-			holder = new ViewHolder(row);
-			row.setTag(holder);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+
+		if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.file, parent, false);
+			holder = new ViewHolder();
+            holder.nameView = (TextView) convertView.findViewById(R.id.file_name);
+            holder.iconView = (ImageView) convertView.findViewById(R.id.file_icon);
+            convertView.setTag(holder);
 		} else {
-			// Reduce, reuse, recycle!
-			holder = (ViewHolder) row.getTag();
+			holder = (ViewHolder) convertView.getTag();
 		}
 
-		// Get the file at the current position
-		final File file = (File) getItem(position);
+		final File file = mFiles.get(position);
 
-		// Set the TextView as the file name
 		holder.nameView.setText(file.getName());
+		holder.iconView.setImageResource(file.isDirectory() ? ICON_FOLDER: ICON_FILE);
 
-		// If the item is not a directory, use the file icon
-		holder.iconView.setImageResource(file.isDirectory() ? ICON_FOLDER
-				: ICON_FILE);
-
-		return row;
+		return convertView;
 	}
 
 	static class ViewHolder {
 		TextView nameView;
 		ImageView iconView;
-
-		ViewHolder(View row) {
-			nameView = (TextView) row.findViewById(R.id.file_name);
-			iconView = (ImageView) row.findViewById(R.id.file_icon);
-		}
 	}
 }
