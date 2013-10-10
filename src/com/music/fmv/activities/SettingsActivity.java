@@ -40,13 +40,13 @@ public class SettingsActivity extends PreferenceActivity {
         albumsFodlerPref = findPreference(getString(R.string.ALBUMS_CACHE_FOLDER_KEY));
         imagesFodlerPref = findPreference(getString(R.string.IMAGE_CACHE_FOLDER_KEY));
 
-        downloadFodlerPref  .setOnPreferenceClickListener(new FileChooserListener(DOWNLOAD_FOLDER_REQUEST));
-        songsFodlerPref     .setOnPreferenceClickListener(new FileChooserListener(SONGS_FOLDER_REQUEST));
-        albumsFodlerPref    .setOnPreferenceClickListener(new FileChooserListener(ALBUMS_FOLDER_REQUEST));
-        imagesFodlerPref    .setOnPreferenceClickListener(new FileChooserListener(IMAGES_FOLDER_REQUEST));
+        downloadFodlerPref.setOnPreferenceClickListener(new FileChooserListener(DOWNLOAD_FOLDER_REQUEST));
+        songsFodlerPref.setOnPreferenceClickListener(new FileChooserListener(SONGS_FOLDER_REQUEST));
+        albumsFodlerPref.setOnPreferenceClickListener(new FileChooserListener(ALBUMS_FOLDER_REQUEST));
+        imagesFodlerPref.setOnPreferenceClickListener(new FileChooserListener(IMAGES_FOLDER_REQUEST));
 
         CheckBoxPreference useOneFolderCheck = (CheckBoxPreference) findPreference("use_one_folder");
-        applyAppearForStorrageSettings(useOneFolderCheck.getPreferenceManager().getSharedPreferences().getBoolean("use_one_folder",false));
+        applyAppearForStorrageSettings(useOneFolderCheck.getPreferenceManager().getSharedPreferences().getBoolean("use_one_folder", false));
 
         useOneFolderCheck.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -74,7 +74,7 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     private void applyAppearForStorrageSettings(boolean isOneDownload) {
-        if (isOneDownload){
+        if (isOneDownload) {
             storageCategory.removePreference(songsFodlerPref);
             storageCategory.removePreference(albumsFodlerPref);
             storageCategory.removePreference(imagesFodlerPref);
@@ -87,7 +87,7 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-    private class FileChooserListener implements Preference.OnPreferenceClickListener{
+    private class FileChooserListener implements Preference.OnPreferenceClickListener {
         private int requestCode;
 
         private FileChooserListener(int requestCode) {

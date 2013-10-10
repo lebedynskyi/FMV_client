@@ -15,7 +15,7 @@ import com.music.fmv.core.BaseFragment;
  * Date: 7/22/13
  * Time: 12:07 PM
  */
-public class SettingsFragment extends BaseFragment{
+public class SettingsFragment extends BaseFragment {
     private static final String ACTIVITY_TAG = "ACTIVITY_TAG";
 
     private LocalActivityManager mLocalActivityManager;

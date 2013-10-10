@@ -12,7 +12,7 @@ import com.music.fmv.tasks.BaseAsyncTask;
  * Time: 21:24
  * To change this template use File | Settings | File Templates.
  */
-public class LoadDialog extends AlertDialog{
+public class LoadDialog extends AlertDialog {
     private BaseAsyncTask task;
 
     public LoadDialog(Context context, BaseAsyncTask t) {
@@ -31,16 +31,16 @@ public class LoadDialog extends AlertDialog{
         initUI();
     }
 
-    private void initUI(){
+    private void initUI() {
         setCancelable(false);
     }
 
     @Override
     public void onBackPressed() {
-        try{
+        try {
             if (task != null) task.canceledByUser();
             this.dismiss();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         super.onBackPressed();

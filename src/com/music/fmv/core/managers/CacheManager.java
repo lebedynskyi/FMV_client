@@ -13,8 +13,8 @@ import java.util.*;
  * Date: 7/12/13
  * Time: 6:08 PM
  */
-public class CacheManager extends Manager{
-    Map<String, WeakReference<Object>>  mCache;
+public class CacheManager extends Manager {
+    Map<String, WeakReference<Object>> mCache;
     private ArrayList<String> autocompleteWords;
 
     public CacheManager(Core coreManager) {
@@ -28,23 +28,23 @@ public class CacheManager extends Manager{
 
     }
 
-    public Map<String, WeakReference<Object>> getAllCache(){
+    public Map<String, WeakReference<Object>> getAllCache() {
         return mCache;
     }
 
-    public Object getValue(String key){
+    public Object getValue(String key) {
         return mCache.get(key).get();
     }
 
-    public void setValue(String key, Object v){
+    public void setValue(String key, Object v) {
         mCache.put(key, new WeakReference<Object>(v));
     }
 
-    public Set<String> getKeys(){
+    public Set<String> getKeys() {
         return mCache.keySet();
     }
 
-    public boolean isSongExists(PlayableSong song){
+    public boolean isSongExists(PlayableSong song) {
         String loadFolder = core.getSettingsManager().getDownloadFolder();
         File folder = new File(loadFolder);
         folder.mkdirs();

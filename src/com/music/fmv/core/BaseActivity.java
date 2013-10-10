@@ -20,7 +20,7 @@ import com.music.fmv.widgets.CaptchaDialog;
  * Date: 7/12/13
  * Time: 5:38 PM
  */
-public abstract class BaseActivity extends ActionBarActivity{
+public abstract class BaseActivity extends ActionBarActivity {
     protected Core mCore;
     protected ActivityMediator mMediator;
     protected Handler handler;
@@ -28,7 +28,7 @@ public abstract class BaseActivity extends ActionBarActivity{
     private ActionBar actionBar;
 
     @Override
-    protected final void onCreate(Bundle savedInstanceState){
+    protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         mCore = Core.getInstance(this);
@@ -64,24 +64,24 @@ public abstract class BaseActivity extends ActionBarActivity{
 
     @Override
     public void setTitle(CharSequence title) {
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle(title);
         }
     }
 
-    public void sendScreenStatistic(String screenName){
+    public void sendScreenStatistic(String screenName) {
         tracker.set(Fields.SCREEN_NAME, screenName + " -> " + this.getClass().getName());
         tracker.send(MapBuilder.createAppView().build());
     }
 
-    public void hideActionBar(){
-        if (actionBar != null){
+    public void hideActionBar() {
+        if (actionBar != null) {
             actionBar.hide();
         }
     }
 
-    public void showActionBar(){
-        if (actionBar != null){
+    public void showActionBar() {
+        if (actionBar != null) {
             actionBar.show();
         }
     }
@@ -95,13 +95,13 @@ public abstract class BaseActivity extends ActionBarActivity{
 
     private void checkAdvert() {
         try {
-            ViewGroup advertView = (ViewGroup)findViewById(R.id.advert_layout);
+            ViewGroup advertView = (ViewGroup) findViewById(R.id.advert_layout);
             if (advertView == null) return;
 
-            if (NetworkUtil.isNetworkAvailable(this)){
+            if (NetworkUtil.isNetworkAvailable(this)) {
                 initAdvert(advertView);
-            }else advertView.setVisibility(View.GONE);
-        }catch (Exception e){
+            } else advertView.setVisibility(View.GONE);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -110,8 +110,8 @@ public abstract class BaseActivity extends ActionBarActivity{
 
     }
 
-    protected boolean runTask(AsyncTask task){
-        if (NetworkUtil.isNetworkAvailable(this)){
+    protected boolean runTask(AsyncTask task) {
+        if (NetworkUtil.isNetworkAvailable(this)) {
             task.execute();
             return true;
         }
@@ -119,11 +119,12 @@ public abstract class BaseActivity extends ActionBarActivity{
         return false;
     }
 
-    public void showCaptchaDialog(Captcha c, CaptchaDialog.CaptchaCallBack callBack){
+    public void showCaptchaDialog(Captcha c, CaptchaDialog.CaptchaCallBack callBack) {
         CaptchaDialog dialog = new CaptchaDialog();
         dialog.setCaptcha(c);
         dialog.setCaptchaCallBack(callBack);
         dialog.show(getSupportFragmentManager(), c.getUrl());
     }
+
     protected abstract void onCreated(Bundle state);
 }

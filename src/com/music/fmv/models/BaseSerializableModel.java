@@ -7,5 +7,5 @@ import java.io.Serializable;
  * Date: 7/12/13
  * Time: 5:56 PM
  */
-public class BaseSerializableModel implements Serializable{
+public class BaseSerializableModel implements Serializable {
 }

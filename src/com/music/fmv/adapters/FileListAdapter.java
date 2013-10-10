@@ -15,45 +15,45 @@ import java.util.List;
 
 public class FileListAdapter extends BaseAdapter {
 
-	private final static int ICON_FOLDER = R.drawable.ic_folder;
-	private final static int ICON_FILE = R.drawable.ic_file;
+    private final static int ICON_FOLDER = R.drawable.ic_folder;
+    private final static int ICON_FILE = R.drawable.ic_file;
 
-	private List<File> mFiles = new ArrayList<File>();
-	private final LayoutInflater mInflater;
+    private List<File> mFiles = new ArrayList<File>();
+    private final LayoutInflater mInflater;
 
-	public FileListAdapter(Context context) {
-		mInflater = LayoutInflater.from(context);
-	}
+    public FileListAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+    }
 
-	public void setListItems(List<File> files) {
-		this.mFiles = files;
-		notifyDataSetChanged();
-	}
+    public void setListItems(List<File> files) {
+        this.mFiles = files;
+        notifyDataSetChanged();
+    }
 
-	@Override
+    @Override
     public int getCount() {
-		return mFiles.size();
-	}
+        return mFiles.size();
+    }
 
-	public void add(File file) {
-		mFiles.add(file);
-		notifyDataSetChanged();
-	}
+    public void add(File file) {
+        mFiles.add(file);
+        notifyDataSetChanged();
+    }
 
-	public void clear() {
-		mFiles.clear();
-		notifyDataSetChanged();
-	}
+    public void clear() {
+        mFiles.clear();
+        notifyDataSetChanged();
+    }
 
-	@Override
+    @Override
     public Object getItem(int position) {
-		return mFiles.get(position);
-	}
+        return mFiles.get(position);
+    }
 
-	@Override
+    @Override
     public long getItemId(int position) {
-		return position;
-	}
+        return position;
+    }
 
     @Override
     public boolean isEnabled(int position) {
@@ -63,21 +63,21 @@ public class FileListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+        ViewHolder holder;
 
-		if (convertView == null) {
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.file, parent, false);
-			holder = new ViewHolder();
+            holder = new ViewHolder();
             holder.nameView = (TextView) convertView.findViewById(R.id.file_name);
             holder.iconView = (ImageView) convertView.findViewById(R.id.file_icon);
             convertView.setTag(holder);
-		} else {
-			holder = (ViewHolder) convertView.getTag();
-		}
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-		final File file = mFiles.get(position);
+        final File file = mFiles.get(position);
 
-        if (!file.isDirectory()){
+        if (!file.isDirectory()) {
             holder.iconView.setEnabled(false);
             holder.nameView.setEnabled(false);
         } else {
@@ -85,14 +85,14 @@ public class FileListAdapter extends BaseAdapter {
             holder.nameView.setEnabled(true);
         }
 
-		holder.nameView.setText(file.getName());
-		holder.iconView.setImageResource(file.isDirectory() ? ICON_FOLDER: ICON_FILE);
+        holder.nameView.setText(file.getName());
+        holder.iconView.setImageResource(file.isDirectory() ? ICON_FOLDER : ICON_FILE);
 
-		return convertView;
-	}
+        return convertView;
+    }
 
-	static class ViewHolder {
-		TextView nameView;
-		ImageView iconView;
-	}
+    static class ViewHolder {
+        TextView nameView;
+        ImageView iconView;
+    }
 }

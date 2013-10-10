@@ -4,7 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;import com.music.fmv.core.Core;
+import android.widget.BaseAdapter;
+import com.music.fmv.core.Core;
 
 import java.util.List;
 
@@ -42,11 +43,11 @@ public abstract class FixedBaseAdapter<T> extends BaseAdapter {
         return position;
     }
 
-    protected View inflateView(int id){
+    protected View inflateView(int id) {
         return inflater.inflate(id, null, false);
     }
 
-    protected View inflateView(int id, ViewGroup parent){
+    protected View inflateView(int id, ViewGroup parent) {
         return inflater.inflate(id, parent, false);
     }
 

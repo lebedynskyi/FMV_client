@@ -210,6 +210,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * Set if all item opened will be close when the user move ListView
      *
      * @param swipeClosesAllItemsWhenListMoves
+     *
      */
     public void setSwipeClosesAllItemsWhenListMoves(boolean swipeClosesAllItemsWhenListMoves) {
         this.swipeClosesAllItemsWhenListMoves = swipeClosesAllItemsWhenListMoves;
@@ -650,7 +651,8 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (customScrollListener != null) customScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                if (customScrollListener != null)
+                    customScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
 
                 if (isFirstItem) {
                     boolean onSecondItemList = firstVisibleItem == 1;

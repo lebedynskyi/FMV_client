@@ -7,8 +7,10 @@ package com.music.fmv.tasks.threads;
  * Time: 1:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface IDownloadListener{
+public interface IDownloadListener {
     public void onDownload(String name, int cur, int max);
+
     public void onDownloadFinished();
+
     public void onError(String name);
 }

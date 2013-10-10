@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Time: 11:33 AM
  */
 
-public abstract class SearchSongsTask  extends BaseAsyncTask<ArrayList<PlayableSong>>{
+public abstract class SearchSongsTask extends BaseAsyncTask<ArrayList<PlayableSong>> {
     private final String query;
     private final Integer page;
 
@@ -25,7 +25,7 @@ public abstract class SearchSongsTask  extends BaseAsyncTask<ArrayList<PlayableS
     protected ArrayList<PlayableSong> doInBackground(Object... params) {
         try {
             return api.searchSongs(query, page);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             isError = true;
         }

@@ -26,16 +26,16 @@ public final class Core {
     private Handler handler;
 
     private NotifyManager mNotificationManager;
-    private CacheManager mCacheManager ;
+    private CacheManager mCacheManager;
     private SettingsManager mSettingsManager;
     private DisplayImageOptions notCachedOptions;
     private DownloadManager downloadManager;
     private PlayerManager playerManager;
 
     public static Core getInstance(Context app) {
-        if (instance == null){
-            synchronized (Core.class){
-                if(instance == null){
+        if (instance == null) {
+            synchronized (Core.class) {
+                if (instance == null) {
                     instance = new Core(app);
                 }
             }
@@ -43,7 +43,7 @@ public final class Core {
         return instance;
     }
 
-    private Core(Context app){
+    private Core(Context app) {
         if (app == null) throw new IllegalArgumentException("Context cannot be null");
         this.app = app;
         handler = new Handler();
@@ -63,7 +63,7 @@ public final class Core {
         return mCacheManager;
     }
 
-    public SettingsManager getSettingsManager(){
+    public SettingsManager getSettingsManager() {
         return mSettingsManager;
     }
 
@@ -75,8 +75,8 @@ public final class Core {
         return downloadManager;
     }
 
-    public DisplayImageOptions getNotCachedOptions(){
-        if (notCachedOptions == null){
+    public DisplayImageOptions getNotCachedOptions() {
+        if (notCachedOptions == null) {
             notCachedOptions = new DisplayImageOptions.Builder()
                     .showStubImage(R.drawable.default_artist_medium)
                     .cacheInMemory(true)
@@ -92,7 +92,7 @@ public final class Core {
         return app;
     }
 
-    public void finish(){
+    public void finish() {
 
     }
 
@@ -100,16 +100,16 @@ public final class Core {
         Toast.makeText(app, strID, Toast.LENGTH_SHORT).show();
     }
 
-    public void registerForUpdates(IUpdateListener listener){
+    public void registerForUpdates(IUpdateListener listener) {
         updateListeners.add(new WeakReference<IUpdateListener>(listener));
     }
 
-    public void callUpdateUI(){
+    public void callUpdateUI() {
         Iterator<WeakReference<IUpdateListener>> it = updateListeners.iterator();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             WeakReference<IUpdateListener> ref = it.next();
             final IUpdateListener l = ref.get();
-            if (l == null){
+            if (l == null) {
                 it.remove();
                 continue;
             }
@@ -122,12 +122,12 @@ public final class Core {
         }
     }
 
-    public void unregisterListener(IUpdateListener listener){
+    public void unregisterListener(IUpdateListener listener) {
         Iterator<WeakReference<IUpdateListener>> it = updateListeners.iterator();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             WeakReference<IUpdateListener> ref = it.next();
             IUpdateListener l = ref.get();
-            if (l == null){
+            if (l == null) {
                 it.remove();
                 continue;
             }

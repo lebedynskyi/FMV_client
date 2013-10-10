@@ -20,8 +20,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * Date: 8/13/13
  * Time: 10:25 AM
  */
-public class CaptchaDialog extends DialogFragment{
-    private View  mainView;
+public class CaptchaDialog extends DialogFragment {
+    private View mainView;
     private Button cancel;
     private Button apply;
     private EditText captchaField;
@@ -63,28 +63,30 @@ public class CaptchaDialog extends DialogFragment{
     private View.OnClickListener buttonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.cancel_btn:
                     if (captchaCallBack != null) captchaCallBack.captchaCanceled();
                     break;
                 case R.id.apply_btn:
-                    if (TextUtils.isEmpty(captchaField.getText())){
+                    if (TextUtils.isEmpty(captchaField.getText())) {
                         captchaField.setError(getActivity().getString(R.string.field_cannot_be_empty));
                         return;
                     }
-                    if (captchaCallBack != null){
+                    if (captchaCallBack != null) {
                         captchaCallBack.captchaEntered(captchaField.getText().toString());
                     }
             }
             ViewUtils.hideSoftKeyboard(getActivity());
             try {
                 dismiss();
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         }
     };
 
-    public static interface CaptchaCallBack{
+    public static interface CaptchaCallBack {
         public void captchaEntered(String captcha);
+
         public void captchaCanceled();
     }
 }

@@ -37,8 +37,8 @@ public class SearchAlbumFragment extends BaseFragment {
     private TextView emptyView;
 
     @Override
-    protected View  createView(Bundle savedInstanceState) {
-        View mainView =inflateView(R.layout.search_album_fagment);
+    protected View createView(Bundle savedInstanceState) {
+        View mainView = inflateView(R.layout.search_album_fagment);
         albumsListsView = (SwipeListView) mainView.findViewById(R.id.albums_list);
         adapter = new SearchAlbumsAdapter(albumsList, baseActivity, albumsListsView);
 
@@ -54,12 +54,12 @@ public class SearchAlbumFragment extends BaseFragment {
         return mainView;
     }
 
-    private void searchAlbum(String query, final Integer page){
+    private void searchAlbum(String query, final Integer page) {
         if (query == null || query.trim().length() == 0 || albumTaskRunned) return;
         query = query.trim();
 
-        SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page, page == null){
-            protected void onPreExecute(){
+        SearchAlbumsTask task = new SearchAlbumsTask(baseActivity, query, page, page == null) {
+            protected void onPreExecute() {
                 super.onPreExecute();
                 albumTaskRunned = true;
             }
@@ -72,14 +72,14 @@ public class SearchAlbumFragment extends BaseFragment {
 
                 if (isCancelled()) return;
 
-                if (isError || albums == null){
+                if (isError || albums == null) {
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (albums.size() > 0){
+                if (albums.size() > 0) {
                     updateAlbumList(albums, page == null);
-                }else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -94,14 +94,14 @@ public class SearchAlbumFragment extends BaseFragment {
         }
     }
 
-    private void getNextAlbumPage(){
+    private void getNextAlbumPage() {
         if (albumPageAvailable > 0 && futureAlbumPage <= albumPageAvailable) {
             searchAlbum(lastRequest, futureAlbumPage);
         }
     }
 
-    private void updateAlbumList(List<SearchAlbumModel> albums, boolean needClear){
-        if(needClear) {
+    private void updateAlbumList(List<SearchAlbumModel> albums, boolean needClear) {
+        if (needClear) {
             albumsList.clear();
             futureAlbumPage = 1;
         }
@@ -109,20 +109,21 @@ public class SearchAlbumFragment extends BaseFragment {
         adapter.notifyDataSetChanged();
         futureAlbumPage += 1;
 
-        if (albumPageAvailable <= 0){
+        if (albumPageAvailable <= 0) {
             albumsListsView.removeFooterView(rotateFooter);
-        }else if (albumPageAvailable > 0 && albumsListsView.getFooterViewsCount() == 0){
+        } else if (albumPageAvailable > 0 && albumsListsView.getFooterViewsCount() == 0) {
             albumsListsView.addFooterView(rotateFooter);
         }
 
-        if (albumsListsView.getCount() ==0){
+        if (albumsListsView.getCount() == 0) {
             emptyView.setVisibility(View.VISIBLE);
-        }else emptyView.setVisibility(View.GONE);
+        } else emptyView.setVisibility(View.GONE);
     }
 
     //Scroll listeners for lists, call method when last item in list is visible
     private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
-        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
             //TODO Looks like a bug
             albumsListsView.closeOpenedItems();
         }
@@ -130,7 +131,7 @@ public class SearchAlbumFragment extends BaseFragment {
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             final int lastItem = firstVisibleItem + visibleItemCount;
-            if(lastItem == totalItemCount) {
+            if (lastItem == totalItemCount) {
                 getNextAlbumPage();
             }
         }
@@ -141,7 +142,7 @@ public class SearchAlbumFragment extends BaseFragment {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             ViewUtils.hideSoftKeyboard(baseActivity);
-            if (actionId == EditorInfo.IME_ACTION_SEARCH){
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 searchAlbum(v.getText().toString(), null);
                 return true;
             }
@@ -149,19 +150,19 @@ public class SearchAlbumFragment extends BaseFragment {
         }
     };
 
-    private BaseSwipeListViewListener albumsLIstener = new BaseSwipeListViewListener(){
+    private BaseSwipeListViewListener albumsLIstener = new BaseSwipeListViewListener() {
         @Override
         public void onClickFrontView(int position) {
-            if (albumsListsView.isOpened(position)){
+            if (albumsListsView.isOpened(position)) {
                 albumsListsView.closeAnimate(position);
-            }else albumsListsView.openAnimate(position);
+            } else albumsListsView.openAnimate(position);
         }
 
         @Override
         public void onClickBackView(int position) {
-            if (albumsListsView.isOpened(position)){
+            if (albumsListsView.isOpened(position)) {
                 albumsListsView.closeAnimate(position);
-            }else albumsListsView.openAnimate(position);
+            } else albumsListsView.openAnimate(position);
         }
     };
 }

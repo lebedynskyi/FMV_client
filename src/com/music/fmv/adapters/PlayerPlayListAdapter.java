@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 9/27/13
  * Time: 1:19 PM
  */
-public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong>{
+public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong> {
     public PlayerPlayListAdapter(List<PlayableSong> mData, Context context) {
         super(mData, context);
     }
@@ -24,7 +24,7 @@ public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflateView(R.layout.player_playlist_row, parent);
             holder.artist = (TextView) convertView.findViewById(R.id.song_owner);
@@ -32,21 +32,21 @@ public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong>{
             holder.duration = (TextView) convertView.findViewById(R.id.duration);
             holder.isCached = (ImageView) convertView.findViewById(R.id.is_cached);
             convertView.setTag(holder);
-        }else holder = (ViewHolder) convertView.getTag();
+        } else holder = (ViewHolder) convertView.getTag();
         PlayableSong song = mData.get(position);
 
         holder.name.setText(song.getName());
         holder.artist.setText(song.getArtist());
         holder.duration.setText(song.getNiceDuration());
 
-        if (core.getCacheManager().isSongExists(song)){
+        if (core.getCacheManager().isSongExists(song)) {
             holder.isCached.setVisibility(View.VISIBLE);
-        }else holder.isCached.setVisibility(View.GONE);
+        } else holder.isCached.setVisibility(View.GONE);
 
         return convertView;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView name, artist, duration;
         ImageView isCached;
     }

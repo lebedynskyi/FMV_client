@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Date: 7/12/13
  * Time: 5:49 PM
  */
-public class SearchBandModel extends BaseSerializableModel{
+public class SearchBandModel extends BaseSerializableModel {
     public static int AVAILABLE_PAGES = 0;
 
     private String url;

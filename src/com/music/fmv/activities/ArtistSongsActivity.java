@@ -22,7 +22,7 @@ public class ArtistSongsActivity extends BaseActivity {
         setContentView(R.layout.artist_songs_activity);
     }
 
-    private SwipeListViewListener listListener = new BaseSwipeListViewListener(){
+    private SwipeListViewListener listListener = new BaseSwipeListViewListener() {
         @Override
         public void onOpened(int position, boolean toRight) {
 

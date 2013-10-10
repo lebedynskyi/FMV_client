@@ -28,12 +28,12 @@
     <string name="search_hint">Enter a search request</string>
     <string name="empty_list">No items to show</string>
 
-                                      <!--  Tabs in SearchFragment  -->
+    <!--  Tabs in SearchFragment  -->
     <string name="by_artist">Artists</string>
     <string name="by_album">Albums</string>
     <string name="by_name">Songs</string>
 
-                                       <!--  Tabs in the MainActivit  y-->
+    <!--  Tabs in the MainActivit  y-->
     <string name="search">Search</string>
     <string name="history">History</string>
     <string name="music">Music</string>
@@ -53,12 +53,13 @@
     <string name="show_playlist">Show playlist</string>
     <string name="hide_playlist">Hide playlist</string>
 
-                                      <!--   Preferences !!!!!!!  -->
+    <!--   Preferences !!!!!!!  -->
     <string name="pref_storage_title">Storage settings:</string>
     <string name="pref_common_title">Common settings:</string>
 
     <string name="pref_use_one_folder">Use one folder</string>
-    <string name="pref_use_one_folder_descr">All file will be saved in separated folders like songs, albums etc...</string>
+    <string name="pref_use_one_folder_descr">All file will be saved in separated folders like songs, albums etc...
+    </string>
 
     <string name="pref_download_folder">Download folder</string>
     <string name="pref_download_folder_descr">Folder for saving all files after downloading</string>
@@ -75,7 +76,7 @@
     <string name="pref_language">Choose language for content</string>
     <string name="pref_language_descr">Language of information about artists, albums, etc.</string>
 
-                                      <!--   File chooser   -->
+    <!--   File chooser   -->
     <string name="empty_directory">Empty Directory</string>
     <string name="storage_removed">Storage was removed or unmounted.</string>
     <string name="choose_file">Select a file</string>

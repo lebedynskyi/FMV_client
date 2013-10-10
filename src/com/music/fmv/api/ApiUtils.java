@@ -23,7 +23,7 @@ public class ApiUtils {
     public static final String RESPONSE_TAG = "response";
 
 
-    public static String encodeString(String s){
+    public static String encodeString(String s) {
         if (TextUtils.isEmpty(s)) return "";
         try {
             return URLEncoder.encode(s, "utf-8");
@@ -34,14 +34,14 @@ public class ApiUtils {
     }
 
     //returns a valid url from Map
-    public static String generateUrl(Map<String, String> params){
+    public static String generateUrl(Map<String, String> params) {
         if (params.size() == 0) return "";
 
         Iterator<String> keys = params.keySet().iterator();
         StringBuilder urlBuilder = new StringBuilder();
         int counter = 0;
 
-        while (keys.hasNext()){
+        while (keys.hasNext()) {
             String key = keys.next();
             urlBuilder.append(counter++ == 0 ? "?" : "&").append(key).append("=").append(encodeString(params.get(key)));
         }
@@ -49,11 +49,11 @@ public class ApiUtils {
         return urlBuilder.toString();
     }
 
-    public static List<SearchBandModel> parseSearchBand(JSONObject response)throws Exception{
+    public static List<SearchBandModel> parseSearchBand(JSONObject response) throws Exception {
         ArrayList<SearchBandModel> result = new ArrayList<SearchBandModel>();
         JSONObject resp = response.optJSONObject(RESPONSE_TAG);
         JSONArray artists = resp.optJSONArray("artists");
-        if (artists!= null){
+        if (artists != null) {
             for (int i = 0; i < artists.length(); i++) {
                 try {
                     JSONObject artistData = artists.getJSONObject(i);
@@ -64,7 +64,7 @@ public class ApiUtils {
                     model.setImage(artistData.optString("image"));
                     JSONArray genres = artistData.optJSONArray("genres");
 
-                    if (genres != null){
+                    if (genres != null) {
                         ArrayList<String> modelGenres = new ArrayList<String>();
                         for (int j = 0; j < genres.length(); j++) {
                             modelGenres.add(genres.optString(i));
@@ -72,7 +72,7 @@ public class ApiUtils {
                         model.setGenres(modelGenres);
                     }
                     result.add(model);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -82,14 +82,14 @@ public class ApiUtils {
         return result;
     }
 
-    public static BandInfoModel parseBandInfo(JSONObject response){
+    public static BandInfoModel parseBandInfo(JSONObject response) {
         response = response.optJSONObject(RESPONSE_TAG);
         BandInfoModel model = new BandInfoModel();
         JSONArray images = response.optJSONArray("images");
         JSONArray similar = response.optJSONArray("similar");
         model.setDescr(response.optString("descr"));
 
-        if (images !=null){
+        if (images != null) {
             ArrayList<String> imagesUrls = new ArrayList<String>();
             for (int i = 0; i < images.length(); i++) {
                 imagesUrls.add(images.optString(i));
@@ -97,11 +97,11 @@ public class ApiUtils {
             model.setImages(imagesUrls);
         }
 
-        if (similar != null){
+        if (similar != null) {
             ArrayList<SimilarBandModel> similarsModels = new ArrayList<SimilarBandModel>();
             for (int i = 0; i < similar.length(); i++) {
                 JSONObject tempSimilarJson = similar.optJSONObject(i);
-                SimilarBandModel similarBandModel = new SimilarBandModel() ;
+                SimilarBandModel similarBandModel = new SimilarBandModel();
                 similarBandModel.setUrl(tempSimilarJson.optString("url"));
                 similarBandModel.setImage(tempSimilarJson.optString("image"));
                 similarBandModel.setName(tempSimilarJson.optString("name"));
@@ -134,7 +134,7 @@ public class ApiUtils {
                 model.setBriefDescr(albumData.optString("biref"));
                 model.setImage(albumData.optString("image"));
                 albums.add(model);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -142,7 +142,7 @@ public class ApiUtils {
         return albums;
     }
 
-    public static ArrayList<PlayableSong> parseSearchSongs(JSONObject response)throws Exception{
+    public static ArrayList<PlayableSong> parseSearchSongs(JSONObject response) throws Exception {
         ArrayList<PlayableSong> songs = new ArrayList<PlayableSong>();
         JSONObject resp = response.getJSONObject(RESPONSE_TAG);
         JSONArray songsArr = resp.getJSONArray("songs");
@@ -161,11 +161,11 @@ public class ApiUtils {
                 song.setName(songData.optString("name"));
                 song.setRate(songData.optString("rate"));
                 songs.add(song);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        PlayableSong.PAGE_AVAILABLE =  resp.optInt("pages", -1);
+        PlayableSong.PAGE_AVAILABLE = resp.optInt("pages", -1);
         return songs;
     }
 }

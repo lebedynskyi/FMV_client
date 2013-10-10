@@ -11,7 +11,7 @@ import java.util.List;
  * Date: 7/22/13
  * Time: 3:56 PM
  */
-public abstract class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumModel>>{
+public abstract class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumModel>> {
     private String searchQuery;
     private Integer page;
 

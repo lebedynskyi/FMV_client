@@ -7,7 +7,7 @@ import android.text.TextUtils;
  * Date: 7/19/13
  * Time: 12:15 PM
  */
-public class SearchAlbumModel  extends BaseSerializableModel{
+public class SearchAlbumModel extends BaseSerializableModel {
     public static int AVAILABLE_PAGES = 0;
     private String artistName;
     private String albumName;
@@ -65,7 +65,7 @@ public class SearchAlbumModel  extends BaseSerializableModel{
     }
 
     public String getTitle() {
-        if (TextUtils.isEmpty(artistName) && TextUtils.isEmpty(albumName))  return "Unknown song";
+        if (TextUtils.isEmpty(artistName) && TextUtils.isEmpty(albumName)) return "Unknown song";
         if (TextUtils.isEmpty(artistName)) return albumName;
         if (TextUtils.isEmpty(albumName)) return artistName;
         return artistName + " - " + albumName;

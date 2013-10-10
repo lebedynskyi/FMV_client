@@ -18,9 +18,9 @@ public abstract class GetBandTask extends BaseAsyncTask<BandInfoModel> {
     protected BandInfoModel doInBackground(Object... params) {
         try {
             return api.getBandInfo();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-           isError = true;
+            isError = true;
         }
         return null;
     }

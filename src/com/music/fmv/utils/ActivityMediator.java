@@ -21,7 +21,7 @@ public class ActivityMediator {
     private Context context;
     private boolean isActivity = false;
 
-    public void startBandActivity(BandInfoModel model){
+    public void startBandActivity(BandInfoModel model) {
         Bundle bnd = new Bundle();
         bnd.putSerializable(BandInfoActivity.BAND_KEY, model);
         startActivity(BandInfoActivity.class, bnd);
@@ -69,7 +69,7 @@ public class ActivityMediator {
         context.startActivity(intent);
     }
 
-    private void startActivityForresult(Class clz, Bundle bundle,int requestCode) {
+    private void startActivityForresult(Class clz, Bundle bundle, int requestCode) {
         Intent intent = new Intent(context, clz);
         if (bundle != null)
             intent.putExtras(bundle);

@@ -13,7 +13,7 @@ import java.io.File;
  * Time: 12:34 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SongLoader implements IDownlaoder{
+public class SongLoader implements IDownlaoder {
     private final File file;
     private final PlayableSong song;
     private IDownloadListener listener;

@@ -9,11 +9,12 @@ import com.music.fmv.core.Core;
  */
 public abstract class Manager {
     protected Core core;
-    protected Manager(Core coreManager){
+
+    protected Manager(Core coreManager) {
         core = coreManager;
     }
 
-    public String getString(int strID){
+    public String getString(int strID) {
         return core.getContext().getString(strID);
     }
 

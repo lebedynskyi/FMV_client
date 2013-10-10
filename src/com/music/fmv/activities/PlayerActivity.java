@@ -80,22 +80,22 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private void initPlayList() {
-        if (player != null){
+        if (player != null) {
             Player.PlayerStatus status = player.getStatus();
             if (status == null) return;
 
         }
     }
 
-    public void backClicked(View v){
-        if(fromNitification){
+    public void backClicked(View v) {
+        if (fromNitification) {
             mMediator.startMain();
             finish();
         }
         super.onBackPressed();
     }
 
-    public void playListClicked(View v){
+    public void playListClicked(View v) {
 
     }
 
@@ -134,9 +134,9 @@ public class PlayerActivity extends BaseActivity {
         handle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (tray.isOpened()){
+                if (tray.isOpened()) {
                     tray.animateClose();
-                }else tray.animateOpen();
+                } else tray.animateOpen();
             }
         });
     }
@@ -255,17 +255,22 @@ public class PlayerActivity extends BaseActivity {
             }
         }
 
-        @Override public void onStartTrackingTouch(SeekBar seekBar) { }
-        @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
     };
 
 
-    private PlayerManager.PostInitializationListener initListener = new PlayerManager.PostInitializationListener(){
+    private PlayerManager.PostInitializationListener initListener = new PlayerManager.PostInitializationListener() {
         @Override
         public void onPlayerCreated(Player p) {
             PlayerActivity.this.player = p;
             player = mCore.getPlayerManager().getPlayer(this);
-            if (player == null){
+            if (player == null) {
                 return;
             }
 

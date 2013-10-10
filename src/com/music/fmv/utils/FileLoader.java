@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
- */ 
+ */
 
 package com.music.fmv.utils;
 
@@ -25,97 +25,95 @@ import java.util.List;
 
 /**
  * Loader that returns a list of Files in a given file path.
- * 
- * @version 2012-10-28
- * 
+ *
  * @author paulburke (ipaulpro)
- * 
+ * @version 2012-10-28
  */
 public class FileLoader extends AsyncTaskLoader<List<File>> {
 
-	private static final int FILE_OBSERVER_MASK = FileObserver.CREATE
-			| FileObserver.DELETE | FileObserver.DELETE_SELF
-			| FileObserver.MOVED_FROM | FileObserver.MOVED_TO
-			| FileObserver.MODIFY | FileObserver.MOVE_SELF;
-	
-	private FileObserver mFileObserver;
-	
-	private List<File> mData;
-	private String mPath;
+    private static final int FILE_OBSERVER_MASK = FileObserver.CREATE
+            | FileObserver.DELETE | FileObserver.DELETE_SELF
+            | FileObserver.MOVED_FROM | FileObserver.MOVED_TO
+            | FileObserver.MODIFY | FileObserver.MOVE_SELF;
 
-	public FileLoader(Context context, String path) {
-		super(context);
-		this.mPath = path;
-	}
+    private FileObserver mFileObserver;
 
-	@Override
-	public List<File> loadInBackground() {
-		return FileUtils.getFileList(mPath);
-	}
+    private List<File> mData;
+    private String mPath;
 
-	@Override
-	public void deliverResult(List<File> data) {
-		if (isReset()) {
-			onReleaseResources(data);
-			return;
-		}
+    public FileLoader(Context context, String path) {
+        super(context);
+        this.mPath = path;
+    }
 
-		List<File> oldData = mData;
-		mData = data;
-		
-		if (isStarted())
-			super.deliverResult(data);
+    @Override
+    public List<File> loadInBackground() {
+        return FileUtils.getFileList(mPath);
+    }
 
-		if (oldData != null && oldData != data)
-			onReleaseResources(oldData);
-	}
+    @Override
+    public void deliverResult(List<File> data) {
+        if (isReset()) {
+            onReleaseResources(data);
+            return;
+        }
 
-	@Override
-	protected void onStartLoading() {
-		if (mData != null)
-			deliverResult(mData);
+        List<File> oldData = mData;
+        mData = data;
 
-		if (mFileObserver == null) {
-			mFileObserver = new FileObserver(mPath, FILE_OBSERVER_MASK) {
-				@Override
-				public void onEvent(int event, String path) {
-					onContentChanged();	
-				}
-			};
-		}
-		mFileObserver.startWatching();
-		
-		if (takeContentChanged() || mData == null)
-			forceLoad();
-	}
+        if (isStarted())
+            super.deliverResult(data);
 
-	@Override
-	protected void onStopLoading() {
-		cancelLoad();
-	}
+        if (oldData != null && oldData != data)
+            onReleaseResources(oldData);
+    }
 
-	@Override
-	protected void onReset() {
-		onStopLoading();
+    @Override
+    protected void onStartLoading() {
+        if (mData != null)
+            deliverResult(mData);
 
-		if (mData != null) {
-			onReleaseResources(mData);
-			mData = null;
-		}
-	}
+        if (mFileObserver == null) {
+            mFileObserver = new FileObserver(mPath, FILE_OBSERVER_MASK) {
+                @Override
+                public void onEvent(int event, String path) {
+                    onContentChanged();
+                }
+            };
+        }
+        mFileObserver.startWatching();
 
-	@Override
-	public void onCanceled(List<File> data) {
-		super.onCanceled(data);
+        if (takeContentChanged() || mData == null)
+            forceLoad();
+    }
 
-		onReleaseResources(data);
-	}
+    @Override
+    protected void onStopLoading() {
+        cancelLoad();
+    }
 
-	protected void onReleaseResources(List<File> data) {
-		
-		if (mFileObserver != null) {
-			mFileObserver.stopWatching();
-			mFileObserver = null;
-		}
-	}
+    @Override
+    protected void onReset() {
+        onStopLoading();
+
+        if (mData != null) {
+            onReleaseResources(mData);
+            mData = null;
+        }
+    }
+
+    @Override
+    public void onCanceled(List<File> data) {
+        super.onCanceled(data);
+
+        onReleaseResources(data);
+    }
+
+    protected void onReleaseResources(List<File> data) {
+
+        if (mFileObserver != null) {
+            mFileObserver.stopWatching();
+            mFileObserver = null;
+        }
+    }
 }

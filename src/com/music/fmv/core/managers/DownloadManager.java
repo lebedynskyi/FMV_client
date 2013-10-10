@@ -30,12 +30,12 @@ public class DownloadManager extends Manager {
     protected void finish() {
         loaderExecutor.getQueue().clear();
         loaderExecutor.shutdownNow();
-        if (loaderExecutor.getQueue().isEmpty()){
+        if (loaderExecutor.getQueue().isEmpty()) {
             core.getNotificationManager().removeDownloading();
         }
     }
 
-    public void download(SearchAlbumModel album){
+    public void download(SearchAlbumModel album) {
         //TODO implemented
     }
 
@@ -45,7 +45,7 @@ public class DownloadManager extends Manager {
 
 
     public void download(PlayableSong model, IDownloadListener listener) {
-        if (!NetworkUtil.isNetworkAvailable(core.getContext())){
+        if (!NetworkUtil.isNetworkAvailable(core.getContext())) {
             core.showToast(R.string.network_unavailable);
             return;
         }
@@ -54,20 +54,21 @@ public class DownloadManager extends Manager {
         File folder = new File(loadFolder);
         folder.mkdirs();
         File newSongFile = model.getAbsolutheFile(folder);
-        if (newSongFile.exists()){
+        if (newSongFile.exists()) {
             core.showToast(R.string.file_already_exists);
             return;
         }
 
         SongLoader loader = new SongLoader(newSongFile, model);
         loader.setDownloadListener(listener);
-        if (!loaderExecutor.getQueue().contains(loader)){
+        if (!loaderExecutor.getQueue().contains(loader)) {
             loaderExecutor.execute(loader);
-        }else core.showToast(R.string.already_in_queue);
+        } else core.showToast(R.string.already_in_queue);
     }
 
     private IDownloadListener downloadListener = new IDownloadListener() {
         private ArrayList<String> failedSongs = new ArrayList<String>();
+
         @Override
         public void onDownload(String name, int percent, int max) {
             core.getNotificationManager().notifyDownloading(name, percent, max);
@@ -75,11 +76,11 @@ public class DownloadManager extends Manager {
 
         @Override
         public void onDownloadFinished() {
-            if (loaderExecutor.getQueue().isEmpty()){
-                if (!failedSongs.isEmpty()){
+            if (loaderExecutor.getQueue().isEmpty()) {
+                if (!failedSongs.isEmpty()) {
                     core.getNotificationManager().notifyErrorDownloading(failedSongs.toString());
                     failedSongs.clear();
-                }else core.getNotificationManager().notifySuccessDownloading();
+                } else core.getNotificationManager().notifySuccessDownloading();
             }
             core.callUpdateUI();
         }
@@ -90,12 +91,12 @@ public class DownloadManager extends Manager {
         }
     };
 
-    private ThreadPoolExecutor loaderExecutor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()){
+    private ThreadPoolExecutor loaderExecutor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()) {
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
             super.beforeExecute(t, r);
             try {
-                if (getQueue().size() > 1){
+                if (getQueue().size() > 1) {
                     Thread.sleep(5000);
                 }
             } catch (InterruptedException e) {

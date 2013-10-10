@@ -29,13 +29,13 @@ public class TabButton extends RelativeLayout {
 
     public TabButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        view = inflate(context,R.layout.tab_button, this);
+        view = inflate(context, R.layout.tab_button, this);
         initComponentsUI();
     }
 
     public TabButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        view = inflate(context,R.layout.tab_button, this);
+        view = inflate(context, R.layout.tab_button, this);
         initComponentsUI();
     }
 
@@ -44,13 +44,13 @@ public class TabButton extends RelativeLayout {
         return view;
     }
 
-    private void initComponentsUI(){
+    private void initComponentsUI() {
         selectedDraw = getContext().getResources().getDrawable(R.drawable.bottom_selected);
         button = (ImageView) view.findViewById(R.id.tab_btn);
         setOnClickListener(clickListener);
     }
 
-    public void initUI(Drawable imageSelector, ClickCallBack callBack){
+    public void initUI(Drawable imageSelector, ClickCallBack callBack) {
         this.callBack = callBack;
         button.setBackgroundDrawable(imageSelector);
     }
@@ -59,21 +59,21 @@ public class TabButton extends RelativeLayout {
     public void setSelected(boolean selected) {
         super.setSelected(selected);
         button.setSelected(selected);
-        if (selected){
+        if (selected) {
             view.setBackgroundDrawable(selectedDraw);
-        }else {
+        } else {
             view.setBackgroundDrawable(null);
         }
     }
 
-    public interface ClickCallBack{
+    public interface ClickCallBack {
         public void onClick(View v);
     }
 
-    private OnClickListener clickListener =new OnClickListener() {
+    private OnClickListener clickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (callBack != null){
+            if (callBack != null) {
                 callBack.onClick(TabButton.this);
             }
         }

@@ -31,10 +31,10 @@ public class Api {
     public static final String API_URL = TEST_URL;
 
     //commands for api
-    public static final String SEARCH_BAND_COMMAND =   "artist.search";
-    public static final String GET_BAND_COMMAND =      "artist.get";
+    public static final String SEARCH_BAND_COMMAND = "artist.search";
+    public static final String GET_BAND_COMMAND = "artist.get";
     public static final String SEARCH_ALBUMS_COMMAND = "albums.search";
-    public static final String SEARCH_SONGS_COMMAND =  "songs.search";
+    public static final String SEARCH_SONGS_COMMAND = "songs.search";
 
 
     //returns List<SearchBandModel>
@@ -44,7 +44,7 @@ public class Api {
         params.put("artist", searchQuery);
         params.put("lan", language);
 
-        if (page != null){
+        if (page != null) {
             params.put("page", page.toString());
         }
 
@@ -52,7 +52,7 @@ public class Api {
         urlBuilder.append(API_URL).append(SEARCH_BAND_COMMAND);
         String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
 
-        if (!TextUtils.isEmpty(jsonResponse)){
+        if (!TextUtils.isEmpty(jsonResponse)) {
             JSONObject response = new JSONObject(jsonResponse);
             checkError(response);
             return ApiUtils.parseSearchBand(response);
@@ -63,12 +63,12 @@ public class Api {
 
 
     //returns List<SearchAlbumModel>
-    public List<SearchAlbumModel> searchAlbum(String searchQuery, String language, Integer page)throws Exception{
+    public List<SearchAlbumModel> searchAlbum(String searchQuery, String language, Integer page) throws Exception {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("album", searchQuery);
         params.put("lan", language);
-        if(page != null){
+        if (page != null) {
             params.put("page", page.toString());
         }
 
@@ -77,8 +77,8 @@ public class Api {
 
         String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
 
-        if (!TextUtils.isEmpty(jsonResponse)){
-            JSONObject response =new JSONObject(jsonResponse);
+        if (!TextUtils.isEmpty(jsonResponse)) {
+            JSONObject response = new JSONObject(jsonResponse);
             checkError(response);
             return ApiUtils.parseSearchAlbum(response);
         }
@@ -86,11 +86,11 @@ public class Api {
         return null;
     }
 
-    public ArrayList<PlayableSong> searchSongs(String query, Integer page) throws Exception{
+    public ArrayList<PlayableSong> searchSongs(String query, Integer page) throws Exception {
         if (TextUtils.isEmpty(query)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("song", query);
-        if (page != null){
+        if (page != null) {
             params.put("page", page.toString());
         }
 
@@ -99,7 +99,7 @@ public class Api {
 
         String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
 
-        if (!TextUtils.isEmpty(jsonResponse)){
+        if (!TextUtils.isEmpty(jsonResponse)) {
             JSONObject response = new JSONObject(jsonResponse);
             checkError(response);
             return ApiUtils.parseSearchSongs(response);
@@ -107,10 +107,10 @@ public class Api {
         return null;
     }
 
-    public String getUrlOfSong(String id) throws Exception{
+    public String getUrlOfSong(String id) throws Exception {
         if (TextUtils.isEmpty(id)) throw new IllegalArgumentException("searchQuery cannot be empty");
         String resp = NetworkUtil.doGet(GET_SONG_URl + id, null);
-        if (resp!=null){
+        if (resp != null) {
             JSONObject response = new JSONObject(resp);
             return response.getString("track_link");
         }
@@ -123,7 +123,7 @@ public class Api {
 
     //throws exception if Json response has error
     private void checkError(JSONObject response) {
-        if (response.has("error")){
+        if (response.has("error")) {
             throw new RuntimeException("Error in api response");
         }
     }

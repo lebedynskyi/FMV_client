@@ -17,11 +17,11 @@ import java.util.ArrayList;
  * Time: 2:43 PM
  */
 
-public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
+public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong> {
     private AdapterCallback callback;
     private SwipeListView listView;
 
-    public SearchSongAdapter(Context c ,ArrayList<PlayableSong> list, SwipeListView listView){
+    public SearchSongAdapter(Context c, ArrayList<PlayableSong> list, SwipeListView listView) {
         super(list, c);
         this.listView = listView;
     }
@@ -38,7 +38,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        if (convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflateView(R.layout.search_songs_row, parent);
             holder.owner = (TextView) convertView.findViewById(R.id.song_owner);
@@ -49,7 +49,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
             holder.addToQueue = convertView.findViewById(R.id.song_add_to_queu);
             holder.download = convertView.findViewById(R.id.song_download);
             convertView.setTag(holder);
-        }else holder = (ViewHolder) convertView.getTag();
+        } else holder = (ViewHolder) convertView.getTag();
         PlayableSong song = mData.get(position);
 
         holder.download.setOnClickListener(new ButtonListener(song, position));
@@ -60,14 +60,14 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
         holder.name.setText(song.getName());
         holder.duration.setText(song.getNiceDuration());
 
-        if (core.getCacheManager().isSongExists(song)){
+        if (core.getCacheManager().isSongExists(song)) {
             holder.isCached.setVisibility(View.VISIBLE);
-        }else holder.isCached.setVisibility(View.GONE);
+        } else holder.isCached.setVisibility(View.GONE);
 
         return convertView;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView name;
         TextView owner;
         TextView duration;
@@ -79,7 +79,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
         View download;
     }
 
-    private class ButtonListener implements View.OnClickListener{
+    private class ButtonListener implements View.OnClickListener {
         private PlayableSong model;
         private int position;
 
@@ -91,7 +91,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
         @Override
         public void onClick(View v) {
             listView.closeAnimate(position + 1);
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.song_play:
                     if (callback != null) callback.playClicked(model, position);
                     break;
@@ -104,9 +104,11 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong>{
         }
     }
 
-    public interface AdapterCallback{
+    public interface AdapterCallback {
         public void playClicked(PlayableSong model, int pos);
+
         public void addToQueueClicked(PlayableSong model);
+
         public void downloadClicked(PlayableSong model);
     }
 }

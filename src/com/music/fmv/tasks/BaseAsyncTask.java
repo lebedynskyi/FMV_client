@@ -12,21 +12,21 @@ import com.music.fmv.views.LoadDialog;
  * Time: 8:49 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
+public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T> {
     protected Context context;
     private boolean isShowDialog;
     protected Api api = new Api();
     protected boolean isError;
     private LoadDialog loadDialog;
 
-    protected BaseAsyncTask(Context context, boolean showDialog){
+    protected BaseAsyncTask(Context context, boolean showDialog) {
         this.context = context;
         isShowDialog = showDialog;
     }
 
     @Override
     protected void onPreExecute() {
-        if (isShowDialog){
+        if (isShowDialog) {
             loadDialog = new LoadDialog(context, this);
             loadDialog.show();
         }
@@ -37,7 +37,7 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T>{
         if (loadDialog != null) loadDialog.dismiss();
     }
 
-    public void canceledByUser(){
+    public void canceledByUser() {
         cancel(true);
     }
 }

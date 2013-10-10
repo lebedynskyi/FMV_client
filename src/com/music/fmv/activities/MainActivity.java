@@ -122,12 +122,17 @@ public class MainActivity extends BaseActivity {
 
     //Listener for viewpager. OnPageSelected() clicked when page was changed by swiping
     private ViewPager.OnPageChangeListener pagerListener = new ViewPager.OnPageChangeListener() {
-        @Override public void onPageScrolled(int i, float v, int i2) {}
-        @Override public void onPageScrollStateChanged(int i) {}
+        @Override
+        public void onPageScrolled(int i, float v, int i2) {
+        }
 
         @Override
-        public void onPageSelected(int i){
-            switch (i){
+        public void onPageScrollStateChanged(int i) {
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            switch (i) {
                 case SETTINGS_TAB:
                     settingsTabClicked();
                     break;

@@ -21,41 +21,41 @@ import java.util.List;
 
 public class FileListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<File>> {
 
-	private static final int LOADER_ID = 0;
+    private static final int LOADER_ID = 0;
 
-	private FileListAdapter mAdapter;
-	private String mPath;
+    private FileListAdapter mAdapter;
+    private String mPath;
 
-	/**
-	 * Create a new instance with the given file path.
-	 * 
-	 * @param path The absolute path of the file (directory) to display.
-	 * @return A new Fragment with the given file path. 
-	 */
-	public static FileListFragment newInstance(String path) {
-		FileListFragment fragment = new FileListFragment();
-		Bundle args = new Bundle();
-		args.putString(FileChooserActivity.PATH, path);
-		fragment.setArguments(args);
+    /**
+     * Create a new instance with the given file path.
+     *
+     * @param path The absolute path of the file (directory) to display.
+     * @return A new Fragment with the given file path.
+     */
+    public static FileListFragment newInstance(String path) {
+        FileListFragment fragment = new FileListFragment();
+        Bundle args = new Bundle();
+        args.putString(FileChooserActivity.PATH, path);
+        fragment.setArguments(args);
 
-		return fragment;
-	}
+        return fragment;
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		mAdapter = new FileListAdapter(getActivity());
-		mPath = getArguments() != null ? getArguments().getString(
-				FileChooserActivity.PATH) : Environment
-				.getExternalStorageDirectory().getAbsolutePath();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter = new FileListAdapter(getActivity());
+        mPath = getArguments() != null ? getArguments().getString(
+                FileChooserActivity.PATH) : Environment
+                .getExternalStorageDirectory().getAbsolutePath();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup layout = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
 
         ViewGroup progressContainer = (ViewGroup) layout.getChildAt(0);
-        ((ProgressBar)progressContainer.getChildAt(0)).setIndeterminateDrawable(getResources().getDrawable(R.drawable.blue_rotate));
+        ((ProgressBar) progressContainer.getChildAt(0)).setIndeterminateDrawable(getResources().getDrawable(R.drawable.blue_rotate));
 
         ListView lv = (ListView) layout.findViewById(android.R.id.list);
 
@@ -67,44 +67,44 @@ public class FileListFragment extends ListFragment implements LoaderManager.Load
     }
 
     @Override
-	public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         setListShown(false);
-		getLoaderManager().initLoader(LOADER_ID, null, this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
-	}
+    }
 
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-        if (position == 0){
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        if (position == 0) {
             ((FileChooserActivity) getActivity()).onFolderPicked(new File(mPath));
             return;
         }
 
         HeaderViewListAdapter adapter = (HeaderViewListAdapter) l.getAdapter();
-		if (adapter != null) {
-			File file = (File) adapter.getItem(position);
-			mPath = file.getAbsolutePath();
-			((FileChooserActivity) getActivity()).onFolderClicked(file);
-		}
-	}
+        if (adapter != null) {
+            File file = (File) adapter.getItem(position);
+            mPath = file.getAbsolutePath();
+            ((FileChooserActivity) getActivity()).onFolderClicked(file);
+        }
+    }
 
-	@Override
-	public Loader<List<File>> onCreateLoader(int id, Bundle args) {
-		return new FileLoader(getActivity(), mPath);
-	}
+    @Override
+    public Loader<List<File>> onCreateLoader(int id, Bundle args) {
+        return new FileLoader(getActivity(), mPath);
+    }
 
-	@Override
-	public void onLoadFinished(Loader<List<File>> loader, List<File> data) {
-		mAdapter.setListItems(data);
+    @Override
+    public void onLoadFinished(Loader<List<File>> loader, List<File> data) {
+        mAdapter.setListItems(data);
 
-		if (isResumed())
-			setListShown(true);
-		else
-			setListShownNoAnimation(true);
-	}
+        if (isResumed())
+            setListShown(true);
+        else
+            setListShownNoAnimation(true);
+    }
 
-	@Override
-	public void onLoaderReset(Loader<List<File>> loader) {
-		mAdapter.clear();
-	}
+    @Override
+    public void onLoaderReset(Loader<List<File>> loader) {
+        mAdapter.clear();
+    }
 }

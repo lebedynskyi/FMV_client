@@ -57,11 +57,11 @@ public class SearchArtistFragment extends BaseFragment {
         searchBand(s, null);
     }
 
-    private void searchBand(String query, final Integer page){
+    private void searchBand(String query, final Integer page) {
         if (TextUtils.isEmpty(query) || artistTaskRunned) return;
         query = query.trim();
 
-        SearchBandTask task = new SearchBandTask(query, page, baseActivity, page == null){
+        SearchBandTask task = new SearchBandTask(query, page, baseActivity, page == null) {
 
             @Override
             protected void onPreExecute() {
@@ -79,14 +79,14 @@ public class SearchArtistFragment extends BaseFragment {
                 if (isCancelled()) return;
 
                 //empty result
-                if (result != null && result.size() ==0){
+                if (result != null && result.size() == 0) {
                     Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
                     clearArtists();
                     return;
                 }
 
                 //it means that error was occurred during search
-                if (isError || result == null){
+                if (isError || result == null) {
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
                     clearArtists();
                     return;
@@ -100,23 +100,23 @@ public class SearchArtistFragment extends BaseFragment {
             @Override
             public void canceledByUser() {
                 super.canceledByUser();
-                artistTaskRunned= false;
+                artistTaskRunned = false;
             }
         };
 
-        if (runTask(task)){
+        if (runTask(task)) {
             lastRequest = query;
         }
     }
 
-    private void getNextBandPage(){
-        if (artistsPageAvailable > 0 ) {
+    private void getNextBandPage() {
+        if (artistsPageAvailable > 0) {
             searchBand(lastRequest, futureArtistPage);
         }
     }
 
-    private void updateBandList(List<SearchBandModel> searchBandModels,boolean isClear){
-        if(isClear) {
+    private void updateBandList(List<SearchBandModel> searchBandModels, boolean isClear) {
+        if (isClear) {
             artistsList.clear();
             futureArtistPage = 1;
         }
@@ -124,32 +124,34 @@ public class SearchArtistFragment extends BaseFragment {
         artistsAdapter.notifyDataSetChanged();
         futureArtistPage += 1;
 
-        if (artistsPageAvailable <= 0){
+        if (artistsPageAvailable <= 0) {
             artistsListView.removeFooterView(rotateFooter);
-        }else if (artistsPageAvailable > 0 && artistsListView.getFooterViewsCount() == 0){
+        } else if (artistsPageAvailable > 0 && artistsListView.getFooterViewsCount() == 0) {
             artistsListView.addFooterView(rotateFooter);
         }
 
-        if (artistsListView.getCount() ==0){
+        if (artistsListView.getCount() == 0) {
             emptyView.setVisibility(View.VISIBLE);
-        }else emptyView.setVisibility(View.GONE);
+        } else emptyView.setVisibility(View.GONE);
     }
 
     private void clearArtists() {
         artistsList.clear();
         artistsListView.removeFooterView(rotateFooter);
-        SearchBandModel.AVAILABLE_PAGES= 0;
+        SearchBandModel.AVAILABLE_PAGES = 0;
         artistsAdapter.notifyDataSetChanged();
     }
 
     //Scroll listeners for lists, call method when last item in list is visible
     private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
-        @Override public void onScrollStateChanged(AbsListView view, int scrollState) {}
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             final int lastItem = firstVisibleItem + visibleItemCount;
-            if(lastItem == totalItemCount) {
+            if (lastItem == totalItemCount) {
                 getNextBandPage();
             }
         }
@@ -160,8 +162,8 @@ public class SearchArtistFragment extends BaseFragment {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             ViewUtils.hideSoftKeyboard(baseActivity);
-            if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                String text = v.getText().toString() ;
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String text = v.getText().toString();
                 processSearch(text);
                 return true;
             }
@@ -192,7 +194,7 @@ public class SearchArtistFragment extends BaseFragment {
                 }
             };
 
-            if (runTask(task)){
+            if (runTask(task)) {
                 getUserTaskRunned = true;
             }
         }

@@ -14,7 +14,7 @@ import java.util.List;
  * Time: 9:11 AM
  * To change this template use File | Settings | File Templates.
  */
-public class FragmentAdapter extends FragmentPagerAdapter{
+public class FragmentAdapter extends FragmentPagerAdapter {
     List<BaseFragment> fragments;
 
     public FragmentAdapter(FragmentManager fm, List<BaseFragment> fragments) {

@@ -11,7 +11,7 @@ import java.util.Date;
  * Date: 7/17/13
  * Time: 4:04 PM
  */
-public class PlayableSong extends BaseSerializableModel{
+public class PlayableSong extends BaseSerializableModel {
     public static int PAGE_AVAILABLE = -1;
     public static final SimpleDateFormat SD = new SimpleDateFormat("mm:ss");
 
@@ -62,13 +62,13 @@ public class PlayableSong extends BaseSerializableModel{
         this.duration = duration;
     }
 
-    public String getNiceDuration(){
+    public String getNiceDuration() {
         Date date = new Date(duration * 1000);
         return SD.format(date);
 
     }
 
-    public boolean isPlayable(){
+    public boolean isPlayable() {
         return url != null;
     }
 
@@ -80,16 +80,16 @@ public class PlayableSong extends BaseSerializableModel{
         return rate;
     }
 
-    public File getAbsolutheFile(String folder){
-        return  new File(folder, this.getFutureFileName());
+    public File getAbsolutheFile(String folder) {
+        return new File(folder, this.getFutureFileName());
     }
 
-    public File getAbsolutheFile(File folder){
-        return  new File(folder, this.getFutureFileName());
+    public File getAbsolutheFile(File folder) {
+        return new File(folder, this.getFutureFileName());
     }
 
     public String getFutureFileName() {
-        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(artist))  return "Unknown song";
+        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(artist)) return "Unknown song";
         if (TextUtils.isEmpty(name)) return artist;
         if (TextUtils.isEmpty(artist)) return name;
         return artist + " - " + name + ".mp3";

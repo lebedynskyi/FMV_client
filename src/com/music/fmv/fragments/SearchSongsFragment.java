@@ -88,14 +88,14 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
 
                 if (isCancelled()) return;
 
-                if (isError || songs == null){
+                if (isError || songs == null) {
                     Toast.makeText(baseActivity, getString(R.string.request_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (songs.size() > 0){
+                if (songs.size() > 0) {
                     updateSongsList(songs, page == null);
-                }else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(baseActivity, getString(R.string.empty_result), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -105,13 +105,13 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
             }
         };
 
-        if (runTask(task)){
+        if (runTask(task)) {
             lastQuery = query;
         }
     }
 
     private void updateSongsList(ArrayList<PlayableSong> songs, boolean isClear) {
-        if(isClear) {
+        if (isClear) {
             songsInAdapter.clear();
             futureSongPage = 1;
         }
@@ -119,15 +119,15 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
         adapter.notifyDataSetChanged();
         futureSongPage += 1;
 
-        if (songsPageAvailable <= 0){
+        if (songsPageAvailable <= 0) {
             songsListView.removeFooterView(rotateFooter);
-        }else if (songsPageAvailable > 0 && songsListView.getFooterViewsCount() == 0){
+        } else if (songsPageAvailable > 0 && songsListView.getFooterViewsCount() == 0) {
             songsListView.addFooterView(rotateFooter);
         }
 
-        if (songsListView.getCount() ==0){
+        if (songsListView.getCount() == 0) {
             emptyView.setVisibility(View.VISIBLE);
-        }else emptyView.setVisibility(View.GONE);
+        } else emptyView.setVisibility(View.GONE);
     }
 
     private void getNextSongsPage() {
@@ -142,7 +142,7 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             ViewUtils.hideSoftKeyboard(baseActivity);
             songsListView.closeOpenedItems();
-            if (actionId == EditorInfo.IME_ACTION_SEARCH){
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 String text = v.getText().toString();
                 processSearch(text, null);
                 return true;
@@ -161,13 +161,13 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             final int lastItem = firstVisibleItem + visibleItemCount;
-            if(lastItem == totalItemCount) {
+            if (lastItem == totalItemCount) {
                 getNextSongsPage();
             }
         }
     };
 
-    private BaseSwipeListViewListener listViewListener = new BaseSwipeListViewListener(){
+    private BaseSwipeListViewListener listViewListener = new BaseSwipeListViewListener() {
         @Override
         public void onClickBackView(int position) {
             songsListView.closeAnimate(position);

@@ -230,7 +230,7 @@ public class SwipeListView extends ListView {
         swipeListViewController.reloadChoiceStateInView(convertView.findViewById(swipeFrontView), position);
     }
 
-    public void setOnScrollListener(OnScrollListener listener){
+    public void setOnScrollListener(OnScrollListener listener) {
         swipeListViewController.setCustomScrollListener(listener);
     }
 

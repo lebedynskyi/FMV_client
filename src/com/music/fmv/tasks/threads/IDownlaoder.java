@@ -7,7 +7,7 @@ package com.music.fmv.tasks.threads;
  * Time: 1:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface IDownlaoder extends Runnable{
+public interface IDownlaoder extends Runnable {
     public void setDownloadListener(IDownloadListener listener);
 }
 

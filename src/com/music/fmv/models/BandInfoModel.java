@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Time: 5:54 PM
  */
 
-public class BandInfoModel extends BaseSerializableModel{
+public class BandInfoModel extends BaseSerializableModel {
     private ArrayList<String> images;
     private ArrayList<SimilarBandModel> similars;
     private String descr;
@@ -30,7 +30,7 @@ public class BandInfoModel extends BaseSerializableModel{
         this.images = images;
     }
 
-    public ArrayList<SimilarBandModel> getSimilars(){
+    public ArrayList<SimilarBandModel> getSimilars() {
         return similars;
     }
 

@@ -35,7 +35,7 @@ public class ViewUtils {
         return display.getHeight();
     }
 
-    public static int getOrientation(Context c){
+    public static int getOrientation(Context c) {
         return getScrenWidth(c) > getScrenHeight(c) ? LANDSCAPE : PORTRAIT;
     }
 
@@ -53,9 +53,9 @@ public class ViewUtils {
         }
     }
 
-    public static void setUpKeyBoardHider(View view, final Activity activity){
+    public static void setUpKeyBoardHider(View view, final Activity activity) {
         if (view == null) return;
-        if(!(view instanceof EditText)) {
+        if (!(view instanceof EditText)) {
 
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
@@ -74,39 +74,40 @@ public class ViewUtils {
         }
     }
 
-    public static void setVisible(View v, String s){
+    public static void setVisible(View v, String s) {
         if (TextUtils.isEmpty(s)) v.setVisibility(View.GONE);
         else v.setVisibility(View.VISIBLE);
     }
 
-    public static void setVisible(View v, Object o){
+    public static void setVisible(View v, Object o) {
         if (o == null) v.setVisibility(View.GONE);
         else v.setVisibility(View.VISIBLE);
     }
 
-    public static void setVisible(View v, List<?> list){
+    public static void setVisible(View v, List<?> list) {
         if (list != null && list.size() > 0) v.setVisibility(View.VISIBLE);
         else v.setVisibility(View.GONE);
     }
 
     public static void hideSoftKeyboard(Activity activity) {
         try {
-            InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 
-    public static int convertDpToPixel(float dp, Context context){
+    public static int convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f);
-        return (int)px;
+        return (int) px;
     }
 
-    public static float convertPixelsToDp(float px, Context context){
+    public static float convertPixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float dp = px / (metrics.densityDpi / 160f);
-        return (int)dp;
+        return (int) dp;
     }
 }

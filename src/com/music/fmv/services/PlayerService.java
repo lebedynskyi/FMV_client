@@ -66,7 +66,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
                 mPlayer.start();
                 showNotification();
             }
-        }else {
+        } else {
             playSong(currentSong);
         }
         notifyStateCallback();
@@ -83,7 +83,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
         if (curPosition + 1 < playerQueue.size() && curPosition != -1) {
             playSong(playerQueue.get(curPosition + 1));
-        }else {
+        } else {
             releasePlayer();
             clearNotify();
             notifyStateCallback();
@@ -112,7 +112,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public void add(PlayableSong model) {
-        if (mPlayer == null){
+        if (mPlayer == null) {
             ArrayList<PlayableSong> ss = new ArrayList<PlayableSong>();
             ss.add(model);
             play(ss, 0);
@@ -173,19 +173,19 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         boolean isPlaying = false;
         boolean isLoop = false;
 
-        if (mPlayer != null && preparedPlayers.contains(mPlayer)){
+        if (mPlayer != null && preparedPlayers.contains(mPlayer)) {
             duration = mPlayer.getDuration();
             currentPos = mPlayer.getCurrentPosition();
             isPlaying = mPlayer.isPlaying();
             isLoop = mPlayer.isLooping();
         }
-        return new PlayerStatus(duration, currentPos, currentSong,playerQueue, isShuffle, isLoop, isPlaying);
+        return new PlayerStatus(duration, currentPos, currentSong, playerQueue, isShuffle, isLoop, isPlaying);
     }
 
     private synchronized void playSong(final PlayableSong song) {
         if (song == null) return;
-        if (!playerQueue.contains(song)){
-             playerQueue.add(song);
+        if (!playerQueue.contains(song)) {
+            playerQueue.add(song);
         }
 
         releasePlayer();
@@ -204,7 +204,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private void playAsyncFromHttp(final PlayableSong song) {
         if (!TextUtils.isEmpty(song.getUrl())) {
             playFromPath(song.getUrl());
-        }else {
+        } else {
             AsyncHttpRunner runner = new AsyncHttpRunner(song);
             runner.start();
         }
@@ -261,7 +261,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return false;
     }
 
-    private class AsyncHttpRunner extends Thread{
+    private class AsyncHttpRunner extends Thread {
         private PlayableSong song;
 
         private AsyncHttpRunner(PlayableSong song) {
@@ -272,7 +272,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         public void run() {
             try {
                 String songUrl = new Api().getUrlOfSong(song.getId());
-                if (!TextUtils.isEmpty(songUrl)){
+                if (!TextUtils.isEmpty(songUrl)) {
                     song.setUrl(songUrl);
                     core.getHandler().post(new Runnable() {
                         @Override

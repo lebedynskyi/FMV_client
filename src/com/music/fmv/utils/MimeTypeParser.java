@@ -27,68 +27,68 @@ import java.io.InputStreamReader;
 
 public class MimeTypeParser {
 
-	public static final String TAG_MIMETYPES = "MimeTypes";
-	public static final String TAG_TYPE = "type";
-	
-	public static final String ATTR_EXTENSION = "extension";
-	public static final String ATTR_MIMETYPE = "mimetype";
-	
-	private XmlPullParser mXpp;
-	private MimeTypes mMimeTypes;
+    public static final String TAG_MIMETYPES = "MimeTypes";
+    public static final String TAG_TYPE = "type";
 
-	public MimeTypeParser() {
-	}
+    public static final String ATTR_EXTENSION = "extension";
+    public static final String ATTR_MIMETYPE = "mimetype";
 
-	public MimeTypes fromXml(InputStream in)
-			throws XmlPullParserException, IOException {
-		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+    private XmlPullParser mXpp;
+    private MimeTypes mMimeTypes;
 
-		mXpp = factory.newPullParser();
-		mXpp.setInput(new InputStreamReader(in));
+    public MimeTypeParser() {
+    }
 
-		return parse();
-	}
+    public MimeTypes fromXml(InputStream in)
+            throws XmlPullParserException, IOException {
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 
-	public MimeTypes fromXmlResource(XmlResourceParser in)
-	throws XmlPullParserException, IOException {
-		mXpp = in;
+        mXpp = factory.newPullParser();
+        mXpp.setInput(new InputStreamReader(in));
 
-		return parse();
-	}
+        return parse();
+    }
 
-	public MimeTypes parse()
-			throws XmlPullParserException, IOException {
+    public MimeTypes fromXmlResource(XmlResourceParser in)
+            throws XmlPullParserException, IOException {
+        mXpp = in;
 
-		mMimeTypes = new MimeTypes();
-		
-		int eventType = mXpp.getEventType();
+        return parse();
+    }
 
-		while (eventType != XmlPullParser.END_DOCUMENT) {
-			String tag = mXpp.getName();
+    public MimeTypes parse()
+            throws XmlPullParserException, IOException {
 
-			if (eventType == XmlPullParser.START_TAG) {
-				if (tag.equals(TAG_MIMETYPES)) {
-					
-				} else if (tag.equals(TAG_TYPE)) {
-					addMimeTypeStart();
-				}
-			} else if (eventType == XmlPullParser.END_TAG) {
-				if (tag.equals(TAG_MIMETYPES)) {
-					
-				}
-			}
+        mMimeTypes = new MimeTypes();
 
-			eventType = mXpp.next();
-		}
+        int eventType = mXpp.getEventType();
 
-		return mMimeTypes;
-	}
-	
-	private void addMimeTypeStart() {
-		String extension = mXpp.getAttributeValue(null, ATTR_EXTENSION);
-		String mimetype = mXpp.getAttributeValue(null, ATTR_MIMETYPE);
-		
-		mMimeTypes.put(extension, mimetype);
-	}
-	
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            String tag = mXpp.getName();
+
+            if (eventType == XmlPullParser.START_TAG) {
+                if (tag.equals(TAG_MIMETYPES)) {
+
+                } else if (tag.equals(TAG_TYPE)) {
+                    addMimeTypeStart();
+                }
+            } else if (eventType == XmlPullParser.END_TAG) {
+                if (tag.equals(TAG_MIMETYPES)) {
+
+                }
+            }
+
+            eventType = mXpp.next();
+        }
+
+        return mMimeTypes;
+    }
+
+    private void addMimeTypeStart() {
+        String extension = mXpp.getAttributeValue(null, ATTR_EXTENSION);
+        String mimetype = mXpp.getAttributeValue(null, ATTR_MIMETYPE);
+
+        mMimeTypes.put(extension, mimetype);
+    }
+
 }

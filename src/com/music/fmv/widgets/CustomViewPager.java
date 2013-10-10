@@ -10,7 +10,7 @@ import android.view.MotionEvent;
  * Date: 8/5/13
  * Time: 12:30 PM
  */
-public class CustomViewPager extends ViewPager{
+public class CustomViewPager extends ViewPager {
     private boolean canScroll = true;
 
     public CustomViewPager(Context context) {

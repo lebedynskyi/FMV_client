@@ -19,7 +19,7 @@ import java.util.Map;
  * Time: 11:20 AM
  */
 public final class NetworkUtil {
-    public enum Method{
+    public enum Method {
         POST, GET
     }
 
@@ -29,15 +29,15 @@ public final class NetworkUtil {
         return info != null && info.isConnected();
     }
 
-    public static String doGet(String urlRequest, Map<String, String> params) throws Exception{
+    public static String doGet(String urlRequest, Map<String, String> params) throws Exception {
         return doRequest(generateUrl(urlRequest, params), Method.GET, null);
     }
 
-    public static String doPost(String urlRequest, String data) throws Exception{
+    public static String doPost(String urlRequest, String data) throws Exception {
         return doRequest(urlRequest, Method.POST, data);
     }
 
-    public static String doRequest(String urlRequest, Method method, String data)throws Exception{
+    public static String doRequest(String urlRequest, Method method, String data) throws Exception {
         URL url = new URL(urlRequest);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(5000);
@@ -50,7 +50,7 @@ public final class NetworkUtil {
         connection.addRequestProperty("Accept", "application/json");
 
         //Send data to service
-        if (data != null && method == Method.POST){
+        if (data != null && method == Method.POST) {
             BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
             outputStream.write(data.getBytes());
             outputStream.flush();
@@ -63,7 +63,7 @@ public final class NetworkUtil {
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder responseBuilder = new StringBuilder();
         String s = null;
-        while ((s = reader.readLine()) != null){
+        while ((s = reader.readLine()) != null) {
             responseBuilder.append(s);
         }
         reader.close();
@@ -71,7 +71,7 @@ public final class NetworkUtil {
     }
 
     //returns a valid url from Map
-    public static String generateUrl(String baseUrl, Map<String, String> params){
+    public static String generateUrl(String baseUrl, Map<String, String> params) {
         if (params == null || params.size() == 0) return baseUrl;
 
         Iterator<String> keys = params.keySet().iterator();
@@ -79,7 +79,7 @@ public final class NetworkUtil {
         urlBuilder.append(baseUrl);
         int counter = 0;
 
-        while (keys.hasNext()){
+        while (keys.hasNext()) {
             String key = keys.next();
             urlBuilder.append(counter++ == 0 ? "?" : "&").append(key).append("=").append(encodeString(params.get(key)));
         }
@@ -87,7 +87,7 @@ public final class NetworkUtil {
         return urlBuilder.toString();
     }
 
-    public static String encodeString(String s){
+    public static String encodeString(String s) {
         if (TextUtils.isEmpty(s)) return "";
         try {
             return URLEncoder.encode(s, "utf-8");
@@ -97,7 +97,7 @@ public final class NetworkUtil {
         return s;
     }
 
-    public static void downloadFile(File f, String songUrl, IDownloadListener listener)throws Exception{
+    public static void downloadFile(File f, String songUrl, IDownloadListener listener) throws Exception {
         URL url = new URL(songUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(5000);
@@ -114,17 +114,17 @@ public final class NetworkUtil {
             int count;
             int total = 0;
 
-            while ((count = inStream.read(data, 0, data.length)) != -1){
+            while ((count = inStream.read(data, 0, data.length)) != -1) {
                 total += count;
                 outStream.write(data, 0, count);
                 curPercent = (total * 100) / fileLength;
 
-                if (curPercent != lastPercentNotify && listener != null && curPercent % 10 == 0){
+                if (curPercent != lastPercentNotify && listener != null && curPercent % 10 == 0) {
                     listener.onDownload(f.getName(), curPercent, 100);
                     lastPercentNotify = curPercent;
                 }
             }
-        }finally {
+        } finally {
             inStream.close();
             outStream.close();
         }

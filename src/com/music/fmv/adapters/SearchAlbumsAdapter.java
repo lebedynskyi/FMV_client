@@ -113,8 +113,11 @@ public class SearchAlbumsAdapter extends FixedBaseAdapter<SearchAlbumModel> {
 
     public interface AdapterCallback {
         public void playClicked(SearchAlbumModel model);
+
         public void addToQueueClicked(SearchAlbumModel model);
+
         public void showClicked(SearchAlbumModel mdel);
+
         public void downloadClicked(SearchAlbumModel model);
     }
 }

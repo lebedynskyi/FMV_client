@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
     <view android:layout_width="match_parent"
           android:layout_height="match_parent"
           class="android.support.v4.view.ViewPager"
@@ -16,14 +16,17 @@
             android:id="@+id/tab_container"
             android:layout_alignParentBottom="true">
         <com.music.fmv.views.TabButton android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@+id/search_btn" android:layout_weight="1"/>
+                                       android:layout_height="match_parent"
+                                       android:id="@+id/search_btn" android:layout_weight="1"/>
         <com.music.fmv.views.TabButton android:layout_width="match_parent"
-              android:layout_height="match_parent" android:id="@+id/history_btn" android:layout_weight="1"/>
+                                       android:layout_height="match_parent" android:id="@+id/history_btn"
+                                       android:layout_weight="1"/>
         <com.music.fmv.views.TabButton android:layout_width="match_parent"
-              android:layout_height="match_parent" android:id="@+id/music_btn" android:layout_weight="1"/>
+                                       android:layout_height="match_parent" android:id="@+id/music_btn"
+                                       android:layout_weight="1"/>
         <com.music.fmv.views.TabButton android:layout_width="match_parent"
-              android:layout_height="match_parent" android:id="@+id/settings_tab" android:layout_weight="1"/>
+                                       android:layout_height="match_parent" android:id="@+id/settings_tab"
+                                       android:layout_weight="1"/>
     </LinearLayout>
 </RelativeLayout>
 

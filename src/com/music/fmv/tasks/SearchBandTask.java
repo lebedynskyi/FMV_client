@@ -14,7 +14,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>>{
+public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>> {
     private String searchQuery;
     private Integer page;
 

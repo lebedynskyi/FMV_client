@@ -16,7 +16,7 @@ import com.music.fmv.R;
  * Time: 22:01
  * To change this template use File | Settings | File Templates.
  */
-public class GlowButton extends RelativeLayout{
+public class GlowButton extends RelativeLayout {
     private TextView textView;
     private View baseView;
     private int whiteColor;
@@ -57,31 +57,31 @@ public class GlowButton extends RelativeLayout{
         blackColor = getContext().getResources().getColor(R.color.black);
     }
 
-    public void setText(String text){
+    public void setText(String text) {
         this.textView.setText(text);
     }
 
-    public String getText(){
+    public String getText() {
         return this.textView.getText().toString();
     }
 
-    public void setTextColor(int color){
+    public void setTextColor(int color) {
         this.textColor = color;
         textView.setTextColor(textColor);
     }
 
-    public void setSelected(boolean selected){
+    public void setSelected(boolean selected) {
         super.setSelected(selected);
-        if (selected){
+        if (selected) {
             glow();
-        }else{
+        } else {
             unglow();
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!selectable){
+        if (!selectable) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     setSelected(true);
@@ -93,7 +93,7 @@ public class GlowButton extends RelativeLayout{
         return super.onTouchEvent(event);
     }
 
-    public void setSelectable(boolean value){
+    public void setSelectable(boolean value) {
         this.selectable = value;
     }
 

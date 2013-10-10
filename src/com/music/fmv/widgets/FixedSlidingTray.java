@@ -13,7 +13,7 @@ import android.view.WindowManager;
  * Time: 9:33 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FixedSlidingTray extends SlidingTray{
+public class FixedSlidingTray extends SlidingTray {
     private static final int SCROLL_SIZE = 30;
     private static final int SCROLL_DELAY = 5;
 
@@ -63,44 +63,44 @@ public class FixedSlidingTray extends SlidingTray{
     }
 
 
-   private class Opener extends Thread {
-       @Override
-       public void run() {
+    private class Opener extends Thread {
+        @Override
+        public void run() {
 
-           //Make content visible
-           post(new Runnable() {
-               @Override
-               public void run() {
-                   prepareContent();
-                   getContent().setVisibility(VISIBLE);
-                   invalidate();
-               }
-           });
+            //Make content visible
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    prepareContent();
+                    getContent().setVisibility(VISIBLE);
+                    invalidate();
+                }
+            });
 
-           //calculate height for scroll
-           int maxY = (getHeight() - getHandle().getHeight()) * -1;
-           int currY = getScrollY();
-           while (currY > maxY){
-               currY -= SCROLL_SIZE;
-                if (currY <= maxY){
+            //calculate height for scroll
+            int maxY = (getHeight() - getHandle().getHeight()) * -1;
+            int currY = getScrollY();
+            while (currY > maxY) {
+                currY -= SCROLL_SIZE;
+                if (currY <= maxY) {
                     screollInUI(0, maxY);
-                }else screollInUI(0, currY);
-               try {
-                   sleep(SCROLL_DELAY);
-               } catch (InterruptedException e) {
-                   e.printStackTrace();
-               }
-           }
+                } else screollInUI(0, currY);
+                try {
+                    sleep(SCROLL_DELAY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
-           post(new Runnable() {
-               @Override
-               public void run() {
-                   open();
-                   scrollTo(0,0);
-               }
-           });
-       }
-   }
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    open();
+                    scrollTo(0, 0);
+                }
+            });
+        }
+    }
 
     private class Closer extends Thread {
         @Override
@@ -119,11 +119,11 @@ public class FixedSlidingTray extends SlidingTray{
             //calculate height for scroll
             int maxY = (getHeight() - getHandle().getHeight());
             int currY = getScrollY();
-            while (currY < maxY){
+            while (currY < maxY) {
                 currY += SCROLL_SIZE;
-                if (currY >= maxY){
+                if (currY >= maxY) {
                     screollInUI(0, maxY);
-                }else screollInUI(0, currY);
+                } else screollInUI(0, currY);
                 try {
                     sleep(SCROLL_DELAY);
                 } catch (InterruptedException e) {
@@ -135,7 +135,7 @@ public class FixedSlidingTray extends SlidingTray{
                 @Override
                 public void run() {
                     close();
-                    scrollTo(0,0);
+                    scrollTo(0, 0);
                 }
             });
         }

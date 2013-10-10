@@ -38,12 +38,12 @@ public class SearchFragment extends BaseFragment {
         albumButton = (GlowButton) mainView.findViewById(R.id.album_tab);
         songsButton = (GlowButton) mainView.findViewById(R.id.song_tab);
 
-        artistBtn  .setOnClickListener(tabListener);
+        artistBtn.setOnClickListener(tabListener);
         albumButton.setOnClickListener(tabListener);
         songsButton.setOnClickListener(tabListener);
 
         List<BaseFragment> fragments = new ArrayList<BaseFragment>(3);
-        fragments.add(ARTIST_TAB ,new SearchArtistFragment());
+        fragments.add(ARTIST_TAB, new SearchArtistFragment());
         fragments.add(ALBUM_TAB, new SearchAlbumFragment());
         fragments.add(SONG_TAB, new SearchSongsFragment());
         pager.setAdapter(new FragmentAdapter(getActivity().getSupportFragmentManager(), fragments));
@@ -56,7 +56,7 @@ public class SearchFragment extends BaseFragment {
     private View.OnClickListener tabListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.artist_tab:
                     pager.setCurrentItem(ARTIST_TAB);
                     baseActivity.sendScreenStatistic("Artist tab");
