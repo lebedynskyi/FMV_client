@@ -80,6 +80,12 @@ public abstract class BaseActivity extends ActionBarActivity{
         }
     }
 
+    public void showActionBar(){
+        if (actionBar != null){
+            actionBar.show();
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();

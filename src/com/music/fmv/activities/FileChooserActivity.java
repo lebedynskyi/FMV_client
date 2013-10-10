@@ -47,6 +47,7 @@ public class FileChooserActivity extends BaseActivity implements OnBackStackChan
 	@Override
 	protected void onCreated(Bundle savedInstanceState) {
 		setContentView(R.layout.chooser);
+        showActionBar();
 
 		mFragmentManager = getSupportFragmentManager();
 		mFragmentManager.addOnBackStackChangedListener(this);

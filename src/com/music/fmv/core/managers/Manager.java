@@ -13,5 +13,10 @@ public abstract class Manager {
         core = coreManager;
     }
 
+    public String getString(int strID){
+        return core.getContext().getString(strID);
+    }
+
     protected abstract void finish();
+
 }

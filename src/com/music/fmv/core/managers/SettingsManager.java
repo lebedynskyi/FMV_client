@@ -3,7 +3,7 @@ package com.music.fmv.core.managers;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import com.music.fmv.core.Const;
+import com.music.fmv.R;
 import com.music.fmv.core.Core;
 
 /**
@@ -26,19 +26,19 @@ public class SettingsManager extends Manager{
     }
 
     public String getResultLanguage(){
-        return prefs.getString(Const.LANGUAGE_CACHE_KEY, "ru");
+        return prefs.getString(getString(R.string.DEFAULT_LAGUAGE_KEY), "ru");
     }
 
     public void setResultLanguage(String lan){
-        puString(Const.LANGUAGE_CACHE_KEY, lan);
+        puString(getString(R.string.DEFAULT_LAGUAGE_KEY), lan);
     }
 
     public String getImageCacheFolder() {
-        return prefs.getString(Const.IMAGE_CACHE_KEY, DEFAULT_IMAGES_FOLDER);
+        return prefs.getString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), DEFAULT_IMAGES_FOLDER);
     }
 
     public void setImageCacheFolder(String folder) {
-        puString(Const.IMAGE_CACHE_KEY, folder);
+        puString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), folder);
     }
 
     private void puString(String key, String value){
@@ -46,10 +46,9 @@ public class SettingsManager extends Manager{
         editor.putString(key, value).commit();
     }
 
-    @SuppressWarnings("notUsed")
     @Override protected void finish() {}
 
     public String getDownloadFolder() {
-        return prefs.getString(Const.SONGS_FOLDER_CACHE_KEY, DEFAULT_SONGS_FOLDER);
+        return prefs.getString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), DEFAULT_SONGS_FOLDER);
     }
 }
