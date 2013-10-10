@@ -28,6 +28,7 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 import com.music.fmv.R;
+import com.music.fmv.models.PlayableSong;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -488,5 +489,13 @@ public class FileUtils {
         // Only return URIs that can be opened with ContentResolver
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         return intent;
+    }
+
+    public static File getAbsolutheFile(String folder, PlayableSong song) {
+        return new File(folder, song.getFutureFileName());
+    }
+
+    public static File getAbsolutheFile(File folder, PlayableSong song) {
+        return new File(folder, song.getFutureFileName());
     }
 }

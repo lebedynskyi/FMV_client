@@ -29,7 +29,7 @@ public class SongLoader implements IDownlaoder {
     public void run() {
         if (song == null || file == null) return;
         try {
-            String songUrl = api.getUrlOfSong(song.getId());
+            String songUrl = api.getUrlOfSong(song.getUrlForUrl(), song.getUrlKey());
             if (songUrl == null) return;
             NetworkUtil.downloadFile(file, songUrl, listener);
         } catch (Exception e) {

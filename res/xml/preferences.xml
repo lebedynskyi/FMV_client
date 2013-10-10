@@ -6,7 +6,7 @@
                 android:title="@string/pref_language"
                 android:summary="@string/pref_language_descr"
                 android:key="@string/DEFAULT_LAGUAGE_KEY"
-                android:defaultValue="digiGreen"
+                android:defaultValue="en"
                 android:entries="@array/preference_languages_titles"
                 android:entryValues="@array/preference_languages_values"/>
 

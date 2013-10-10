@@ -6,10 +6,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
-import com.music.fmv.widgets.FixedBaseAdapter;
 import com.music.fmv.models.PlayableSong;
+import com.music.fmv.utils.TimeUtils;
+import com.music.fmv.widgets.FixedBaseAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * User: vitaliylebedinskiy
@@ -58,7 +60,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong> {
 
         holder.owner.setText(song.getArtist());
         holder.name.setText(song.getName());
-        holder.duration.setText(song.getNiceDuration());
+        holder.duration.setText(TimeUtils.getNiceTimeForSongs(song.getDuration()));
 
         if (core.getCacheManager().isSongExists(song)) {
             holder.isCached.setVisibility(View.VISIBLE);

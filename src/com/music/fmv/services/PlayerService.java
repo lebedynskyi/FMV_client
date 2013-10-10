@@ -271,7 +271,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         @Override
         public void run() {
             try {
-                String songUrl = new Api().getUrlOfSong(song.getId());
+                String songUrl = new Api().getUrlOfSong(song.getUrlForUrl(), song.getUrlKey());
                 if (!TextUtils.isEmpty(songUrl)) {
                     song.setUrl(songUrl);
                     core.getHandler().post(new Runnable() {

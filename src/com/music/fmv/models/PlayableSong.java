@@ -2,10 +2,6 @@ package com.music.fmv.models;
 
 import android.text.TextUtils;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * User: vitaliylebedinskiy
  * Date: 7/17/13
@@ -13,7 +9,6 @@ import java.util.Date;
  */
 public class PlayableSong extends BaseSerializableModel {
     public static int PAGE_AVAILABLE = -1;
-    public static final SimpleDateFormat SD = new SimpleDateFormat("mm:ss");
 
     private String url;
     private String artist;
@@ -21,6 +16,26 @@ public class PlayableSong extends BaseSerializableModel {
     private int duration;
     private String id;
     private String rate;
+
+    private String urlKey = "track_link";
+    private String urlForUrl;
+
+    public String getUrlKey() {
+        return urlKey;
+    }
+
+    public void setUrlKey(String urlKey) {
+        this.urlKey = urlKey;
+    }
+
+    public String getUrlForUrl() {
+//        return urlForUrl;
+        return "http://pleer.com/site_api/files/get_url?id=" + id;
+    }
+
+    public void setUrlForUrl(String urlForUrl) {
+        this.urlForUrl = urlForUrl;
+    }
 
     public String getId() {
         return id;
@@ -62,16 +77,6 @@ public class PlayableSong extends BaseSerializableModel {
         this.duration = duration;
     }
 
-    public String getNiceDuration() {
-        Date date = new Date(duration * 1000);
-        return SD.format(date);
-
-    }
-
-    public boolean isPlayable() {
-        return url != null;
-    }
-
     public void setRate(String rate) {
         this.rate = rate;
     }
@@ -80,18 +85,13 @@ public class PlayableSong extends BaseSerializableModel {
         return rate;
     }
 
-    public File getAbsolutheFile(String folder) {
-        return new File(folder, this.getFutureFileName());
-    }
-
-    public File getAbsolutheFile(File folder) {
-        return new File(folder, this.getFutureFileName());
-    }
-
     public String getFutureFileName() {
-        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(artist)) return "Unknown song";
-        if (TextUtils.isEmpty(name)) return artist;
-        if (TextUtils.isEmpty(artist)) return name;
+        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(artist)) return "Unknown song.mp3";
+
+        if (TextUtils.isEmpty(name)) return artist + ".mp3";
+
+        if (TextUtils.isEmpty(artist)) return name + ".mp3";
+
         return artist + " - " + name + ".mp3";
     }
 

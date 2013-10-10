@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.models.PlayableSong;
+import com.music.fmv.utils.TimeUtils;
 import com.music.fmv.widgets.FixedBaseAdapter;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong> {
 
         holder.name.setText(song.getName());
         holder.artist.setText(song.getArtist());
-        holder.duration.setText(song.getNiceDuration());
+        holder.duration.setText(TimeUtils.getNiceTimeForSongs(song.getDuration()));
 
         if (core.getCacheManager().isSongExists(song)) {
             holder.isCached.setVisibility(View.VISIBLE);

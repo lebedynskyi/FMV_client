@@ -6,6 +6,7 @@ import com.music.fmv.models.PlayableSong;
 import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.tasks.threads.IDownloadListener;
 import com.music.fmv.tasks.threads.SongLoader;
+import com.music.fmv.utils.FileUtils;
 import com.music.fmv.utils.NetworkUtil;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class DownloadManager extends Manager {
         String loadFolder = core.getSettingsManager().getDownloadFolder();
         File folder = new File(loadFolder);
         folder.mkdirs();
-        File newSongFile = model.getAbsolutheFile(folder);
+        File newSongFile = FileUtils.getAbsolutheFile(folder, model);
         if (newSongFile.exists()) {
             core.showToast(R.string.file_already_exists);
             return;

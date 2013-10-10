@@ -6,14 +6,6 @@ import com.music.fmv.models.SearchBandModel;
 
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: lebed
- * Date: 7/14/13
- * Time: 8:53 AM
- * To change this template use File | Settings | File Templates.
- */
-
 public abstract class SearchBandTask extends BaseAsyncTask<List<SearchBandModel>> {
     private String searchQuery;
     private Integer page;

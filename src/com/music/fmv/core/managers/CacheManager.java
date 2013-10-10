@@ -1,12 +1,15 @@
 package com.music.fmv.core.managers;
 
-import android.text.TextUtils;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.PlayableSong;
+import com.music.fmv.utils.FileUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: vitaliylebedinskiy
@@ -48,7 +51,7 @@ public class CacheManager extends Manager {
         String loadFolder = core.getSettingsManager().getDownloadFolder();
         File folder = new File(loadFolder);
         folder.mkdirs();
-        File newSongFile = song.getAbsolutheFile(folder);
+        File newSongFile = FileUtils.getAbsolutheFile(folder, song);
         return newSongFile.exists();
     }
 
@@ -56,7 +59,7 @@ public class CacheManager extends Manager {
         String loadFolder = core.getSettingsManager().getDownloadFolder();
         File folder = new File(loadFolder);
         folder.mkdirs();
-        File newSongFile = song.getAbsolutheFile(folder);
+        File newSongFile = FileUtils.getAbsolutheFile(folder, song);
         return newSongFile.getAbsolutePath();
     }
 }
