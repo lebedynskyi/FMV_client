@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.utils.TimeUtils;
-import com.music.fmv.widgets.FixedBaseAdapter;
 
 import java.util.List;
 

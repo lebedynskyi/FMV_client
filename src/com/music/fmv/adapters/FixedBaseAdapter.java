@@ -1,4 +1,4 @@
-package com.music.fmv.widgets;
+package com.music.fmv.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

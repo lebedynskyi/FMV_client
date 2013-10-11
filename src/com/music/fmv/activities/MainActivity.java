@@ -3,15 +3,21 @@ package com.music.fmv.activities;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Toast;
 import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.fragments.*;
+import com.music.fmv.fragments.HistoryFragment;
+import com.music.fmv.fragments.MusicFragment;
+import com.music.fmv.fragments.SearchFragment;
+import com.music.fmv.fragments.SettingsFragment;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
@@ -28,6 +34,8 @@ public class MainActivity extends BaseActivity {
     private TabButton settingsBTN;
 
     private int backPressed = 0;
+
+    private long lastBackTime = 0;
 
     @Override
     protected void onCreated(Bundle state) {
@@ -147,4 +155,15 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        Date d  = Calendar.getInstance().getTime();
+        if ((d.getTime() - lastBackTime) < 1000){
+            super.onBackPressed();
+        }else {
+            lastBackTime = d.getTime();
+            Toast.makeText(this, R.string.press_one_more_to_exit, 1000).show();
+        }
+    }
 }

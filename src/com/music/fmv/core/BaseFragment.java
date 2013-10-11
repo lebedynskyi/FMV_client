@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.music.fmv.R;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.tasks.AutocompleterTask;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.LoadDialog;
@@ -32,6 +32,7 @@ public abstract class BaseFragment extends Fragment {
     protected BaseActivity baseActivity;
     protected LayoutInflater inflater;
     private LoadDialog dialog;
+    private AutocompleterTask currentAutocompleterTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,13 @@ public abstract class BaseFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (currentAutocompleterTask != null){
+                currentAutocompleterTask.cancel(true);
+                currentAutocompleterTask = null;
+            }
 
+            currentAutocompleterTask = new AutocompleterTask(baseActivity, false, sourceEditText, queryType);
+            currentAutocompleterTask.execute();
         }
 
         @Override

@@ -9,6 +9,7 @@ import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchBandAdapter;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.models.notdbmodels.BandInfoModel;
 import com.music.fmv.models.notdbmodels.SearchBandModel;
 import com.music.fmv.tasks.GetBandTask;
@@ -42,7 +43,7 @@ public class SearchArtistFragment extends BaseFragment {
         View mainView = inflateView(R.layout.search_artist_fragment);
         emptyView = (TextView) mainView.findViewById(R.id.empty_view);
         artistsListView = (ListView) mainView.findViewById(R.id.artists_list);
-        artistsListView.addHeaderView(createSearchHeader(searchListener, null));
+        artistsListView.addHeaderView(createSearchHeader(searchListener, SearchQueryCache.QUERY_TYPE.ARTIST));
         artistsListView.setHeaderDividersEnabled(false);
         artistsListView.setOnScrollListener(scrollListener);
         artistsAdapter = new SearchBandAdapter(artistsList, baseActivity);
