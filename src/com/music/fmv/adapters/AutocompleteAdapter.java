@@ -1,6 +1,7 @@
 package com.music.fmv.adapters;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ public class AutocompleteAdapter extends FixedBaseAdapter<String>{
             holder.tv = (TextView) convertView.findViewById(R.id.word_text);
             convertView.setTag(holder);
         }else holder = (ViewHolder) convertView.getTag();
-        holder.tv.setText(getItem(position));
+        holder.tv.setText(Html.fromHtml(getItem(position)));
         return convertView;
     }
 

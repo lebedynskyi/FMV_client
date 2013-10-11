@@ -5,10 +5,9 @@ import com.music.fmv.db.DBHelper;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.utils.FileUtils;
-import com.music.fmv.utils.Log;
 
 import java.io.File;
-import java.util.Arrays;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -42,8 +41,19 @@ public class CacheManager extends Manager {
 
     public void addSearchQueryToCache(SearchQueryCache model) {
         dbHelper.getQueryCacheDAO().createOrUpdate(model);
+    }
 
-        List<SearchQueryCache> ll = dbHelper.getQueryCacheDAO().queryForAll();
-        Log.e("QURIES !!!!!", Arrays.toString(ll.toArray()));
+    public List<SearchQueryCache> getCachedQueries(SearchQueryCache.QUERY_TYPE queryType, int i, String query) throws SQLException {
+        List<SearchQueryCache> list = dbHelper.getQueryCacheDAO().queryBuilder()
+                .distinct()
+                .selectColumns("query")
+                .where()
+                .eq("queryType", queryType.name())
+                .and()
+                .like("query", "%" + query + "%")
+                .query();
+        if (list.size() > i) {
+            return list.subList(0, i);
+        }else return list;
     }
 }

@@ -1,6 +1,5 @@
 package com.music.fmv.models.dbmodels;
 
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -18,14 +17,14 @@ public class SearchQueryCache extends BaseDBModel{
     @DatabaseField()
     private String query;
 
-    @DatabaseField(dataType = DataType.ENUM_INTEGER)
-    private QUERY_TYPE queryType;
+    @DatabaseField()
+    private String queryType;
 
     public SearchQueryCache(){}
 
     public SearchQueryCache(String query, QUERY_TYPE queryType) {
         this.query = query;
-        this.queryType = queryType;
+        this.queryType = queryType.name();
     }
 
     public String getQuery() {
@@ -36,12 +35,12 @@ public class SearchQueryCache extends BaseDBModel{
         this.query = query;
     }
 
-    public QUERY_TYPE getQueryType() {
+    public String getQueryType() {
         return queryType;
     }
 
     public void setQueryType(QUERY_TYPE queryType) {
-        this.queryType = queryType;
+        this.queryType = queryType.name();
     }
 
 

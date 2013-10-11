@@ -16,6 +16,9 @@ import com.music.fmv.tasks.AutocompleterTask;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.LoadDialog;
+import com.music.fmv.widgets.AutocompletePopupWindow;
+
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,6 +36,7 @@ public abstract class BaseFragment extends Fragment {
     protected LayoutInflater inflater;
     private LoadDialog dialog;
     private AutocompleterTask currentAutocompleterTask;
+    private AutocompletePopupWindow autocompleteWindow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,13 +95,25 @@ public abstract class BaseFragment extends Fragment {
                 currentAutocompleterTask = null;
             }
 
-            currentAutocompleterTask = new AutocompleterTask(baseActivity, false, sourceEditText, queryType);
+            if (autocompleteWindow != null){
+                autocompleteWindow.dismiss();
+                autocompleteWindow = null;
+            }
+
+            currentAutocompleterTask = new AutocompleterTask(baseActivity, false, queryType, sourceEditText.getText().toString()){
+                @Override
+                protected void onPostExecute(ArrayList<String> strings) {
+                    super.onPostExecute(strings);
+                    if (strings == null || strings.size() == 0 || isCancelled()) return;
+
+                    autocompleteWindow = new AutocompletePopupWindow(context, strings, sourceEditText);
+                    autocompleteWindow.setWindowLayoutMode(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    autocompleteWindow.showAsDropDown(sourceEditText, 0, 5);
+                }
+            };
             currentAutocompleterTask.execute();
         }
 
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
+        @Override public void afterTextChanged(Editable s) {}
     }
 }

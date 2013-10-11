@@ -1,11 +1,12 @@
 package com.music.fmv.tasks;
 
 import android.content.Context;
-import android.widget.EditText;
+import android.text.TextUtils;
+import com.music.fmv.R;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
-import com.music.fmv.widgets.AutocompletePopupWindow;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -14,27 +15,42 @@ import java.util.ArrayList;
  */
 
 public class AutocompleterTask extends BaseAsyncTask<ArrayList<String>> {
-    private EditText editText;
+    private final boolean showDialog;
     private SearchQueryCache.QUERY_TYPE queryType;
+    private final String cuurentString;
 
-    public AutocompleterTask(Context context, boolean showDialog, EditText editText, SearchQueryCache.QUERY_TYPE queryType) {
+    public AutocompleterTask(Context context, boolean showDialog, SearchQueryCache.QUERY_TYPE queryType, String cuurentString) {
         super(context, showDialog);
-        this.editText = editText;
+        this.showDialog = showDialog;
         this.queryType = queryType;
+        this.cuurentString = cuurentString;
     }
 
     @Override
     protected ArrayList<String> doInBackground(Object... params) {
-        //TODO select words and show poup window;
+        try {
+            List<SearchQueryCache> cache = core.getCacheManager().getCachedQueries(queryType, 5, cuurentString);
+            return extractString(cache);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    @Override
-    protected void onPostExecute(ArrayList<String> strings) {
-        super.onPostExecute(strings);
-        if (strings == null || strings.size() == 0 || isCancelled()) return;
+    private ArrayList<String> extractString(List<SearchQueryCache> cache) {
+        ArrayList<String> words = new ArrayList<String>();
+        int length = cuurentString.length();
+        for (SearchQueryCache c: cache){
+            String query = c.getQuery();
+            if (TextUtils.isEmpty(query) || length == 0) continue;
 
-        AutocompletePopupWindow window = new AutocompletePopupWindow(context, strings, editText);
-        window.showAsDropDown(editText);
+            int queryLength = query.length();
+
+            if (queryLength <= length + 5) {
+                String color = core.getContext().getString(R.color.blue_button).substring(3);
+                words.add(query.replace(cuurentString, "<font color=#" + color + ">" + cuurentString + "</font>"));
+            }
+        }
+        return words;
     }
 }

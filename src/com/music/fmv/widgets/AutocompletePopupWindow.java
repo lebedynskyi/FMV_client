@@ -39,7 +39,7 @@ public class AutocompletePopupWindow extends PopupWindow{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String word = words.get(position);
-            Toast.makeText(context, word, Toast.LENGTH_SHORT).show();
+            editText.setText(word);
             dismiss();
         }
     };
