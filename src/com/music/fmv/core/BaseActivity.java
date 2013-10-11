@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.google.analytics.tracking.android.*;
 import com.music.fmv.R;
-import com.music.fmv.models.Captcha;
+import com.music.fmv.models.notdbmodels.Captcha;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
@@ -32,6 +32,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         actionBar = getSupportActionBar();
         mCore = Core.getInstance(this);
+        hideActionBar();
         mMediator = new ActivityMediator(this);
         handler = new Handler();
         tracker = GoogleAnalytics.getInstance(this).getTracker("UA-43469464-1");

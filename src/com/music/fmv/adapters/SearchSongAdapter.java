@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.utils.TimeUtils;
 import com.music.fmv.widgets.FixedBaseAdapter;
 

@@ -3,6 +3,8 @@ package com.music.fmv.core;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.music.fmv.R;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.LoadDialog;
@@ -54,12 +57,40 @@ public abstract class BaseFragment extends Fragment {
         return inflater.inflate(id, null, false);
     }
 
-    protected View createSearchHeader(TextView.OnEditorActionListener searchListener) {
+    protected View createSearchHeader(TextView.OnEditorActionListener searchListener, SearchQueryCache.QUERY_TYPE autocmpleterType) {
         View v = inflater.inflate(R.layout.search_header, null, false);
         EditText tv = ((EditText) v.findViewById(R.id.search_field));
         tv.setOnEditorActionListener(searchListener);
+        if (autocmpleterType != null){
+            tv.addTextChangedListener(new AutocompleteWatcher(tv, autocmpleterType));
+        }
         return v;
     }
 
     protected abstract View createView(Bundle savedInstanceState);
+
+    private class AutocompleteWatcher implements TextWatcher{
+        private EditText sourceEditText;
+        private SearchQueryCache.QUERY_TYPE queryType;
+
+        private AutocompleteWatcher(EditText sourceEditText, SearchQueryCache.QUERY_TYPE queryType) {
+            this.sourceEditText = sourceEditText;
+            this.queryType = queryType;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
 }

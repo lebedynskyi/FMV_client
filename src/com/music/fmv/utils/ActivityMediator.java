@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.music.fmv.activities.BandInfoActivity;
 import com.music.fmv.activities.MainActivity;
 import com.music.fmv.activities.PlayerActivity;
-import com.music.fmv.models.BandInfoModel;
+import com.music.fmv.models.notdbmodels.BandInfoModel;
 
 /**
  * Created with IntelliJ IDEA.

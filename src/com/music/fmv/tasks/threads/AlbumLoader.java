@@ -1,6 +1,6 @@
 package com.music.fmv.tasks.threads;
 
-import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 
 /**
  * Created with IntelliJ IDEA.

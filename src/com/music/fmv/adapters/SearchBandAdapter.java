@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
 import com.music.fmv.widgets.FixedBaseAdapter;
-import com.music.fmv.models.SearchBandModel;
+import com.music.fmv.models.notdbmodels.SearchBandModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;

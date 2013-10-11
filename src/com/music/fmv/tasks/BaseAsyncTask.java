@@ -2,7 +2,8 @@ package com.music.fmv.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import com.music.fmv.api.Api;
+import com.music.fmv.core.Core;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.views.LoadDialog;
 
 /**
@@ -15,13 +16,14 @@ import com.music.fmv.views.LoadDialog;
 public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T> {
     protected Context context;
     private boolean isShowDialog;
-    protected Api api = new Api();
     protected boolean isError;
     private LoadDialog loadDialog;
+    protected Core core;
 
     protected BaseAsyncTask(Context context, boolean showDialog) {
         this.context = context;
         isShowDialog = showDialog;
+        core = Core.getInstance(context);
     }
 
     @Override
@@ -39,5 +41,10 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T> {
 
     public void canceledByUser() {
         cancel(true);
+    }
+
+    public void addQueryToDB(String query, SearchQueryCache.QUERY_TYPE type){
+        SearchQueryCache model = new SearchQueryCache(query, type);
+        Core.getInstance(context).getCacheManager().addSearchQueryToCache(model);
     }
 }

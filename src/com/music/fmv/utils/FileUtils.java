@@ -28,7 +28,7 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 import com.music.fmv.R;
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -497,5 +497,9 @@ public class FileUtils {
 
     public static File getAbsolutheFile(File folder, PlayableSong song) {
         return new File(folder, song.getFutureFileName());
+    }
+
+    public static String getAbsoluthePath(String folder, PlayableSong song) {
+        return new File(folder, song.getFutureFileName()).getAbsolutePath();
     }
 }

@@ -1,7 +1,9 @@
 package com.music.fmv.tasks;
 
 import android.content.Context;
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.api.Api;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 
 import java.util.ArrayList;
 
@@ -12,6 +14,8 @@ import java.util.ArrayList;
  */
 
 public abstract class SearchSongsTask extends BaseAsyncTask<ArrayList<PlayableSong>> {
+    private static final SearchQueryCache.QUERY_TYPE queryType = SearchQueryCache.QUERY_TYPE.SONG;
+
     private final String query;
     private final Integer page;
 
@@ -24,7 +28,8 @@ public abstract class SearchSongsTask extends BaseAsyncTask<ArrayList<PlayableSo
     @Override
     protected ArrayList<PlayableSong> doInBackground(Object... params) {
         try {
-            return api.searchSongs(query, page);
+            addQueryToDB(query, queryType);
+            return new Api().searchSongs(query, page);
         } catch (Exception e) {
             e.printStackTrace();
             isError = true;

@@ -7,7 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import com.music.fmv.core.Core;
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.services.Player;
 import com.music.fmv.services.PlayerService;
 

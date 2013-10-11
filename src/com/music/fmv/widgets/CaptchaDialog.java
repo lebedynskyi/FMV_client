@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
-import com.music.fmv.models.Captcha;
+import com.music.fmv.models.notdbmodels.Captcha;
 import com.music.fmv.utils.ViewUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 

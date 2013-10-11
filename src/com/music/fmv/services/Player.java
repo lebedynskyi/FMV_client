@@ -1,6 +1,6 @@
 package com.music.fmv.services;
 
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 
 import java.util.List;
 

@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 
 import java.util.ArrayList;
 import java.util.HashSet;

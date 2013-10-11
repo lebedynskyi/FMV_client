@@ -1,10 +1,10 @@
 package com.music.fmv.api;
 
 import android.text.TextUtils;
-import com.music.fmv.models.BandInfoModel;
-import com.music.fmv.models.PlayableSong;
-import com.music.fmv.models.SearchAlbumModel;
-import com.music.fmv.models.SearchBandModel;
+import com.music.fmv.models.notdbmodels.BandInfoModel;
+import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.SearchAlbumModel;
+import com.music.fmv.models.notdbmodels.SearchBandModel;
 import com.music.fmv.utils.NetworkUtil;
 import org.json.JSONObject;
 

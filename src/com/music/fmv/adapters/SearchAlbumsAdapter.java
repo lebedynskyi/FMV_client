@@ -9,7 +9,7 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
 import com.music.fmv.widgets.FixedBaseAdapter;
-import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;

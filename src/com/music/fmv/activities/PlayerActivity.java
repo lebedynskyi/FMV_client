@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.managers.PlayerManager;
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.services.Player;
 import com.music.fmv.widgets.FixedSlidingTray;
 

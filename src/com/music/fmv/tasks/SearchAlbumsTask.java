@@ -1,8 +1,9 @@
 package com.music.fmv.tasks;
 
 import android.content.Context;
-import com.music.fmv.core.Core;
-import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.api.Api;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
  * Time: 3:56 PM
  */
 public abstract class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumModel>> {
+    private static final SearchQueryCache.QUERY_TYPE queryType = SearchQueryCache.QUERY_TYPE.ALBUM;
+
     private String searchQuery;
     private Integer page;
 
@@ -23,9 +26,10 @@ public abstract class SearchAlbumsTask extends BaseAsyncTask<List<SearchAlbumMod
 
     @Override
     protected final List<SearchAlbumModel> doInBackground(Object... params) {
-        String language = Core.getInstance(context).getSettingsManager().getResultLanguage();
         try {
-            return api.searchAlbum(searchQuery, language, page);
+            addQueryToDB(searchQuery, queryType);
+            String language = core.getSettingsManager().getResultLanguage();
+            return new Api().searchAlbum(searchQuery, language, page);
         } catch (Exception e) {
             e.printStackTrace();
             isError = true;

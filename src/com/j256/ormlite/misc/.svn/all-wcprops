@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/misc
+END
+BaseDaoEnabled.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/misc/BaseDaoEnabled.java
+END
+TransactionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/misc/TransactionManager.java
+END
+VersionUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/misc/VersionUtils.java
+END
+JavaxPersistence.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/misc/JavaxPersistence.java
+END
+SqlExceptionUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/misc/SqlExceptionUtil.java
+END

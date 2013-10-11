@@ -2,8 +2,8 @@ package com.music.fmv.core.managers;
 
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
-import com.music.fmv.models.PlayableSong;
-import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 import com.music.fmv.tasks.threads.IDownloadListener;
 import com.music.fmv.tasks.threads.SongLoader;
 import com.music.fmv.utils.FileUtils;

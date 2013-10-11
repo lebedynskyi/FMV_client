@@ -1,29 +1,38 @@
 package com.music.fmv.core.managers;
 
 import com.music.fmv.core.Core;
-import com.music.fmv.models.PlayableSong;
+import com.music.fmv.db.DBHelper;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.utils.FileUtils;
+import com.music.fmv.utils.Log;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 7/12/13
  * Time: 6:08 PM
  */
 public class CacheManager extends Manager {
-    Map<String, WeakReference<Object>> mCache;
-    private ArrayList<String> autocompleteWords;
+    private DBHelper dbHelper;
 
-    public CacheManager(Core coreManager) {
-        super(coreManager);
-        mCache = new HashMap<String, WeakReference<Object>>();
-        autocompleteWords = new ArrayList<String>();
+    public CacheManager(Core core) {
+        super(core);
+        dbHelper = DBHelper.getInstance(core.getContext());
+    }
+
+    public boolean isSongExists(PlayableSong song) {
+        String loadFolder = core.getSettingsManager().getDownloadFolder();
+        File songFile = FileUtils.getAbsolutheFile(loadFolder, song);
+        return songFile.exists();
+    }
+
+    public String getSongPath(PlayableSong song) {
+        String loadFolder = core.getSettingsManager().getDownloadFolder();
+        return FileUtils.getAbsoluthePath(loadFolder, song);
     }
 
     @Override
@@ -31,35 +40,10 @@ public class CacheManager extends Manager {
 
     }
 
-    public Map<String, WeakReference<Object>> getAllCache() {
-        return mCache;
-    }
+    public void addSearchQueryToCache(SearchQueryCache model) {
+        dbHelper.getQueryCacheDAO().createOrUpdate(model);
 
-    public Object getValue(String key) {
-        return mCache.get(key).get();
-    }
-
-    public void setValue(String key, Object v) {
-        mCache.put(key, new WeakReference<Object>(v));
-    }
-
-    public Set<String> getKeys() {
-        return mCache.keySet();
-    }
-
-    public boolean isSongExists(PlayableSong song) {
-        String loadFolder = core.getSettingsManager().getDownloadFolder();
-        File folder = new File(loadFolder);
-        folder.mkdirs();
-        File newSongFile = FileUtils.getAbsolutheFile(folder, song);
-        return newSongFile.exists();
-    }
-
-    public String getSongPath(PlayableSong song) {
-        String loadFolder = core.getSettingsManager().getDownloadFolder();
-        File folder = new File(loadFolder);
-        folder.mkdirs();
-        File newSongFile = FileUtils.getAbsolutheFile(folder, song);
-        return newSongFile.getAbsolutePath();
+        List<SearchQueryCache> ll = dbHelper.getQueryCacheDAO().queryForAll();
+        Log.e("QURIES !!!!!", Arrays.toString(ll.toArray()));
     }
 }

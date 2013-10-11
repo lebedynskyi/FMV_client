@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/table
+END
+TableInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/table/TableInfo.java
+END
+ObjectFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/table/ObjectFactory.java
+END
+DatabaseTableConfigLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/table/DatabaseTableConfigLoader.java
+END
+DatabaseTableConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/table/DatabaseTableConfig.java
+END
+TableUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/table/TableUtils.java
+END
+DatabaseTable.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/table/DatabaseTable.java
+END

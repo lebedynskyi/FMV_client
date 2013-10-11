@@ -12,7 +12,7 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchAlbumsAdapter;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 import com.music.fmv.tasks.SearchAlbumsTask;
 import com.music.fmv.utils.ViewUtils;
 
@@ -45,7 +45,7 @@ public class SearchAlbumFragment extends BaseFragment {
         emptyView = (TextView) mainView.findViewById(R.id.empty_view);
 
 
-        albumsListsView.addHeaderView(createSearchHeader(searchListener));
+        albumsListsView.addHeaderView(createSearchHeader(searchListener, null));
         albumsListsView.setAdapter(adapter);
         albumsListsView.setHeaderDividersEnabled(false);
         albumsListsView.setOnScrollListener(scrollListener);

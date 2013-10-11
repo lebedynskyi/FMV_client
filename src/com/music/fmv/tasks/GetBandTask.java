@@ -1,8 +1,9 @@
 package com.music.fmv.tasks;
 
 import android.content.Context;
-import com.music.fmv.models.BandInfoModel;
-import com.music.fmv.models.SearchBandModel;
+import com.music.fmv.api.Api;
+import com.music.fmv.models.notdbmodels.BandInfoModel;
+import com.music.fmv.models.notdbmodels.SearchBandModel;
 
 /**
  * User: vitaliylebedinskiy
@@ -17,7 +18,7 @@ public abstract class GetBandTask extends BaseAsyncTask<BandInfoModel> {
     @Override
     protected BandInfoModel doInBackground(Object... params) {
         try {
-            return api.getBandInfo();
+            return new Api().getBandInfo();
         } catch (Exception e) {
             e.printStackTrace();
             isError = true;

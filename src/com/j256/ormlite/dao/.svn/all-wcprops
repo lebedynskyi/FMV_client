@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao
+END
+CloseableWrappedIterableImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/CloseableWrappedIterableImpl.java
+END
+GenericRawResults.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/GenericRawResults.java
+END
+CloseableWrappedIterable.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/CloseableWrappedIterable.java
+END
+CloseableIterable.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/CloseableIterable.java
+END
+ObjectCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/ObjectCache.java
+END
+BaseForeignCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/BaseForeignCollection.java
+END
+BaseDaoImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/BaseDaoImpl.java
+END
+CloseableIterator.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/CloseableIterator.java
+END
+LazyForeignCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/LazyForeignCollection.java
+END
+RuntimeExceptionDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/RuntimeExceptionDao.java
+END
+DaoManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/DaoManager.java
+END
+EagerForeignCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/EagerForeignCollection.java
+END
+ReferenceObjectCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/ReferenceObjectCache.java
+END
+LruObjectCache.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/LruObjectCache.java
+END
+RawRowMapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/RawRowMapper.java
+END
+Dao.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/Dao.java
+END
+ForeignCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/event-organizer-android/!svn/ver/1183/branches/Festivak2013/src/com/j256/ormlite/dao/ForeignCollection.java
+END
