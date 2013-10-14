@@ -1,10 +1,16 @@
 package com.music.fmv.activities;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.*;
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.widget.Toast;
 import com.music.fmv.R;
+
+import java.io.File;
 
 /**
  * User: vitaliylebedinskiy
@@ -25,12 +31,14 @@ public class SettingsActivity extends PreferenceActivity {
     private Preference albumsFodlerPref;
     private Preference imagesFodlerPref;
 
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         initPrefs();
+        prefs = getPreferenceManager().getSharedPreferences();
     }
 
     private void initPrefs() {
@@ -67,6 +75,20 @@ public class SettingsActivity extends PreferenceActivity {
 
     public void onFilePicked(int requestCode, Uri fileUri) {
         Toast.makeText(this, fileUri.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void onFilePicked(int requestCode, File file) {
+        Toast.makeText(this, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+
+        if (requestCode == DOWNLOAD_FOLDER_REQUEST){
+            prefs.edit().putString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), file.getAbsolutePath()).commit();
+        }else if (requestCode == SONGS_FOLDER_REQUEST){
+            prefs.edit().putString(getString(R.string.SONG_FOLDER_CACHE_KEY), file.getAbsolutePath() + "/music/").commit();
+        }else if (requestCode == IMAGES_FOLDER_REQUEST){
+            prefs.edit().putString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), file.getAbsolutePath() + "/images/").commit();
+        }else if (requestCode == ALBUMS_FOLDER_REQUEST){
+            prefs.edit().putString(getString(R.string.ALBUMS_CACHE_FOLDER_KEY), file.getAbsolutePath() + "/albums/").commit();
+        }
     }
 
     public static interface FileChooserCallback {

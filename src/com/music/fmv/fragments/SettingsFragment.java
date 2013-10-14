@@ -10,6 +10,8 @@ import com.music.fmv.activities.FileChooserActivity;
 import com.music.fmv.activities.SettingsActivity;
 import com.music.fmv.core.BaseFragment;
 
+import java.io.File;
+
 /**
  * User: vitaliylebedinskiy
  * Date: 7/22/13
@@ -61,7 +63,7 @@ public class SettingsFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_CANCELED) return;
 
-        settingsActivity.onFilePicked(requestCode, data.getData());
+        settingsActivity.onFilePicked(requestCode, (File) data.getSerializableExtra(FileChooserActivity.RESULT_FILE));
     }
 
     private SettingsActivity.FileChooserCallback fileChooserCallback = new SettingsActivity.FileChooserCallback() {

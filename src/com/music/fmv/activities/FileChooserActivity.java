@@ -30,6 +30,8 @@ import java.io.File;
 public class FileChooserActivity extends BaseActivity implements OnBackStackChangedListener {
     public static final String PATH = "path";
     public static final String EXTERNAL_BASE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String RESULT_FILE = "RESULT_FILE";
+
 
     private FragmentManager mFragmentManager;
     private BroadcastReceiver mStorageListener = new BroadcastReceiver() {
@@ -150,7 +152,10 @@ public class FileChooserActivity extends BaseActivity implements OnBackStackChan
     private void finishWithResult(File file) {
         if (file != null) {
             Uri uri = Uri.fromFile(file);
-            setResult(RESULT_OK, new Intent().setData(uri));
+            Intent resultIntent = new Intent();
+            resultIntent.setData(uri);
+            resultIntent.putExtra(RESULT_FILE, file);
+            setResult(RESULT_OK, resultIntent);
             finish();
         } else {
             setResult(RESULT_CANCELED);
