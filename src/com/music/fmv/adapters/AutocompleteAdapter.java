@@ -4,9 +4,11 @@ import android.content.Context;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import com.music.fmv.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,12 +17,15 @@ import java.util.List;
  * Time: 3:27 PM
  */
 public class AutocompleteAdapter extends FixedBaseAdapter<String>{
-    public AutocompleteAdapter(List<String> mData, Context context) {
+    private AdapterView.OnItemClickListener wordListener;
+
+    public AutocompleteAdapter(List<String> mData, Context context, AdapterView.OnItemClickListener wordListener) {
         super(mData, context);
+        this.wordListener = wordListener;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if(convertView == null){
             holder = new ViewHolder();
@@ -29,7 +34,20 @@ public class AutocompleteAdapter extends FixedBaseAdapter<String>{
             convertView.setTag(holder);
         }else holder = (ViewHolder) convertView.getTag();
         holder.tv.setText(Html.fromHtml(getItem(position)));
+        final View finalConvertView = convertView;
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wordListener != null) wordListener.onItemClick(null, finalConvertView, position, getItemId(position));
+            }
+        });
         return convertView;
+    }
+
+    public void changeData(ArrayList<String> strings) {
+        this.mData.clear();
+        this.mData.addAll(strings);
+        notifyDataSetChanged();
     }
 
     private class ViewHolder{

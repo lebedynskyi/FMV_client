@@ -83,13 +83,16 @@ public abstract class BaseFragment extends Fragment {
             this.queryType = queryType;
         }
 
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {/*nothing*/}
+        @Override public void afterTextChanged(Editable s) {/*nothing*/}
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if ((sourceEditText.getTag() != null) && (sourceEditText.getTag() instanceof Integer) && (((Integer)sourceEditText.getTag()) == 1) ){
+                sourceEditText.setTag( null);
+                return;
+            }
+
             if (currentAutocompleterTask != null){
                 currentAutocompleterTask.cancel(true);
                 currentAutocompleterTask = null;
@@ -113,7 +116,5 @@ public abstract class BaseFragment extends Fragment {
             };
             currentAutocompleterTask.execute();
         }
-
-        @Override public void afterTextChanged(Editable s) {}
     }
 }

@@ -15,6 +15,7 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.core.Core;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.tasks.SearchSongsTask;
 import com.music.fmv.utils.ViewUtils;
@@ -52,7 +53,7 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
 
         songsListView = (SwipeListView) mainView.findViewById(R.id.songs_list);
         songsListView.setOnItemClickListener(songsListener);
-        songsListView.addHeaderView(createSearchHeader(searchListener, null));
+        songsListView.addHeaderView(createSearchHeader(searchListener, SearchQueryCache.QUERY_TYPE.SONG));
         songsListView.setHeaderDividersEnabled(false);
         adapter = new SearchSongAdapter(baseActivity, songsInAdapter, songsListView);
         adapter.setCallback(adapterCallback);
