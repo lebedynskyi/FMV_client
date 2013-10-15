@@ -3,6 +3,7 @@ package com.music.fmv.tasks;
 import android.content.Context;
 import android.text.TextUtils;
 import com.music.fmv.R;
+import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
 
 import java.util.ArrayList;
@@ -15,13 +16,11 @@ import java.util.List;
  */
 
 public class AutocompleterTask extends BaseAsyncTask<ArrayList<String>> {
-    private final boolean showDialog;
-    private SearchQueryCache.QUERY_TYPE queryType;
+    private ModelType  queryType;
     private final String cuurentString;
 
-    public AutocompleterTask(Context context, boolean showDialog, SearchQueryCache.QUERY_TYPE queryType, String cuurentString) {
+    public AutocompleterTask(Context context, boolean showDialog, ModelType  queryType, String cuurentString) {
         super(context, showDialog);
-        this.showDialog = showDialog;
         this.queryType = queryType;
         this.cuurentString = cuurentString;
     }

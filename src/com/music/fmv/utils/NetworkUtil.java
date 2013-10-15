@@ -119,7 +119,7 @@ public final class NetworkUtil {
                 outStream.write(data, 0, count);
                 curPercent = (total * 100) / fileLength;
 
-                if (curPercent != lastPercentNotify && listener != null && curPercent % 10 == 0) {
+                if (curPercent != lastPercentNotify && curPercent % 10 == 0 && listener != null) {
                     listener.onDownload(f.getName(), curPercent, 100);
                     lastPercentNotify = curPercent;
                 }

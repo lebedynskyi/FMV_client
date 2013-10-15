@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.music.fmv.R;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.tasks.AutocompleterTask;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
@@ -62,7 +62,7 @@ public abstract class BaseFragment extends Fragment {
         return inflater.inflate(id, null, false);
     }
 
-    protected View createSearchHeader(TextView.OnEditorActionListener searchListener, SearchQueryCache.QUERY_TYPE autocmpleterType) {
+    protected View createSearchHeader(TextView.OnEditorActionListener searchListener, ModelType autocmpleterType) {
         View v = inflater.inflate(R.layout.search_header, null, false);
         EditText tv = ((EditText) v.findViewById(R.id.search_field));
         tv.setOnEditorActionListener(searchListener);
@@ -76,9 +76,9 @@ public abstract class BaseFragment extends Fragment {
 
     private class AutocompleteWatcher implements TextWatcher{
         private EditText sourceEditText;
-        private SearchQueryCache.QUERY_TYPE queryType;
+        private ModelType queryType;
 
-        private AutocompleteWatcher(EditText sourceEditText, SearchQueryCache.QUERY_TYPE queryType) {
+        private AutocompleteWatcher(EditText sourceEditText, ModelType queryType) {
             this.sourceEditText = sourceEditText;
             this.queryType = queryType;
         }

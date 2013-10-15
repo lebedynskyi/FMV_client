@@ -26,10 +26,10 @@ public class SettingsActivity extends PreferenceActivity {
     private FileChooserCallback fileChooserCallback;
 
     private PreferenceCategory storageCategory;
-    private Preference downloadFodlerPref;
-    private Preference songsFodlerPref;
-    private Preference albumsFodlerPref;
-    private Preference imagesFodlerPref;
+    private Preference downloadFolderPref;
+    private Preference songsFolderPref;
+    private Preference albumsFolderPref;
+    private Preference imagesFolderPref;
 
     private SharedPreferences prefs;
 
@@ -43,15 +43,15 @@ public class SettingsActivity extends PreferenceActivity {
 
     private void initPrefs() {
         storageCategory = (PreferenceCategory) findPreference("pref_key_storage_settings");
-        downloadFodlerPref = findPreference(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY));
-        songsFodlerPref = findPreference(getString(R.string.SONG_FOLDER_CACHE_KEY));
-        albumsFodlerPref = findPreference(getString(R.string.ALBUMS_CACHE_FOLDER_KEY));
-        imagesFodlerPref = findPreference(getString(R.string.IMAGE_CACHE_FOLDER_KEY));
+        downloadFolderPref = findPreference(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY));
+        songsFolderPref = findPreference(getString(R.string.SONG_FOLDER_CACHE_KEY));
+        albumsFolderPref = findPreference(getString(R.string.ALBUMS_CACHE_FOLDER_KEY));
+        imagesFolderPref = findPreference(getString(R.string.IMAGE_CACHE_FOLDER_KEY));
 
-        downloadFodlerPref.setOnPreferenceClickListener(new FileChooserListener(DOWNLOAD_FOLDER_REQUEST));
-        songsFodlerPref.setOnPreferenceClickListener(new FileChooserListener(SONGS_FOLDER_REQUEST));
-        albumsFodlerPref.setOnPreferenceClickListener(new FileChooserListener(ALBUMS_FOLDER_REQUEST));
-        imagesFodlerPref.setOnPreferenceClickListener(new FileChooserListener(IMAGES_FOLDER_REQUEST));
+        downloadFolderPref.setOnPreferenceClickListener(new FileChooserListener(DOWNLOAD_FOLDER_REQUEST));
+        songsFolderPref.setOnPreferenceClickListener(new FileChooserListener(SONGS_FOLDER_REQUEST));
+        albumsFolderPref.setOnPreferenceClickListener(new FileChooserListener(ALBUMS_FOLDER_REQUEST));
+        imagesFolderPref.setOnPreferenceClickListener(new FileChooserListener(IMAGES_FOLDER_REQUEST));
 
         CheckBoxPreference useOneFolderCheck = (CheckBoxPreference) findPreference(getString(R.string.USE_ONE_FOlDER_KEY));
         applyAppearForStorrageSettings(useOneFolderCheck.getPreferenceManager().getSharedPreferences().getBoolean("use_one_folder", false));
@@ -83,11 +83,11 @@ public class SettingsActivity extends PreferenceActivity {
         if (requestCode == DOWNLOAD_FOLDER_REQUEST){
             prefs.edit().putString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), file.getAbsolutePath()).commit();
         }else if (requestCode == SONGS_FOLDER_REQUEST){
-            prefs.edit().putString(getString(R.string.SONG_FOLDER_CACHE_KEY), file.getAbsolutePath() + "/music/").commit();
+            prefs.edit().putString(getString(R.string.SONG_FOLDER_CACHE_KEY), file.getAbsolutePath()).commit();
         }else if (requestCode == IMAGES_FOLDER_REQUEST){
-            prefs.edit().putString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), file.getAbsolutePath() + "/images/").commit();
+            prefs.edit().putString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), file.getAbsolutePath()).commit();
         }else if (requestCode == ALBUMS_FOLDER_REQUEST){
-            prefs.edit().putString(getString(R.string.ALBUMS_CACHE_FOLDER_KEY), file.getAbsolutePath() + "/albums/").commit();
+            prefs.edit().putString(getString(R.string.ALBUMS_CACHE_FOLDER_KEY), file.getAbsolutePath()).commit();
         }
     }
 
@@ -97,15 +97,15 @@ public class SettingsActivity extends PreferenceActivity {
 
     private void applyAppearForStorrageSettings(boolean isOneDownload) {
         if (isOneDownload) {
-            storageCategory.removePreference(songsFodlerPref);
-            storageCategory.removePreference(albumsFodlerPref);
-            storageCategory.removePreference(imagesFodlerPref);
-            storageCategory.addPreference(downloadFodlerPref);
+            storageCategory.removePreference(songsFolderPref);
+            storageCategory.removePreference(albumsFolderPref);
+            storageCategory.removePreference(imagesFolderPref);
+            storageCategory.addPreference(downloadFolderPref);
         } else {
-            storageCategory.removePreference(downloadFodlerPref);
-            storageCategory.addPreference(songsFodlerPref);
-            storageCategory.addPreference(albumsFodlerPref);
-            storageCategory.addPreference(imagesFodlerPref);
+            storageCategory.removePreference(downloadFolderPref);
+            storageCategory.addPreference(songsFolderPref);
+            storageCategory.addPreference(albumsFolderPref);
+            storageCategory.addPreference(imagesFolderPref);
         }
     }
 

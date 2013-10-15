@@ -10,10 +10,6 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "searh_query_cache")
 public class SearchQueryCache extends BaseDBModel{
-    public static enum QUERY_TYPE{
-        SONG, ARTIST, ALBUM
-    }
-
     @DatabaseField()
     private String query;
 
@@ -22,7 +18,7 @@ public class SearchQueryCache extends BaseDBModel{
 
     public SearchQueryCache(){}
 
-    public SearchQueryCache(String query, QUERY_TYPE queryType) {
+    public SearchQueryCache(String query, ModelType queryType) {
         this.query = query;
         this.queryType = queryType.name();
     }
@@ -39,7 +35,7 @@ public class SearchQueryCache extends BaseDBModel{
         return queryType;
     }
 
-    public void setQueryType(QUERY_TYPE queryType) {
+    public void setQueryType(ModelType queryType) {
         this.queryType = queryType.name();
     }
 

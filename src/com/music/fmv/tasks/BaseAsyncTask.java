@@ -3,6 +3,7 @@ package com.music.fmv.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 import com.music.fmv.core.Core;
+import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.views.LoadDialog;
 
@@ -35,7 +36,7 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T> {
     }
 
     @Override
-    protected void onPostExecute(T t) {
+    protected void onPostExecute(T result) {
         if (loadDialog != null) loadDialog.dismiss();
     }
 
@@ -43,7 +44,7 @@ public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T> {
         cancel(true);
     }
 
-    public void addQueryToDB(String query, SearchQueryCache.QUERY_TYPE type){
+    public void addQueryToDB(String query, ModelType  type){
         SearchQueryCache model = new SearchQueryCache(query, type);
         Core.getInstance(context).getCacheManager().addSearchQueryToCache(model);
     }

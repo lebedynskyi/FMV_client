@@ -2,6 +2,7 @@ package com.music.fmv.core.managers;
 
 import com.music.fmv.core.Core;
 import com.music.fmv.db.DBHelper;
+import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.models.notdbmodels.PlayableSong;
 import com.music.fmv.utils.FileUtils;
@@ -43,7 +44,7 @@ public class CacheManager extends Manager {
         dbHelper.getQueryCacheDAO().createOrUpdate(model);
     }
 
-    public List<SearchQueryCache> getCachedQueries(SearchQueryCache.QUERY_TYPE queryType, int i, String query) throws SQLException {
+    public List<SearchQueryCache> getCachedQueries(ModelType  queryType, int i, String query) throws SQLException {
         List<SearchQueryCache> list = dbHelper.getQueryCacheDAO().queryBuilder()
                 .distinct()
                 .selectColumns("query")

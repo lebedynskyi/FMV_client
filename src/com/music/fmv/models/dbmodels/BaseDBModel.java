@@ -18,8 +18,4 @@ public abstract class BaseDBModel {
     public void setId(int id) {
         this.id = id;
     }
-
-    protected BaseDBModel() {
-
-    }
 }

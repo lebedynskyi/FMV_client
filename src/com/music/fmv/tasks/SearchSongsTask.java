@@ -2,7 +2,7 @@ package com.music.fmv.tasks;
 
 import android.content.Context;
 import com.music.fmv.api.Api;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.notdbmodels.PlayableSong;
 
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
  * Time: 11:33 AM
  */
 
-public abstract class SearchSongsTask extends BaseAsyncTask<ArrayList<PlayableSong>> {
-    private static final SearchQueryCache.QUERY_TYPE queryType = SearchQueryCache.QUERY_TYPE.SONG;
+public class SearchSongsTask extends BaseAsyncTask<ArrayList<PlayableSong>> {
+    private static final ModelType queryType = ModelType.SONG;
 
     private final String query;
     private final Integer page;
