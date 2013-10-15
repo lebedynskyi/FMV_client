@@ -51,7 +51,7 @@ public class DownloadManager extends Manager {
             return;
         }
 
-        String loadFolder = core.getSettingsManager().getDownloadFolder();
+        String loadFolder = core.getSettingsManager().getSongsFolder();
         File folder = new File(loadFolder);
         folder.mkdirs();
         File newSongFile = FileUtils.getAbsolutheFile(folder, model);

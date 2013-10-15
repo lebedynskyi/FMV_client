@@ -6,6 +6,7 @@
     <string name="DEFAULT_LAGUAGE_KEY">DEFAULT_LAGUAGE_KEY</string>
     <string name="SONG_FOLDER_CACHE_KEY">SONG_FOLDER_CACHE_KEY</string>
     <string name="DOWNLOAD_FOLDER_CACHE_KEY">DOWNLOAD_FOLDER_CACHE_KEY</string>
+    <string name="USE_ONE_FOlDER_KEY">USE_ONE_FOlDER_KEY</string>
 
     <string-array name="preference_languages_titles">
         <item>Russian</item>
@@ -58,8 +59,7 @@
     <string name="pref_common_title">Common settings:</string>
 
     <string name="pref_use_one_folder">Use one folder</string>
-    <string name="pref_use_one_folder_descr">All file will be saved in separated folders like songs, albums etc...
-    </string>
+    <string name="pref_use_one_folder_descr">All file will be saved in separated folders like songs, albums etc...</string>
 
     <string name="pref_download_folder">Download folder</string>
     <string name="pref_download_folder_descr">Folder for saving all files after downloading</string>

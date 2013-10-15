@@ -8,13 +8,13 @@ import com.music.fmv.core.Core;
 
 /**
  * Created with IntelliJ IDEA.
- * User: lebed
+ * User: Vitalii Lebedynskyi
  * Date: 7/14/13
  * Time: 9:24 AM
  * To change this template use File | Settings | File Templates.
  */
 public class SettingsManager extends Manager {
-    public static final String DEFAULT_CACHE_FOLDER = "FMV";
+    private static final String DEFAULT_CACHE_FOLDER = "FMV";
     private static final String DEFAULT_IMAGES_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + DEFAULT_CACHE_FOLDER + "/images/";
     private static final String DEFAULT_SONGS_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + DEFAULT_CACHE_FOLDER + "/music/";
 
@@ -26,19 +26,13 @@ public class SettingsManager extends Manager {
     }
 
     public String getResultLanguage() {
-        return prefs.getString(getString(R.string.DEFAULT_LAGUAGE_KEY), "ru");
-    }
-
-    public void setResultLanguage(String lan) {
-        puString(getString(R.string.DEFAULT_LAGUAGE_KEY), lan);
+        return prefs.getString(getString(R.string.DEFAULT_LAGUAGE_KEY), "en");
     }
 
     public String getImageCacheFolder() {
-        return prefs.getString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), DEFAULT_IMAGES_FOLDER);
-    }
-
-    public void setImageCacheFolder(String folder) {
-        puString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), folder);
+        if (isUseOneFolder()){
+            return prefs.getString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), DEFAULT_SONGS_FOLDER) + "/images/";
+        }else return prefs.getString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), DEFAULT_IMAGES_FOLDER);
     }
 
     private void puString(String key, String value) {
@@ -46,11 +40,20 @@ public class SettingsManager extends Manager {
         editor.putString(key, value).commit();
     }
 
-    @Override
-    protected void finish() {
-    }
+    @Override protected void finish() {}
 
     public String getDownloadFolder() {
         return prefs.getString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), DEFAULT_SONGS_FOLDER);
+    }
+
+
+    public String getSongsFolder(){
+        if (isUseOneFolder()){
+            return prefs.getString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), DEFAULT_SONGS_FOLDER) + "/music/";
+        }else return prefs.getString(getString(R.string.SONG_FOLDER_CACHE_KEY), DEFAULT_SONGS_FOLDER);
+    }
+
+    private boolean isUseOneFolder() {
+        return prefs.getBoolean(getString(R.string.USE_ONE_FOlDER_KEY), true);
     }
 }

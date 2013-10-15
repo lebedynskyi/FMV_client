@@ -16,7 +16,7 @@
                         android:title="@string/pref_storage_title">
 
         <CheckBoxPreference android:title="@string/pref_use_one_folder"
-                            android:key="use_one_folder"
+                            android:key="@string/USE_ONE_FOlDER_KEY"
                             android:defaultValue="true"
                             android:summary="@string/pref_use_one_folder_descr"/>
 

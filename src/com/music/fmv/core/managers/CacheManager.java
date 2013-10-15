@@ -24,13 +24,13 @@ public class CacheManager extends Manager {
     }
 
     public boolean isSongExists(PlayableSong song) {
-        String loadFolder = core.getSettingsManager().getDownloadFolder();
+        String loadFolder = core.getSettingsManager().getSongsFolder();
         File songFile = FileUtils.getAbsolutheFile(loadFolder, song);
         return songFile.exists();
     }
 
     public String getSongPath(PlayableSong song) {
-        String loadFolder = core.getSettingsManager().getDownloadFolder();
+        String loadFolder = core.getSettingsManager().getSongsFolder();
         return FileUtils.getAbsoluthePath(loadFolder, song);
     }
 
