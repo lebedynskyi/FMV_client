@@ -14,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 7/22/13
  * Time: 3:45 PM
  */
@@ -40,7 +40,7 @@ public class SearchAlbumsAdapter extends FixedBaseAdapter<SearchAlbumModel> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent, SearchAlbumModel model) {
         ViewHolder holder = null;
         if (convertView == null) {
             convertView = inflateView(R.layout.search_album_row, parent);
@@ -56,7 +56,7 @@ public class SearchAlbumsAdapter extends FixedBaseAdapter<SearchAlbumModel> {
             convertView.setTag(holder);
         }
         holder = (ViewHolder) convertView.getTag();
-        SearchAlbumModel model = mData.get(position);
+
         holder.descr.setText(model.getBriefDescr());
         holder.artistName.setText(model.getArtistName());
         holder.name.setText(model.getAlbumName());

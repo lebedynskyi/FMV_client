@@ -13,7 +13,7 @@ import com.music.fmv.core.BaseFragment;
 import java.io.File;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 7/22/13
  * Time: 12:07 PM
  */
@@ -31,8 +31,8 @@ public class SettingsFragment extends BaseFragment {
         Window w = mLocalActivityManager.startActivity(ACTIVITY_TAG, prefActivityIntent);
         settingsActivity = (SettingsActivity) mLocalActivityManager.getActivity(ACTIVITY_TAG);
         settingsActivity.setFileChooserCallback(fileChooserCallback);
-        mainView = w.getDecorView();
-        return mainView;
+        View v  = w.getDecorView();
+        return v;
     }
 
     @Override

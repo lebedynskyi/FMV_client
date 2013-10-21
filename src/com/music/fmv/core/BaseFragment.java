@@ -3,22 +3,11 @@ package com.music.fmv.core;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
-import com.music.fmv.R;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.tasks.AutocompleterTask;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
-import com.music.fmv.views.LoadDialog;
-import com.music.fmv.widgets.AutocompletePopupWindow;
-
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,13 +19,11 @@ import java.util.ArrayList;
 
 public abstract class BaseFragment extends Fragment {
     protected Core core;
-    protected View mainView;
     protected ActivityMediator mMediator;
     protected BaseActivity baseActivity;
-    protected LayoutInflater inflater;
-    private LoadDialog dialog;
-    private AutocompleterTask currentAutocompleterTask;
-    private AutocompletePopupWindow autocompleteWindow;
+
+    private LayoutInflater inflater;
+    private View mainView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,59 +49,6 @@ public abstract class BaseFragment extends Fragment {
         return inflater.inflate(id, null, false);
     }
 
-    protected View createSearchHeader(TextView.OnEditorActionListener searchListener, ModelType autocmpleterType) {
-        View v = inflater.inflate(R.layout.search_header, null, false);
-        EditText tv = ((EditText) v.findViewById(R.id.search_field));
-        tv.setOnEditorActionListener(searchListener);
-        if (autocmpleterType != null){
-            tv.addTextChangedListener(new AutocompleteWatcher(tv, autocmpleterType));
-        }
-        return v;
-    }
 
     protected abstract View createView(Bundle savedInstanceState);
-
-    private class AutocompleteWatcher implements TextWatcher{
-        private EditText sourceEditText;
-        private ModelType queryType;
-
-        private AutocompleteWatcher(EditText sourceEditText, ModelType queryType) {
-            this.sourceEditText = sourceEditText;
-            this.queryType = queryType;
-        }
-
-        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {/*nothing*/}
-        @Override public void afterTextChanged(Editable s) {/*nothing*/}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if ((sourceEditText.getTag() != null) && (sourceEditText.getTag() instanceof Integer) && (((Integer)sourceEditText.getTag()) == 1) ){
-                sourceEditText.setTag( null);
-                return;
-            }
-
-            if (currentAutocompleterTask != null){
-                currentAutocompleterTask.cancel(true);
-                currentAutocompleterTask = null;
-            }
-
-            if (autocompleteWindow != null){
-                autocompleteWindow.dismiss();
-                autocompleteWindow = null;
-            }
-
-            currentAutocompleterTask = new AutocompleterTask(baseActivity, false, queryType, sourceEditText.getText().toString()){
-                @Override
-                protected void onPostExecute(ArrayList<String> strings) {
-                    super.onPostExecute(strings);
-                    if (strings == null || strings.size() == 0 || isCancelled()) return;
-
-                    autocompleteWindow = new AutocompletePopupWindow(context, strings, sourceEditText);
-                    autocompleteWindow.setWindowLayoutMode(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    autocompleteWindow.showAsDropDown(sourceEditText, 0, 5);
-                }
-            };
-            currentAutocompleterTask.execute();
-        }
-    }
 }

@@ -13,7 +13,6 @@ import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
-import com.music.fmv.core.BaseFragment;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.notdbmodels.PlayableSong;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
  * Date: 8/5/13
  * Time: 12:32 PM
  */
-public class SearchSongsFragment extends BaseFragment implements Core.IUpdateListener {
+public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpdateListener {
     private SwipeListView songsListView;
     private ArrayList<PlayableSong> songsInAdapter = new ArrayList<PlayableSong>();
     private SearchSongAdapter adapter;
@@ -70,7 +69,8 @@ public class SearchSongsFragment extends BaseFragment implements Core.IUpdateLis
         }
     };
 
-    private void processSearch(String query, final Integer page) {
+    @Override
+    protected void processSearch(String query, final Integer page) {
         if (TextUtils.isEmpty(query) || songTaskRunned) return;
         query = query.trim();
 

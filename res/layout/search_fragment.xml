@@ -13,18 +13,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/artist_tab" android:layout_weight="1"
-                glow_btn:text="@string/by_artist"
+                glow_btn:text="@string/artist"
                 android:textColor="@color/white"/>
         <com.music.fmv.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                glow_btn:text="@string/by_album"
+                glow_btn:text="@string/albums"
                 android:id="@+id/album_tab" android:layout_weight="1"
                 android:textColor="@color/white"/>
         <com.music.fmv.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                glow_btn:text="@string/by_name"
+                glow_btn:text="@string/songs"
                 android:id="@+id/song_tab" android:layout_weight="1"
                 android:textColor="@color/white"/>
     </LinearLayout>

@@ -22,7 +22,7 @@ public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent, PlayableSong song) {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -33,7 +33,6 @@ public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong> {
             holder.isCached = (ImageView) convertView.findViewById(R.id.is_cached);
             convertView.setTag(holder);
         } else holder = (ViewHolder) convertView.getTag();
-        PlayableSong song = mData.get(position);
 
         holder.name.setText(song.getName());
         holder.artist.setText(song.getArtist());

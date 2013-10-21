@@ -120,9 +120,9 @@ public class Api {
     }
 
     //throws exception if Json response has error
-    private void checkError(JSONObject response) {
+    private void checkError(JSONObject response) throws Exception{
         if (response.has("error")) {
-            throw new RuntimeException("Error in api response");
+            throw new Exception("Error in api response");
         }
     }
 }

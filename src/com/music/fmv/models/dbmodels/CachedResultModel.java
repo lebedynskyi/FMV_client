@@ -10,11 +10,8 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable
 public class CachedResultModel extends BaseDBModel{
-
-
     @DatabaseField
     private String title;
-
     public String getTitle() {
         return title;
     }

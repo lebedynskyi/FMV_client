@@ -34,7 +34,7 @@ public class SearchBandAdapter extends FixedBaseAdapter<SearchBandModel> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent, SearchBandModel model) {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -44,7 +44,7 @@ public class SearchBandAdapter extends FixedBaseAdapter<SearchBandModel> {
             holder.name = (TextView) convertView.findViewById(R.id.band_name);
             convertView.setTag(holder);
         } else holder = (ViewHolder) convertView.getTag();
-        SearchBandModel model = mList.get(position);
+
         holder.name.setText(model.getName());
         imageLoader.displayImage(model.getImage(), holder.icon, Core.getInstance(convertView.getContext()).getNotCachedOptions());
         holder.briefDescr.setText(model.getDescr());

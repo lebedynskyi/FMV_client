@@ -30,9 +30,9 @@
     <string name="empty_list">No items to show</string>
 
     <!--  Tabs in SearchFragment  -->
-    <string name="by_artist">Artists</string>
-    <string name="by_album">Albums</string>
-    <string name="by_name">Songs</string>
+    <string name="artist">Artists</string>
+    <string name="albums">Albums</string>
+    <string name="songs">Songs</string>
 
     <!--  Tabs in the MainActivit  y-->
     <string name="search">Search</string>
@@ -84,5 +84,8 @@
     <string name="loading">Loading</string>
     <string name="save_here">Save here</string>
     <string name="press_one_more_to_exit">Press one more to exit</string>
+
+    <!--     Header in history fragment    -->
+    <string name="search_history_title">History</string>
 
 </resources>

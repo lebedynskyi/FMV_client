@@ -9,6 +9,7 @@ import com.music.fmv.utils.FileUtils;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,20 +42,47 @@ public class CacheManager extends Manager {
     }
 
     public void addSearchQueryToCache(SearchQueryCache model) {
-        dbHelper.getQueryCacheDAO().createOrUpdate(model);
+        try {
+            List<SearchQueryCache> list = dbHelper.getQueryCacheDAO().queryBuilder().where().eq("query", model.getQuery()).and().eq("queryType", model.getQueryType()).query();
+            if (list.isEmpty()){
+                dbHelper.getQueryCacheDAO().createOrUpdate(model);
+                return;
+            }
+
+            for (SearchQueryCache c: list){
+                c.setRate(c.getRate() + 1);
+                dbHelper.getQueryCacheDAO().createOrUpdate(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<SearchQueryCache> getCachedQueries(ModelType  queryType, int i, String query) throws SQLException {
-        List<SearchQueryCache> list = dbHelper.getQueryCacheDAO().queryBuilder()
+        return dbHelper.getQueryCacheDAO().queryBuilder()
                 .distinct()
-                .selectColumns("query")
+                .selectColumns("query", "queryType")
+                .limit(i > 0 ? (long)i : null)
+                .orderBy("rate", false)
                 .where()
                 .eq("queryType", queryType.name())
                 .and()
                 .like("query", "%" + query + "%")
                 .query();
-        if (list.size() > i) {
-            return list.subList(0, i);
-        }else return list;
+    }
+
+    public List<SearchQueryCache> getHistoryItems() {
+        List<SearchQueryCache> fullList = new ArrayList<SearchQueryCache>();
+        try {
+            List<SearchQueryCache> artistList = getCachedQueries(ModelType.ARTIST, 10, "");
+            List<SearchQueryCache> albumsList = getCachedQueries(ModelType.ALBUM, 10, "");
+            List<SearchQueryCache> songsList = getCachedQueries(ModelType.SONG, 10, "");
+            fullList.addAll(artistList);
+            fullList.addAll(albumsList);
+            fullList.addAll(songsList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return fullList;
     }
 }

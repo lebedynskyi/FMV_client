@@ -10,7 +10,7 @@ import com.music.fmv.core.Core;
 import java.util.List;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 9/27/13
  * Time: 1:57 PM
  */
@@ -52,6 +52,9 @@ public abstract class FixedBaseAdapter<T> extends BaseAdapter {
     }
 
     @Override
-    public abstract View getView(int position, View convertView, ViewGroup parent);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return getView(position, convertView, parent, getItem(position));
+    }
 
+    public abstract View getView(int position, View convertView, ViewGroup parent, T item);
 }

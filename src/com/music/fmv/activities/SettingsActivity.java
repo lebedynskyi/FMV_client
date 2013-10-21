@@ -78,8 +78,6 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     public void onFilePicked(int requestCode, File file) {
-        Toast.makeText(this, file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-
         if (requestCode == DOWNLOAD_FOLDER_REQUEST){
             prefs.edit().putString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), file.getAbsolutePath()).commit();
         }else if (requestCode == SONGS_FOLDER_REQUEST){

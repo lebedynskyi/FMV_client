@@ -12,15 +12,24 @@ import com.j256.ormlite.table.DatabaseTable;
 public class SearchQueryCache extends BaseDBModel{
     @DatabaseField()
     private String query;
-
     @DatabaseField()
     private String queryType;
+    @DatabaseField
+    private long rate;
 
     public SearchQueryCache(){}
 
     public SearchQueryCache(String query, ModelType queryType) {
         this.query = query;
         this.queryType = queryType.name();
+    }
+
+    public long getRate() {
+        return rate;
+    }
+
+    public void setRate(long rate) {
+        this.rate = rate;
     }
 
     public String getQuery() {

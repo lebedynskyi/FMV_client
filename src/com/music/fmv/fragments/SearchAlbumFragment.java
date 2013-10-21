@@ -11,7 +11,6 @@ import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchAlbumsAdapter;
-import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 import com.music.fmv.tasks.SearchAlbumsTask;
@@ -25,7 +24,7 @@ import java.util.List;
  * Date: 8/5/13
  * Time: 12:32 PM
  */
-public class SearchAlbumFragment extends BaseFragment {
+public class SearchAlbumFragment extends BaseSearchFragment{
     private boolean albumTaskRunned;
     private Integer futureAlbumPage = 1;
     private int albumPageAvailable = 0;
@@ -45,7 +44,6 @@ public class SearchAlbumFragment extends BaseFragment {
 
         emptyView = (TextView) mainView.findViewById(R.id.empty_view);
 
-
         albumsListsView.addHeaderView(createSearchHeader(searchListener, ModelType.ALBUM));
         albumsListsView.setAdapter(adapter);
         albumsListsView.setHeaderDividersEnabled(false);
@@ -55,7 +53,8 @@ public class SearchAlbumFragment extends BaseFragment {
         return mainView;
     }
 
-    private void searchAlbum(String query, final Integer page) {
+    @Override
+    protected void processSearch(String query, final Integer page) {
         if (query == null || query.trim().length() == 0 || albumTaskRunned) return;
         query = query.trim();
 
@@ -97,7 +96,7 @@ public class SearchAlbumFragment extends BaseFragment {
 
     private void getNextAlbumPage() {
         if (albumPageAvailable > 0 && futureAlbumPage <= albumPageAvailable) {
-            searchAlbum(lastRequest, futureAlbumPage);
+            processSearch(lastRequest, futureAlbumPage);
         }
     }
 
@@ -144,7 +143,7 @@ public class SearchAlbumFragment extends BaseFragment {
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             ViewUtils.hideSoftKeyboard(baseActivity);
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchAlbum(v.getText().toString(), null);
+                processSearch(v.getText().toString(), null);
                 return true;
             }
             return false;

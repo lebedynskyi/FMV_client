@@ -5,7 +5,10 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import com.music.fmv.R;
 import com.music.fmv.adapters.AutocompleteAdapter;
 
@@ -47,7 +50,9 @@ public class AutocompletePopupWindow extends PopupWindow implements View.OnTouch
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String word = words.get(position);
             editText.setTag(1);
-            editText.setText(Html.fromHtml(word).toString());
+            String text = Html.fromHtml(word).toString();
+            editText.setText(text);
+            editText.setSelection(text.length());
             dismiss();
         }
     };

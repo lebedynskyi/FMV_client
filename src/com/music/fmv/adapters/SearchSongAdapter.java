@@ -36,7 +36,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent, PlayableSong song) {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -50,7 +50,6 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayableSong> {
             holder.download = convertView.findViewById(R.id.song_download);
             convertView.setTag(holder);
         } else holder = (ViewHolder) convertView.getTag();
-        PlayableSong song = mData.get(position);
 
         holder.download.setOnClickListener(new ButtonListener(song, position));
         holder.addToQueue.setOnClickListener(new ButtonListener(song, position));

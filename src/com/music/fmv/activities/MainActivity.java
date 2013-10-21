@@ -8,19 +8,20 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.core.Refreshable;
 import com.music.fmv.fragments.HistoryFragment;
 import com.music.fmv.fragments.MusicFragment;
 import com.music.fmv.fragments.SearchFragment;
 import com.music.fmv.fragments.SettingsFragment;
+import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements HistoryFragment.HistoryFragmentCallback {
     public static final int SEARCH_TAB = 0;
     public static final int HISTORY_TAB = 1;
     public static final int MUSIC_TAB = 2;
@@ -33,9 +34,8 @@ public class MainActivity extends BaseActivity {
     private TabButton musicBTN;
     private TabButton settingsBTN;
 
-    private int backPressed = 0;
-
     private long lastBackTime = 0;
+    private ArrayList<BaseFragment> fragments;
 
     @Override
     protected void onCreated(Bundle state) {
@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivity {
         musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector), tabListener);
         settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector), tabListener);
 
-        List<BaseFragment> fragments = new ArrayList<BaseFragment>(4);
+        fragments = new ArrayList<BaseFragment>(4);
         fragments.add(SEARCH_TAB, createSearchTab());
         fragments.add(HISTORY_TAB, createHistoryTab());
         fragments.add(MUSIC_TAB, createMusicTab());
@@ -106,6 +106,8 @@ public class MainActivity extends BaseActivity {
         ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
         pager.setCurrentItem(HISTORY_TAB);
         sendScreenStatistic("History tab");
+        BaseFragment fragment = fragments.get(HISTORY_TAB);
+        if (fragment instanceof Refreshable) ((Refreshable) fragment).refresh();
     }
 
     //Listener for buttons on the bottom of screen (Tabs)
@@ -165,5 +167,12 @@ public class MainActivity extends BaseActivity {
             lastBackTime = d.getTime();
             Toast.makeText(this, R.string.press_one_more_to_exit, 1000).show();
         }
+    }
+
+    @Override
+    public void onHistoryClicked(SearchQueryCache model) {
+        searchTabClicked();
+        SearchFragment fr = (SearchFragment) fragments.get(SEARCH_TAB);
+        fr.search(model);
     }
 }

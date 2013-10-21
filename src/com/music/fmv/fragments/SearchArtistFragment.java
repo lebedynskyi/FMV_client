@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchBandAdapter;
-import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.notdbmodels.BandInfoModel;
 import com.music.fmv.models.notdbmodels.SearchBandModel;
@@ -24,7 +23,7 @@ import java.util.List;
  * Date: 8/5/13
  * Time: 12:30 PM
  */
-public class SearchArtistFragment extends BaseFragment {
+public class SearchArtistFragment extends BaseSearchFragment{
     private Integer futureArtistPage = 1;
     private int artistsPageAvailable = 0;
     private String lastRequest;
@@ -55,10 +54,11 @@ public class SearchArtistFragment extends BaseFragment {
     }
 
     private void processSearch(String s) {
-        searchBand(s, null);
+        processSearch(s, null);
     }
 
-    private void searchBand(String query, final Integer page) {
+    @Override
+    protected void processSearch(String query, final Integer page) {
         if (TextUtils.isEmpty(query) || artistTaskRunned) return;
         query = query.trim();
 
@@ -112,7 +112,7 @@ public class SearchArtistFragment extends BaseFragment {
 
     private void getNextBandPage() {
         if (artistsPageAvailable > 0) {
-            searchBand(lastRequest, futureArtistPage);
+            processSearch(lastRequest, futureArtistPage);
         }
     }
 

@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.core.Refreshable;
 
 import java.util.List;
 
@@ -24,7 +25,11 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        return fragments.get(i);
+        Fragment fr = fragments.get(i);
+        if (fr instanceof Refreshable){
+            ((Refreshable) fr).refresh();
+        }
+        return fr;
     }
 
     @Override

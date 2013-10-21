@@ -25,7 +25,7 @@ public class AutocompleteAdapter extends FixedBaseAdapter<String>{
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent, String model) {
         ViewHolder holder;
         if(convertView == null){
             holder = new ViewHolder();
@@ -33,7 +33,7 @@ public class AutocompleteAdapter extends FixedBaseAdapter<String>{
             holder.tv = (TextView) convertView.findViewById(R.id.word_text);
             convertView.setTag(holder);
         }else holder = (ViewHolder) convertView.getTag();
-        holder.tv.setText(Html.fromHtml(getItem(position)));
+        holder.tv.setText(Html.fromHtml(model));
         final View finalConvertView = convertView;
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
