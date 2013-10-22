@@ -91,25 +91,21 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
 
     public void searchTabClicked() {
         ViewUtils.selectButton(searchBTN, musicBTN, historyBTN, settingsBTN);
-        pager.setCurrentItem(SEARCH_TAB, false);
         sendScreenStatistic("Search tab");
     }
 
     public void musicTabClicked() {
         ViewUtils.selectButton(musicBTN, searchBTN, historyBTN, settingsBTN);
-        pager.setCurrentItem(MUSIC_TAB, false);
         sendScreenStatistic("Music tab");
     }
 
     public void settingsTabClicked() {
         ViewUtils.selectButton(settingsBTN, searchBTN, musicBTN, historyBTN);
-        pager.setCurrentItem(SETTINGS_TAB, false);
         sendScreenStatistic("Settings tab");
     }
 
     public void historyClicked() {
         ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
-        pager.setCurrentItem(HISTORY_TAB, false);
         sendScreenStatistic("History tab");
     }
 
@@ -119,15 +115,19 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.search_btn:
+                    pager.setCurrentItem(SEARCH_TAB, false);
                     searchTabClicked();
                     break;
                 case R.id.music_btn:
+                    pager.setCurrentItem(MUSIC_TAB, false);
                     musicTabClicked();
                     break;
                 case R.id.settings_tab:
+                    pager.setCurrentItem(SETTINGS_TAB, false);
                     settingsTabClicked();
                     break;
                 case R.id.history_btn:
+                    pager.setCurrentItem(HISTORY_TAB, false);
                     historyClicked();
             }
         }

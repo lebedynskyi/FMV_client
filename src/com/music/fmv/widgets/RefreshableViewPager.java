@@ -19,6 +19,7 @@ import com.music.fmv.core.Refreshable;
 public class RefreshableViewPager extends ViewPager {
     private boolean canScroll = true;
     private boolean isAutoRefresh = false;
+    private OnPageChangeListener foreignPageListener;
 
     public RefreshableViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,12 +35,18 @@ public class RefreshableViewPager extends ViewPager {
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.GlowButton);
         this.canScroll = arr.getBoolean(R.styleable.RefreshableViewPager_scrollable, true);
         this.isAutoRefresh = arr.getBoolean(R.styleable.RefreshableViewPager_autoRefresh, true);
+
+        super.setOnPageChangeListener(nativePageListener);
+    }
+
+    @Override
+    public void setOnPageChangeListener(OnPageChangeListener listener) {
+        this.foreignPageListener = listener;
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         return this.canScroll && super.onInterceptTouchEvent(event);
-
     }
 
     public boolean isAutoRefresh() {
@@ -92,4 +99,28 @@ public class RefreshableViewPager extends ViewPager {
         @Override public void onPageScrolled(int i, float v, int i2) {}
         @Override public void onPageSelected(int i) {}
     }
+
+    private BasePageChangeListener nativePageListener = new BasePageChangeListener() {
+        @Override
+        public void onPageSelected(int i) {
+            if (isAutoRefresh){
+                Fragment fr = getFragment(i);
+                if (fr != null && fr instanceof Refreshable){
+                    ((Refreshable) fr).refresh();
+                }
+            }
+
+            if (foreignPageListener != null) foreignPageListener.onPageSelected(i);
+        }
+
+        @Override
+        public void onPageScrolled(int i, float v, int i2) {
+            if (foreignPageListener != null) foreignPageListener.onPageScrolled(i, v, i2);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+            if (foreignPageListener != null) foreignPageListener.onPageScrollStateChanged(i);
+        }
+    };
 }

@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import com.music.fmv.R;
+import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.core.Refreshable;
 import com.music.fmv.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -14,12 +16,15 @@ import java.util.ArrayList;
  * Date: 7/22/13
  * Time: 12:08 PM
  */
-public class MusicFragment extends BaseFragment {
+public class MusicFragment extends BaseFragment implements Refreshable {
+    public static final int NATIVE_MUSIC_TAB = 0;
+    public static final int FAVORITE_MUSIC_TAB = 1;
+
+
     private View loadedB;
     private View nativeB;
     private ViewPager pager;
 
-    private ArrayList<BaseFragment> fragments;
 
     @Override
     protected View createView(Bundle savedInstanceState) {
@@ -28,21 +33,20 @@ public class MusicFragment extends BaseFragment {
         loadedB = v.findViewById(R.id.loaded_music_tab);
         pager = (ViewPager) v.findViewById(R.id.music_pager);
 
-        fragments = new ArrayList<BaseFragment>();
-
         nativeB.setOnClickListener(tabsListener);
         loadedB.setOnClickListener(tabsListener);
+        ViewUtils.selectButton(nativeB, loadedB);
         return v;
     }
 
     public void nativeMusicClicked(){
         ViewUtils.selectButton(nativeB, loadedB);
-        pager.setCurrentItem(0);
+        pager.setCurrentItem(NATIVE_MUSIC_TAB);
     }
 
     public void loadedMusicClicked(){
         ViewUtils.selectButton(loadedB, nativeB);
-        pager.setCurrentItem(1);
+//        pager.setCurrentItem(FAVORITE_MUSIC_TAB);
     }
 
 
@@ -59,4 +63,11 @@ public class MusicFragment extends BaseFragment {
             }
         }
     };
+
+    @Override
+    public void refresh() {
+        ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>();
+        fragments.add(NATIVE_MUSIC_TAB, new NativeMusicListfragment());
+        pager.setAdapter(new FragmentAdapter(baseActivity.getSupportFragmentManager(), fragments));
+    }
 }

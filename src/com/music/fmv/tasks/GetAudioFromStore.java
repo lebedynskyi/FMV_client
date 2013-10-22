@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 import com.music.fmv.models.notdbmodels.FileSystemSong;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +13,13 @@ import java.util.List;
  * Date: 10/22/13
  * Time: 10:30 AM
  */
-public class GetAudioFromStore extends BaseAsyncTask<List<PlayAbleSong>> {
+public class GetAudioFromStore extends BaseAsyncTask<List<FileSystemSong>> {
     public GetAudioFromStore(Context context, boolean showDialog) {
         super(context, showDialog);
     }
 
     @Override
-    protected List<PlayAbleSong> doInBackground(Object... params) {
+    protected List<FileSystemSong> doInBackground(Object... params) {
         String[] props = {
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.DATA,
@@ -31,7 +30,7 @@ public class GetAudioFromStore extends BaseAsyncTask<List<PlayAbleSong>> {
                 MediaStore.Video.Media.SIZE,
         };
         Cursor musicCursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,props, null, null, MediaStore.Audio.Media.DISPLAY_NAME);
-        ArrayList <PlayAbleSong> songs = new ArrayList<PlayAbleSong>();
+        ArrayList <FileSystemSong> songs = new ArrayList<FileSystemSong>();
 
         if (musicCursor.getCount()<= 0) return songs;
 

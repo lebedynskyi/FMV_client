@@ -5,7 +5,7 @@ import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.fortysevendeg.swipelistview.SwipeListViewListener;
 import com.music.fmv.R;
-import com.music.fmv.adapters.SearchSongAdapter;
+import com.music.fmv.adapters.NativeSongAdapter;
 import com.music.fmv.core.BaseActivity;
 
 /**
@@ -15,7 +15,7 @@ import com.music.fmv.core.BaseActivity;
  */
 public class ArtistSongsActivity extends BaseActivity {
     private SwipeListView songsListViwe;
-    private SearchSongAdapter adapter;
+    private NativeSongAdapter adapter;
 
     @Override
     protected void onCreated(Bundle state) {

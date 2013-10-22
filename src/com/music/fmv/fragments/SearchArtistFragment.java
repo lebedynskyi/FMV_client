@@ -50,6 +50,7 @@ public class SearchArtistFragment extends BaseSearchFragment{
         artistsListView.setOnItemClickListener(artistClickListener);
         //Initialization of footer view(ProgressBar)
         rotateFooter = inflateView(R.layout.rotate_footer);
+
         return mainView;
     }
 

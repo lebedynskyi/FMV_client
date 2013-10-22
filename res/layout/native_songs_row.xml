@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent">
+    <LinearLayout
+            android:id="@+id/back"
+            android:layout_width="match_parent"
+            android:background="@drawable/background_item"
+            android:layout_height="70dp" android:gravity="center_vertical|right">
+        <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/song_add_to_queu"
+                android:background="@drawable/back_item_add_queue" android:layout_margin="5dp"/>
+        <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/song_play"
+                android:background="@drawable/back_item_play" android:layout_margin="5dp"/>
+    </LinearLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:id="@+id/front"
+                    android:tag="front"
+                    android:background="@drawable/white_background"
+                    android:layout_height="70dp" android:padding="5dp">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/song_name"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center_vertical|left"
+                android:textSize="22sp"
+                android:textColor="@color/black" android:layout_toLeftOf="@+id/duration"
+                android:text="dsaDAsdADdASDas"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/song_owner"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center_vertical|left"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_below="@+id/song_name"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/duration"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center_vertical|left"
+                android:textSize="13sp" android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+</FrameLayout>

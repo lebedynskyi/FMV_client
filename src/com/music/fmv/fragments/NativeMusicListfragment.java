@@ -2,22 +2,64 @@ package com.music.fmv.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import com.fortysevendeg.swipelistview.SwipeListView;
+import com.music.fmv.R;
+import com.music.fmv.adapters.NativeSongAdapter;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.core.Refreshable;
+import com.music.fmv.models.notdbmodels.FileSystemSong;
+import com.music.fmv.tasks.GetAudioFromStore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Vitalii Lebedynskyi
  * Date: 10/22/13
  * Time: 12:25 PM
  */
-public class NativeMusicListfragment extends BaseFragment implements Refreshable {
+public class NativeMusicListfragment extends BaseFragment{
+    private View emptyView;
+    private View progressView;
+    private SwipeListView songsLIstView;
+    private ArrayList<FileSystemSong> songs = new ArrayList<FileSystemSong>();
+    private NativeSongAdapter adapter;
+
     @Override
     protected View createView(Bundle savedInstanceState) {
-        return null;
+        View v = inflateView(R.layout.native_music_fragment);
+        emptyView = v.findViewById(R.id.empty_text);
+        progressView = v.findViewById(R.id.progress_bar);
+        songsLIstView = (SwipeListView) v.findViewById(R.id.songs_list);
+        adapter = new NativeSongAdapter(baseActivity, songs, songsLIstView);
+        songsLIstView.setAdapter(adapter);
+        initSongs();
+        return v;
     }
 
-    @Override
-    public void refresh() {
+    public void initSongs() {
+        prepareProgress(true);
+        GetAudioFromStore task= new GetAudioFromStore(baseActivity, false){
+            @Override
+            protected void onPostExecute(List<FileSystemSong> result) {
+                super.onPostExecute(result);
+                prepareProgress(false);
+                songs.clear();
+                songs.addAll(result);
+                adapter.notifyDataSetChanged();
+            }
+        };
 
+        task.execute();
+    }
+
+    private void prepareProgress(boolean isLoading) {
+        if (isLoading){
+            songsLIstView.setEmptyView(null);
+            emptyView.setVisibility(View.GONE);
+            progressView.setVisibility(View.VISIBLE);
+        }else {
+            songsLIstView.setEmptyView(emptyView);
+            progressView.setVisibility(View.GONE);
+        }
     }
 }
