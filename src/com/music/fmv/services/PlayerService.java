@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.managers.PlayerManager;
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,11 +29,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private MediaPlayer mPlayer;
     private Core core;
-    private final ArrayList<PlayableSong> playerQueue = new ArrayList<PlayableSong>();
+    private final ArrayList<InternetSong> playerQueue = new ArrayList<InternetSong>();
     private PlayerListener playerListener;
 
     private Set<MediaPlayer> preparedPlayers = new HashSet<MediaPlayer>(2);
-    private PlayableSong currentSong;
+    private InternetSong currentSong;
     private boolean isShuffle;
 
     @Override
@@ -111,9 +111,9 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public void add(PlayableSong model) {
+    public void add(InternetSong model) {
         if (mPlayer == null) {
-            ArrayList<PlayableSong> ss = new ArrayList<PlayableSong>();
+            ArrayList<InternetSong> ss = new ArrayList<InternetSong>();
             ss.add(model);
             play(ss, 0);
             return;
@@ -157,7 +157,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public void play(List<PlayableSong> songs, int position) {
+    public void play(List<InternetSong> songs, int position) {
         if (songs == null || songs.size() == 0 || position >= songs.size()) {
             return;
         }
@@ -182,7 +182,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return new PlayerStatus(duration, currentPos, currentSong, playerQueue, isShuffle, isLoop, isPlaying);
     }
 
-    private synchronized void playSong(final PlayableSong song) {
+    private synchronized void playSong(final InternetSong song) {
         if (song == null) return;
         if (!playerQueue.contains(song)) {
             playerQueue.add(song);
@@ -197,11 +197,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         } else playAsyncFromHttp(song);
     }
 
-    private void playFromFile(PlayableSong song) {
+    private void playFromFile(InternetSong song) {
         playFromPath(core.getCacheManager().getSongPath(song));
     }
 
-    private void playAsyncFromHttp(final PlayableSong song) {
+    private void playAsyncFromHttp(final InternetSong song) {
         if (!TextUtils.isEmpty(song.getUrl())) {
             playFromPath(song.getUrl());
         } else {
@@ -250,7 +250,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (playerListener != null) playerListener.needRefreshControls();
     }
 
-    private void notifyNewSong(PlayableSong song) {
+    private void notifyNewSong(InternetSong song) {
         if (playerListener != null) playerListener.onSongPlaying(song);
     }
 
@@ -262,9 +262,9 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     private class AsyncHttpRunner extends Thread {
-        private PlayableSong song;
+        private InternetSong song;
 
-        private AsyncHttpRunner(PlayableSong song) {
+        private AsyncHttpRunner(InternetSong song) {
             this.song = song;
         }
 

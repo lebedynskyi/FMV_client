@@ -1,6 +1,7 @@
 package com.music.fmv.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Toast;
@@ -8,14 +9,16 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.core.Refreshable;
+import com.music.fmv.core.ISearchFragment;
 import com.music.fmv.fragments.HistoryFragment;
 import com.music.fmv.fragments.MusicFragment;
 import com.music.fmv.fragments.SearchFragment;
 import com.music.fmv.fragments.SettingsFragment;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.tasks.GetAudioFromStore;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
+import com.music.fmv.widgets.RefreshableViewPager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +30,7 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     public static final int MUSIC_TAB = 2;
     public static final int SETTINGS_TAB = 3;
 
-    private ViewPager pager;
+    private RefreshableViewPager pager;
 
     private TabButton searchBTN;
     private TabButton historyBTN;
@@ -35,12 +38,11 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     private TabButton settingsBTN;
 
     private long lastBackTime = 0;
-    private ArrayList<BaseFragment> fragments;
 
     @Override
     protected void onCreated(Bundle state) {
         setContentView(R.layout.main_activity);
-        pager = (ViewPager) findViewById(R.id.pager);
+        pager = (RefreshableViewPager) findViewById(R.id.pager);
 
         searchBTN = (TabButton) findViewById(R.id.search_btn);
         historyBTN = (TabButton) findViewById(R.id.history_btn);
@@ -52,7 +54,7 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
         musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector), tabListener);
         settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector), tabListener);
 
-        fragments = new ArrayList<BaseFragment>(4);
+        ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>(4);
         fragments.add(SEARCH_TAB, createSearchTab());
         fragments.add(HISTORY_TAB, createHistoryTab());
         fragments.add(MUSIC_TAB, createMusicTab());
@@ -63,6 +65,9 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
         pager.setOffscreenPageLimit(4);
         pager.setOnPageChangeListener(pagerListener);
         searchTabClicked();
+
+        GetAudioFromStore task = new GetAudioFromStore(this, false);
+        task.execute();
     }
 
     private BaseFragment createHistoryTab() {
@@ -86,28 +91,26 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
 
     public void searchTabClicked() {
         ViewUtils.selectButton(searchBTN, musicBTN, historyBTN, settingsBTN);
-        pager.setCurrentItem(SEARCH_TAB);
+        pager.setCurrentItem(SEARCH_TAB, false);
         sendScreenStatistic("Search tab");
     }
 
     public void musicTabClicked() {
         ViewUtils.selectButton(musicBTN, searchBTN, historyBTN, settingsBTN);
-        pager.setCurrentItem(MUSIC_TAB);
+        pager.setCurrentItem(MUSIC_TAB, false);
         sendScreenStatistic("Music tab");
     }
 
     public void settingsTabClicked() {
         ViewUtils.selectButton(settingsBTN, searchBTN, musicBTN, historyBTN);
-        pager.setCurrentItem(SETTINGS_TAB);
+        pager.setCurrentItem(SETTINGS_TAB, false);
         sendScreenStatistic("Settings tab");
     }
 
     public void historyClicked() {
         ViewUtils.selectButton(historyBTN, searchBTN, musicBTN, settingsBTN);
-        pager.setCurrentItem(HISTORY_TAB);
+        pager.setCurrentItem(HISTORY_TAB, false);
         sendScreenStatistic("History tab");
-        BaseFragment fragment = fragments.get(HISTORY_TAB);
-        if (fragment instanceof Refreshable) ((Refreshable) fragment).refresh();
     }
 
     //Listener for buttons on the bottom of screen (Tabs)
@@ -130,16 +133,29 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
         }
     };
 
+
+    @Override
+    public void onBackPressed() {
+        Date d  = Calendar.getInstance().getTime();
+        if ((d.getTime() - lastBackTime) < 1000){
+            super.onBackPressed();
+        }else {
+            lastBackTime = d.getTime();
+            Toast.makeText(this, R.string.press_one_more_to_exit, 1000).show();
+        }
+    }
+
+    @Override
+    public void onHistoryClicked(SearchQueryCache model) {
+        searchTabClicked();
+        Fragment fr = pager.getFragment(SEARCH_TAB);
+        if (fr != null && fr instanceof ISearchFragment){
+            ((ISearchFragment) fr).search(model);
+        }
+    }
+
     //Listener for viewpager. OnPageSelected() clicked when page was changed by swiping
-    private ViewPager.OnPageChangeListener pagerListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int i, float v, int i2) {
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int i) {
-        }
-
+    private ViewPager.OnPageChangeListener pagerListener = new RefreshableViewPager.BasePageChangeListener() {
         @Override
         public void onPageSelected(int i) {
             switch (i) {
@@ -157,22 +173,4 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
             }
         }
     };
-
-    @Override
-    public void onBackPressed() {
-        Date d  = Calendar.getInstance().getTime();
-        if ((d.getTime() - lastBackTime) < 1000){
-            super.onBackPressed();
-        }else {
-            lastBackTime = d.getTime();
-            Toast.makeText(this, R.string.press_one_more_to_exit, 1000).show();
-        }
-    }
-
-    @Override
-    public void onHistoryClicked(SearchQueryCache model) {
-        searchTabClicked();
-        SearchFragment fr = (SearchFragment) fragments.get(SEARCH_TAB);
-        fr.search(model);
-    }
 }

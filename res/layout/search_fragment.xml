@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:glow_btn="http://schemas.android.com/apk/res/com.music.fmv"
+              xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fmv"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -13,22 +13,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/artist_tab" android:layout_weight="1"
-                glow_btn:text="@string/artist"
+                appattrs:text="@string/artist"
                 android:textColor="@color/white"/>
         <com.music.fmv.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                glow_btn:text="@string/albums"
+                appattrs:text="@string/albums"
                 android:id="@+id/album_tab" android:layout_weight="1"
                 android:textColor="@color/white"/>
         <com.music.fmv.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                glow_btn:text="@string/songs"
+                appattrs:text="@string/songs"
                 android:id="@+id/song_tab" android:layout_weight="1"
                 android:textColor="@color/white"/>
     </LinearLayout>
-    <com.music.fmv.widgets.CustomViewPager android:layout_height="match_parent"
+    <com.music.fmv.widgets.RefreshableViewPager android:layout_height="match_parent"
                                            android:layout_width="match_parent"
+                                           appattrs:autoRefresh="true"
                                            android:id="@+id/search_pager"/>
 </LinearLayout>

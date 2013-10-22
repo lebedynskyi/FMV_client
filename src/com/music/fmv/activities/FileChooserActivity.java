@@ -44,6 +44,8 @@ public class FileChooserActivity extends BaseActivity implements OnBackStackChan
 
     private String mPath;
 
+
+    //TODO implemented logic for open folder in the middle of the filesystem tree.
     @Override
     protected void onCreated(Bundle savedInstanceState) {
         setContentView(R.layout.chooser);

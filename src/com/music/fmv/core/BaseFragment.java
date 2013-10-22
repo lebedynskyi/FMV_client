@@ -11,7 +11,7 @@ import com.music.fmv.utils.ViewUtils;
 
 /**
  * Created with IntelliJ IDEA.
- * User: lebed
+ * User: Vitalii Lebedynskyi
  * Date: 7/14/13
  * Time: 9:03 AM
  * To change this template use File | Settings | File Templates.

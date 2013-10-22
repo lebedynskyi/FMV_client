@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.fmv.R;
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.utils.TimeUtils;
 
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.List;
  * Date: 9/27/13
  * Time: 1:19 PM
  */
-public class PlayerPlayListAdapter extends FixedBaseAdapter<PlayableSong> {
-    public PlayerPlayListAdapter(List<PlayableSong> mData, Context context) {
+public class PlayerPlayListAdapter extends FixedBaseAdapter<InternetSong> {
+    public PlayerPlayListAdapter(List<InternetSong> mData, Context context) {
         super(mData, context);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent, PlayableSong song) {
+    public View getView(int position, View convertView, ViewGroup parent, InternetSong song) {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();

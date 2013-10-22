@@ -5,6 +5,11 @@
         <attr name="text" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="RefreshableViewPager">
+        <attr name="scrollable" format="boolean"/>
+        <attr name="autoRefresh" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="MultipleOrientationSlidingDrawer">
         <attr name="orientation">
             <enum name="top" value="0"/>

@@ -3,7 +3,7 @@ package com.music.fmv.tasks;
 import android.content.Context;
 import com.music.fmv.api.Api;
 import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Time: 11:33 AM
  */
 
-public class SearchSongsTask extends BaseAsyncTask<ArrayList<PlayableSong>> {
+public class SearchSongsTask extends BaseAsyncTask<ArrayList<InternetSong>> {
     private static final ModelType queryType = ModelType.SONG;
 
     private final String query;
@@ -26,7 +26,7 @@ public class SearchSongsTask extends BaseAsyncTask<ArrayList<PlayableSong>> {
     }
 
     @Override
-    protected ArrayList<PlayableSong> doInBackground(Object... params) {
+    protected ArrayList<InternetSong> doInBackground(Object... params) {
         try {
             addQueryToDB(query, queryType);
             return new Api().searchSongs(query, page);

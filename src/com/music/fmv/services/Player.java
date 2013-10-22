@@ -1,6 +1,6 @@
 package com.music.fmv.services;
 
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 
 import java.util.List;
 
@@ -30,16 +30,16 @@ public interface Player {
 
     public void seek(int position);
 
-    public void play(List<PlayableSong> songs, int position);
+    public void play(List<InternetSong> songs, int position);
 
     public PlayerStatus getStatus();
 
     public void setPlayerListener(PlayerListener listener);
 
-    public void add(PlayableSong model);
+    public void add(InternetSong model);
 
     public interface PlayerListener {
-        public void onSongPlaying(PlayableSong song);
+        public void onSongPlaying(InternetSong song);
 
         public void onPlayingStopped();
 
@@ -49,13 +49,13 @@ public interface Player {
     public class PlayerStatus {
         private int duration;
         private int currentProgress;
-        private PlayableSong currentSong;
-        private List<PlayableSong> currentQueue;
+        private InternetSong currentSong;
+        private List<InternetSong> currentQueue;
         private boolean isShuffle;
         private boolean isLoop;
         private boolean isPlaying;
 
-        public PlayerStatus(int duration, int currentProgress, PlayableSong currentSong, List<PlayableSong> currentQueue, boolean shuffle, boolean loop, boolean playing) {
+        public PlayerStatus(int duration, int currentProgress, InternetSong currentSong, List<InternetSong> currentQueue, boolean shuffle, boolean loop, boolean playing) {
             this.duration = duration;
             this.currentProgress = currentProgress;
             this.currentSong = currentSong;
@@ -73,7 +73,7 @@ public interface Player {
             return currentProgress;
         }
 
-        public PlayableSong getCurrentSong() {
+        public InternetSong getCurrentSong() {
             return currentSong;
         }
 
@@ -89,7 +89,7 @@ public interface Player {
             return isPlaying;
         }
 
-        public List<PlayableSong> getCurrentQueue() {
+        public List<InternetSong> getCurrentQueue() {
             return currentQueue;
         }
     }

@@ -2,7 +2,7 @@ package com.music.fmv.api;
 
 import android.text.TextUtils;
 import com.music.fmv.models.notdbmodels.BandInfoModel;
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 import com.music.fmv.models.notdbmodels.SearchBandModel;
 import com.music.fmv.utils.NetworkUtil;
@@ -84,7 +84,7 @@ public class Api {
         return null;
     }
 
-    public ArrayList<PlayableSong> searchSongs(String query, Integer page) throws Exception {
+    public ArrayList<InternetSong> searchSongs(String query, Integer page) throws Exception {
         if (TextUtils.isEmpty(query)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("song", query);

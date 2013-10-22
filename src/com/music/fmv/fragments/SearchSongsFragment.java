@@ -15,7 +15,7 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.tasks.SearchSongsTask;
 import com.music.fmv.utils.ViewUtils;
 
@@ -28,7 +28,7 @@ import java.util.ArrayList;
  */
 public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpdateListener {
     private SwipeListView songsListView;
-    private ArrayList<PlayableSong> songsInAdapter = new ArrayList<PlayableSong>();
+    private ArrayList<InternetSong> songsInAdapter = new ArrayList<InternetSong>();
     private SearchSongAdapter adapter;
     private boolean songTaskRunned;
     private String lastQuery;
@@ -82,9 +82,9 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
             }
 
             @Override
-            protected void onPostExecute(ArrayList<PlayableSong> songs) {
+            protected void onPostExecute(ArrayList<InternetSong> songs) {
                 super.onPostExecute(songs);
-                songsPageAvailable = PlayableSong.PAGE_AVAILABLE;
+                songsPageAvailable = InternetSong.PAGE_AVAILABLE;
                 songTaskRunned = false;
 
                 if (isCancelled()) return;
@@ -111,7 +111,7 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
         }
     }
 
-    private void updateSongsList(ArrayList<PlayableSong> songs, boolean isClear) {
+    private void updateSongsList(ArrayList<InternetSong> songs, boolean isClear) {
         if (isClear) {
             songsInAdapter.clear();
             futureSongPage = 1;
@@ -182,19 +182,19 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
 
     private SearchSongAdapter.AdapterCallback adapterCallback = new SearchSongAdapter.AdapterCallback() {
         @Override
-        public void playClicked(PlayableSong model, int pos) {
+        public void playClicked(InternetSong model, int pos) {
             core.getPlayerManager().getPlayer(null).play(songsInAdapter, pos);
             mMediator.startPlayerActivity();
         }
 
         @Override
-        public void addToQueueClicked(PlayableSong model) {
+        public void addToQueueClicked(InternetSong model) {
             core.getPlayerManager().getPlayer(null).add(model);
             Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void downloadClicked(PlayableSong model) {
+        public void downloadClicked(InternetSong model) {
             core.getDownloadManager().download(model);
         }
     };

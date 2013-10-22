@@ -88,4 +88,8 @@
     <!--     Header in history fragment    -->
     <string name="search_history_title">History</string>
 
+    <!--    Tabs in music fragment  -->
+    <string name="all_music">All music</string>
+    <string name="downloaded_music">Loaded music</string>
+
 </resources>

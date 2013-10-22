@@ -1,6 +1,8 @@
 package com.music.fmv.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
@@ -10,7 +12,7 @@ import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.GlowButton;
-import com.music.fmv.widgets.CustomViewPager;
+import com.music.fmv.widgets.RefreshableViewPager;
 
 import java.util.ArrayList;
 
@@ -20,23 +22,20 @@ import java.util.ArrayList;
  * Time: 12:39 PM
  */
 public class SearchFragment extends BaseFragment implements ISearchFragment {
-    public static int ARTIST_TAB = 0;
-    public static int ALBUM_TAB = 1;
-    public static int SONG_TAB = 2;
+    public static final int ARTIST_TAB = 0;
+    public static final int ALBUM_TAB = 1;
+    public static final int SONG_TAB = 2;
 
-    private CustomViewPager pager;
+    private RefreshableViewPager pager;
 
     private GlowButton artistBtn;
     private GlowButton albumButton;
     private GlowButton songsButton;
-    private ArrayList<BaseFragment> fragments;
 
     @Override
     protected View createView(Bundle savedInstanceState) {
         View mainView = inflateView(R.layout.search_fragment);
-        pager = (CustomViewPager) mainView.findViewById(R.id.search_pager);
-        pager.setCanScroll(false);
-
+        pager = (RefreshableViewPager) mainView.findViewById(R.id.search_pager);
         artistBtn = (GlowButton) mainView.findViewById(R.id.artist_tab);
         albumButton = (GlowButton) mainView.findViewById(R.id.album_tab);
         songsButton = (GlowButton) mainView.findViewById(R.id.song_tab);
@@ -45,11 +44,12 @@ public class SearchFragment extends BaseFragment implements ISearchFragment {
         albumButton.setOnClickListener(tabListener);
         songsButton.setOnClickListener(tabListener);
 
-        fragments = new ArrayList<BaseFragment>(3);
+        ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>(3);
         fragments.add(ARTIST_TAB, new SearchArtistFragment());
         fragments.add(ALBUM_TAB, new SearchAlbumFragment());
         fragments.add(SONG_TAB, new SearchSongsFragment());
         pager.setAdapter(new FragmentAdapter(getActivity().getSupportFragmentManager(), fragments));
+        pager.setOnPageChangeListener(pagerListener);
         ViewUtils.selectButton(artistBtn, albumButton, songsButton);
         baseActivity.sendScreenStatistic("Artist tab");
         return mainView;
@@ -73,42 +73,59 @@ public class SearchFragment extends BaseFragment implements ISearchFragment {
     };
 
     private void songsTabClicked() {
-        pager.setCurrentItem(SONG_TAB);
+        pager.setCurrentItem(SONG_TAB, false);
         baseActivity.sendScreenStatistic("Songs tab");
         ViewUtils.selectButton(songsButton, albumButton, artistBtn);
     }
 
     private void albumTabClicked() {
-        pager.setCurrentItem(ALBUM_TAB);
+        pager.setCurrentItem(ALBUM_TAB, false);
         baseActivity.sendScreenStatistic("Album tab");
         ViewUtils.selectButton(albumButton, artistBtn, songsButton);
     }
 
     private void artistTabClicked() {
-        pager.setCurrentItem(ARTIST_TAB);
+        pager.setCurrentItem(ARTIST_TAB, false);
         baseActivity.sendScreenStatistic("Artist tab");
         ViewUtils.selectButton(artistBtn, albumButton, songsButton);
     }
 
     public void search(SearchQueryCache model) {
         ModelType type = ModelType.valueOf(model.getQueryType());
-        BaseFragment fr = null;
+        Fragment fr = null;
         switch (type){
             case ARTIST:
-                fr = fragments.get(ARTIST_TAB);
+                fr = pager.getFragment(ARTIST_TAB);
                 artistTabClicked();
                 break;
             case ALBUM:
-                fr = fragments.get(ALBUM_TAB);
+                fr = pager.getFragment(ALBUM_TAB);
                 albumTabClicked();
                 break;
             case SONG:
-                fr = fragments.get(SONG_TAB);
+                fr = pager.getFragment(SONG_TAB);
                 songsTabClicked();
                 break;
         }
-        if (fr instanceof ISearchFragment) {
+        if (fr != null && fr instanceof ISearchFragment) {
             ((ISearchFragment) fr).search(model);
         }
     }
+
+    //Listener for viewpager. OnPageSelected() clicked when page was changed by swiping
+    private ViewPager.OnPageChangeListener pagerListener = new RefreshableViewPager.BasePageChangeListener() {
+        @Override
+        public void onPageSelected(int i) {
+            switch (i) {
+                case ARTIST_TAB:
+                    artistTabClicked();
+                    break;
+                case SONG_TAB:
+                    songsTabClicked();
+                    break;
+                case ALBUM_TAB:
+                    albumTabClicked();
+            }
+        }
+    };
 }

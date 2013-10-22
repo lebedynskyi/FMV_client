@@ -29,7 +29,10 @@ public abstract class BaseSearchFragment extends BaseFragment implements ISearch
     @Override
     public void search(SearchQueryCache model) {
         String query = model.getQuery();
+
+        //To prevent calling the autocompleter
         tv.setTag(new Integer(1));
+
         tv.setText(query);
         processSearch(query, null);
     }

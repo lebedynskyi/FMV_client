@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fmv"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp">
+        <view android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              appattrs:text="@string/all_music"
+              appattrs:selectable="true"
+              class="com.music.fmv.views.GlowButton" android:id="@+id/native_music_tab" android:layout_weight="1"/>
+        <view android:layout_width="match_parent"
+              appattrs:text="@string/downloaded_music"
+              android:layout_height="wrap_content"
+              appattrs:selectable="true"
+              class="com.music.fmv.views.GlowButton" android:id="@+id/loaded_music_tab" android:layout_weight="1"/>
+    </LinearLayout>
+    <com.music.fmv.widgets.RefreshableViewPager
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/music_pager"
+            appattrs:autoRefresh="true"/>
 </LinearLayout>

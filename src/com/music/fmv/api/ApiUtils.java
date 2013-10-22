@@ -1,7 +1,6 @@
 package com.music.fmv.api;
 
 import android.text.TextUtils;
-import com.music.fmv.models.*;
 import com.music.fmv.models.notdbmodels.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -143,17 +142,17 @@ public class ApiUtils {
         return albums;
     }
 
-    public static ArrayList<PlayableSong> parseSearchSongs(JSONObject response) throws Exception {
-        ArrayList<PlayableSong> songs = new ArrayList<PlayableSong>();
+    public static ArrayList<InternetSong> parseSearchSongs(JSONObject response) throws Exception {
+        ArrayList<InternetSong> songs = new ArrayList<InternetSong>();
         JSONObject resp = response.getJSONObject(RESPONSE_TAG);
         JSONArray songsArr = resp.getJSONArray("songs");
         if (songsArr == null) {
-            PlayableSong.PAGE_AVAILABLE = -1;
+            InternetSong.PAGE_AVAILABLE = -1;
             return songs;
         }
 
         for (int i = 0; i < songsArr.length(); i++) {
-            PlayableSong song = new PlayableSong();
+            InternetSong song = new InternetSong();
             JSONObject songData = songsArr.getJSONObject(i);
             try {
                 song.setId(songData.optString("id"));
@@ -166,7 +165,7 @@ public class ApiUtils {
                 e.printStackTrace();
             }
         }
-        PlayableSong.PAGE_AVAILABLE = resp.optInt("pages", -1);
+        InternetSong.PAGE_AVAILABLE = resp.optInt("pages", -1);
         return songs;
     }
 }

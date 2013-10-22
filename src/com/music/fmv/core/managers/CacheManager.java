@@ -4,7 +4,7 @@ import com.music.fmv.core.Core;
 import com.music.fmv.db.DBHelper;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.utils.FileUtils;
 
 import java.io.File;
@@ -25,13 +25,13 @@ public class CacheManager extends Manager {
         dbHelper = DBHelper.getInstance(core.getContext());
     }
 
-    public boolean isSongExists(PlayableSong song) {
+    public boolean isSongExists(InternetSong song) {
         String loadFolder = core.getSettingsManager().getSongsFolder();
         File songFile = FileUtils.getAbsolutheFile(loadFolder, song);
         return songFile.exists();
     }
 
-    public String getSongPath(PlayableSong song) {
+    public String getSongPath(InternetSong song) {
         String loadFolder = core.getSettingsManager().getSongsFolder();
         return FileUtils.getAbsoluthePath(loadFolder, song);
     }

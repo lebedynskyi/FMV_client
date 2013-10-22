@@ -1,7 +1,7 @@
 package com.music.fmv.tasks.threads;
 
 import com.music.fmv.api.Api;
-import com.music.fmv.models.notdbmodels.PlayableSong;
+import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.utils.NetworkUtil;
 
 import java.io.File;
@@ -15,11 +15,11 @@ import java.io.File;
  */
 public class SongLoader implements IDownlaoder {
     private final File file;
-    private final PlayableSong song;
+    private final InternetSong song;
     private IDownloadListener listener;
     private Api api;
 
-    public SongLoader(File f, PlayableSong songs) {
+    public SongLoader(File f, InternetSong songs) {
         this.song = songs;
         this.file = f;
         api = new Api();

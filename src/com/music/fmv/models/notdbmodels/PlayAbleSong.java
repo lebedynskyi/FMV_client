@@ -3,45 +3,24 @@ package com.music.fmv.models.notdbmodels;
 import android.text.TextUtils;
 
 /**
- * User: vitaliylebedinskiy
- * Date: 7/17/13
- * Time: 4:04 PM
+ * User: Vitalii Lebedynskyi
+ * Date: 10/22/13
+ * Time: 11:09 AM
  */
-public class PlayableSong extends BaseSerializableModel {
-    public static int PAGE_AVAILABLE = -1;
-
+public abstract class PlayAbleSong extends BaseSerializableModel{
     private String url;
     private String artist;
     private String name;
     private int duration;
-    private String id;
-    private String rate;
 
-    private String urlKey = "track_link";
-    private String urlForUrl;
-
-    public String getUrlKey() {
-        return urlKey;
+    // url == null will be used getUrlForUrl and getUrlKey
+    public String getUrlKey(){
+        throw new IllegalStateException("PlayAbleSong doesn't have urlKey");
     }
 
-    public void setUrlKey(String urlKey) {
-        this.urlKey = urlKey;
-    }
-
-    public String getUrlForUrl() {
-        return "http://pleer.com/site_api/files/get_url?id=" + id;
-    }
-
-    public void setUrlForUrl(String urlForUrl) {
-        this.urlForUrl = urlForUrl;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    // url == null will be used getUrlForUrl and getUrlKey
+    public String getUrlForUrl(){
+        throw new IllegalStateException("PlayAbleSong doesn't have UrlForUrl");
     }
 
     public String getUrl() {
@@ -76,14 +55,6 @@ public class PlayableSong extends BaseSerializableModel {
         this.duration = duration;
     }
 
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
-
-    public String getRate() {
-        return rate;
-    }
-
     public String getFutureFileName() {
         if (TextUtils.isEmpty(name) && TextUtils.isEmpty(artist)) return "Unknown song.mp3";
 
@@ -99,9 +70,9 @@ public class PlayableSong extends BaseSerializableModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PlayableSong that = (PlayableSong) o;
+        InternetSong that = (InternetSong) o;
 
-        return !(artist != null ? !artist.equals(that.artist) : that.artist != null) && !(name != null ? !name.equals(that.name) : that.name != null);
+        return !(artist != null ? !artist.equals(that.getArtist()) : that.getArtist()!= null) && !(name != null ? !name.equals(that.getName()) : that.getName() != null);
     }
 
     @Override

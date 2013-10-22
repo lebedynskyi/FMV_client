@@ -16,11 +16,10 @@
 
     <application android:label="@string/app_name" android:icon="@drawable/icon"
                  android:name=".core.App"
-                 android:theme="@style/MyAppCompateTheme">
+                 android:theme="@style/AppCompatNoActionBar">
 
         <activity android:name=".activities.MainActivity" android:configChanges="orientation"
-                  android:label="@string/app_name"
-                  android:theme="@style/AppCompatNoActionBar">
+                  android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -34,7 +33,9 @@
         <activity android:name=".activities.ArtistSongsActivity" android:configChanges="orientation"/>
         <activity android:name=".activities.ArtistAlbumsActivity" android:configChanges="orientation"/>
         <activity android:name=".activities.SettingsActivity" android:configChanges="orientation"/>
-        <activity android:name=".activities.FileChooserActivity" android:configChanges="orientation"/>
+        <activity android:name=".activities.FileChooserActivity" android:configChanges="orientation"
+                  android:theme="@style/AppCompateTheme"/>
+
         <service android:name=".services.PlayerService"/>
     </application>
 </manifest>
