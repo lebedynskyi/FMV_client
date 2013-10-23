@@ -57,7 +57,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<InternetSong> {
 
         holder.owner.setText(song.getArtist());
         holder.name.setText(song.getName());
-        holder.duration.setText(TimeUtils.getNiceTimeForSongs(song.getDuration()));
+        holder.duration.setText(TimeUtils.extractTimeFromSong(song));
 
         if (core.getCacheManager().isSongExists(song)) {
             holder.isCached.setVisibility(View.VISIBLE);

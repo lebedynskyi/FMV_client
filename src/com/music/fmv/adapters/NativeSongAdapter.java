@@ -54,7 +54,7 @@ public class NativeSongAdapter extends FixedBaseAdapter<FileSystemSong> {
 
         holder.owner.setText(song.getArtist());
         holder.name.setText(song.getName());
-        holder.duration.setText(TimeUtils.getNiceTimeForSongs(song.getDuration()));
+        holder.duration.setText(TimeUtils.extractTimeFromSong(song));
         return convertView;
     }
 
