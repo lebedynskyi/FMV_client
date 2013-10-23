@@ -63,6 +63,11 @@ public class SwipeListView extends ListView {
     public final static int SWIPE_MODE_LEFT = 3;
 
     /**
+     * Disabling of fling but can handle click
+     */
+    public final static boolean DISABLED_FLING = false;
+
+    /**
      * Binds the swipe gesture to reveal a view behind the row (Drawer style)
      */
     public final static int SWIPE_ACTION_REVEAL = 0;
@@ -172,6 +177,7 @@ public class SwipeListView extends ListView {
         float swipeOffsetRight = 0;
         int swipeDrawableChecked = 0;
         int swipeDrawableUnchecked = 0;
+        boolean disabledFling = DISABLED_FLING;
 
         int swipeActionLeft = SWIPE_ACTION_REVEAL;
         int swipeActionRight = SWIPE_ACTION_REVEAL;
@@ -188,6 +194,7 @@ public class SwipeListView extends ListView {
             swipeCloseAllItemsWhenMoveList = styled.getBoolean(R.styleable.SwipeListView_swipeCloseAllItemsWhenMoveList, true);
             swipeDrawableChecked = styled.getResourceId(R.styleable.SwipeListView_swipeDrawableChecked, 0);
             swipeDrawableUnchecked = styled.getResourceId(R.styleable.SwipeListView_swipeDrawableUnchecked, 0);
+            disabledFling = styled.getBoolean(R.styleable.SwipeListView_disableXFling, false);
             swipeFrontView = styled.getResourceId(R.styleable.SwipeListView_swipeFrontView, 0);
             swipeBackView = styled.getResourceId(R.styleable.SwipeListView_swipeBackView, 0);
         }
@@ -216,6 +223,7 @@ public class SwipeListView extends ListView {
         swipeListViewController.setSwipeOpenOnLongPress(swipeOpenOnLongPress);
         swipeListViewController.setSwipeDrawableChecked(swipeDrawableChecked);
         swipeListViewController.setSwipeDrawableUnchecked(swipeDrawableUnchecked);
+        swipeListViewController.setDisabledFling(disabledFling);
         setOnTouchListener(swipeListViewController);
         super.setOnScrollListener(swipeListViewController.makeScrollListener());
     }

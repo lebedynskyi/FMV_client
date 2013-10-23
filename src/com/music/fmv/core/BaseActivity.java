@@ -16,7 +16,7 @@ import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.widgets.CaptchaDialog;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 7/12/13
  * Time: 5:38 PM
  */

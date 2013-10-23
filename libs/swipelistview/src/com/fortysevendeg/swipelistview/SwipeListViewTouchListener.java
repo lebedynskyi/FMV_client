@@ -100,6 +100,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
     private int oldSwipeActionRight;
     private int oldSwipeActionLeft;
     private AbsListView.OnScrollListener customScrollListener;
+    private boolean disabledFling;
 
     /**
      * Constructor
@@ -812,6 +813,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 if (velocityTracker == null || paused || downPosition == ListView.INVALID_POSITION) {
                     break;
                 }
+                if (disabledFling)return true;
 
                 velocityTracker.addMovement(motionEvent);
                 velocityTracker.computeCurrentVelocity(1000);
@@ -953,6 +955,14 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
 
     public void setCustomScrollListener(AbsListView.OnScrollListener customScrollListener) {
         this.customScrollListener = customScrollListener;
+    }
+
+    public void setDisabledFling(boolean disabledFling) {
+        this.disabledFling = disabledFling;
+    }
+
+    public boolean isDisabledFling() {
+        return disabledFling;
     }
 
     /**

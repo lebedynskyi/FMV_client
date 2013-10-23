@@ -26,6 +26,8 @@
         <attr name="swipeCloseAllItemsWhenMoveList" format="boolean"/>
         <attr name="swipeFrontView" format="reference"/>
         <attr name="swipeBackView" format="reference"/>
+        <attr name="disableXFling" format="boolean"/>
+
         <attr name="swipeMode" format="enum">
             <enum name="none" value="0"/>
             <enum name="both" value="1"/>

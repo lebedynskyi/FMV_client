@@ -8,6 +8,7 @@
           android:layout_height="match_parent"
           android:id="@+id/pager"
           appattrs:autoRefresh="true"
+          appattrs:refreshDelay="300"
           android:background="@drawable/white_background"
           android:layout_above="@+id/tab_container"/>
     <LinearLayout

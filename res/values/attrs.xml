@@ -8,6 +8,7 @@
     <declare-styleable name="RefreshableViewPager">
         <attr name="scrollable" format="boolean"/>
         <attr name="autoRefresh" format="boolean"/>
+        <attr name="refreshDelay" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="MultipleOrientationSlidingDrawer">

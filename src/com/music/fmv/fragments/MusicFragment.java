@@ -6,8 +6,8 @@ import android.view.View;
 import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.core.Refreshable;
 import com.music.fmv.utils.ViewUtils;
+import com.music.fmv.widgets.RefreshableViewPager;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,9 @@ import java.util.ArrayList;
  * Date: 7/22/13
  * Time: 12:08 PM
  */
-public class MusicFragment extends BaseFragment implements Refreshable {
+public class MusicFragment extends BaseFragment implements RefreshableViewPager.Refreshable {
     public static final int NATIVE_MUSIC_TAB = 0;
-    public static final int FAVORITE_MUSIC_TAB = 1;
+    public static final int LOADED_MUSIC_TAB = 1;
 
 
     private View loadedB;
@@ -32,21 +32,21 @@ public class MusicFragment extends BaseFragment implements Refreshable {
         nativeB = v.findViewById(R.id.native_music_tab);
         loadedB = v.findViewById(R.id.loaded_music_tab);
         pager = (ViewPager) v.findViewById(R.id.music_pager);
-
         nativeB.setOnClickListener(tabsListener);
         loadedB.setOnClickListener(tabsListener);
         ViewUtils.selectButton(nativeB, loadedB);
+        pager.setOnPageChangeListener(pagerListener);
         return v;
     }
 
     public void nativeMusicClicked(){
         ViewUtils.selectButton(nativeB, loadedB);
-        pager.setCurrentItem(NATIVE_MUSIC_TAB);
+        pager.setCurrentItem(NATIVE_MUSIC_TAB, false);
     }
 
     public void loadedMusicClicked(){
         ViewUtils.selectButton(loadedB, nativeB);
-//        pager.setCurrentItem(FAVORITE_MUSIC_TAB);
+        pager.setCurrentItem(LOADED_MUSIC_TAB, false);
     }
 
 
@@ -64,10 +64,25 @@ public class MusicFragment extends BaseFragment implements Refreshable {
         }
     };
 
+    private RefreshableViewPager.BasePageChangeListener pagerListener = new RefreshableViewPager.BasePageChangeListener() {
+        @Override
+        public void onPageSelected(int i) {
+            switch (i){
+                case NATIVE_MUSIC_TAB:
+                    ViewUtils.selectButton(nativeB, loadedB);
+                    break;
+                case LOADED_MUSIC_TAB:
+                    ViewUtils.selectButton(loadedB, nativeB);
+            }
+        }
+    };
+
     @Override
     public void refresh() {
         ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>();
         fragments.add(NATIVE_MUSIC_TAB, new NativeMusicListfragment());
+        fragments.add(LOADED_MUSIC_TAB, new LoadedMusicListfragment());
         pager.setAdapter(new FragmentAdapter(baseActivity.getSupportFragmentManager(), fragments));
+        ViewUtils.selectButton(nativeB, loadedB);
     }
 }

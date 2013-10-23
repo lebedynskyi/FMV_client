@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
-import com.music.fmv.core.Refreshable;
 
 /**
  * User: vitaliylebedinskiy
@@ -20,6 +19,7 @@ public class RefreshableViewPager extends ViewPager {
     private boolean canScroll = true;
     private boolean isAutoRefresh = false;
     private OnPageChangeListener foreignPageListener;
+    private int refreshDelay;
 
     public RefreshableViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,11 +32,14 @@ public class RefreshableViewPager extends ViewPager {
     }
 
     private void initAttr(AttributeSet attrs) {
-        TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.GlowButton);
+        TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.RefreshableViewPager);
         this.canScroll = arr.getBoolean(R.styleable.RefreshableViewPager_scrollable, true);
         this.isAutoRefresh = arr.getBoolean(R.styleable.RefreshableViewPager_autoRefresh, true);
+        this.refreshDelay = arr.getInt(R.styleable.RefreshableViewPager_refreshDelay, 1);
 
         super.setOnPageChangeListener(nativePageListener);
+
+        setFadingEdgeLength(0);
     }
 
     @Override
@@ -80,9 +83,14 @@ public class RefreshableViewPager extends ViewPager {
     private void refreshItem(int item) {
         if (!isAutoRefresh) return;
 
-        Fragment fr = getFragment(item);
+        final Fragment fr = getFragment(item);
         if (fr != null && fr instanceof Refreshable){
-            ((Refreshable) fr).refresh();
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ((Refreshable) fr).refresh();
+                }
+            }, refreshDelay);
         }
     }
 
@@ -103,13 +111,7 @@ public class RefreshableViewPager extends ViewPager {
     private BasePageChangeListener nativePageListener = new BasePageChangeListener() {
         @Override
         public void onPageSelected(int i) {
-            if (isAutoRefresh){
-                Fragment fr = getFragment(i);
-                if (fr != null && fr instanceof Refreshable){
-                    ((Refreshable) fr).refresh();
-                }
-            }
-
+            refreshItem(i);
             if (foreignPageListener != null) foreignPageListener.onPageSelected(i);
         }
 
@@ -123,4 +125,8 @@ public class RefreshableViewPager extends ViewPager {
             if (foreignPageListener != null) foreignPageListener.onPageScrollStateChanged(i);
         }
     };
+
+    public static interface Refreshable {
+        public void refresh();
+    }
 }

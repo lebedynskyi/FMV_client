@@ -9,9 +9,9 @@ import com.music.fmv.adapters.HistorySearchAdapter;
 import com.music.fmv.adapters.sectionadapter.SectionAdapter;
 import com.music.fmv.adapters.sectionadapter.Sectionizer;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.core.Refreshable;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.widgets.RefreshableViewPager;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 7/22/13
  * Time: 12:07 PM
  */
-public class HistoryFragment extends BaseFragment implements Refreshable{
+public class HistoryFragment extends BaseFragment implements RefreshableViewPager.Refreshable {
     private HistorySearchAdapter adapter;
     private List<SearchQueryCache> historyItems;
     private SectionAdapter<SearchQueryCache> sectionAdapter;
