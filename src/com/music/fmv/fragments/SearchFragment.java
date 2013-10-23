@@ -61,15 +61,15 @@ public class SearchFragment extends BaseFragment implements ISearchFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.artist_tab:
-                    pager.setCurrentItem(ARTIST_TAB, false);
+                    pager.setCurrentItem(ARTIST_TAB);
                     artistTabClicked();
                     break;
                 case R.id.album_tab:
-                    pager.setCurrentItem(ALBUM_TAB, false);
+                    pager.setCurrentItem(ALBUM_TAB);
                     albumTabClicked();
                     break;
                 case R.id.song_tab:
-                    pager.setCurrentItem(SONG_TAB, false);
+                    pager.setCurrentItem(SONG_TAB);
                     songsTabClicked();
             }
         }

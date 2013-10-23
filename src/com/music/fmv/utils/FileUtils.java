@@ -502,4 +502,8 @@ public class FileUtils {
     public static String getAbsoluthePath(String folder, InternetSong song) {
         return new File(folder, song.getFutureFileName()).getAbsolutePath();
     }
+
+    public static String extractFileName(File file) {
+        return file.getName();
+    }
 }

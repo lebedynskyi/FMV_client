@@ -2,9 +2,13 @@ package com.music.fmv.tasks;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import com.music.fmv.models.notdbmodels.FileSystemSong;
+import org.cmc.music.metadata.IMusicMetadata;
+import org.cmc.music.metadata.MusicMetadataSet;
+import org.cmc.music.myid3.MyID3;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,8 +25,6 @@ public class GetAudioFromStore extends BaseAsyncTask<List<FileSystemSong>> {
     public GetAudioFromStore(Context context, boolean showDialog) {
         super(context, showDialog);
     }
-
-    static int counter = 0;
 
     public GetAudioFromStore(Context baseActivity, boolean b, String songsFolder) {
         super(baseActivity, b);
@@ -45,24 +47,44 @@ public class GetAudioFromStore extends BaseAsyncTask<List<FileSystemSong>> {
             if (file.isDirectory()){
                 songsforresult.addAll(getSongsFromFolder(file.getAbsolutePath()));
             }else {
-                FileSystemSong song = extractSongFromFile(file);
-                if (song == null) continue;
-                songsforresult.add(song);
+               try {
+                   FileSystemSong song = extractSongFromFile(file);
+                   if (song != null) songsforresult.add(song);
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
             }
         }
 
         return songsforresult;
     }
 
-    private FileSystemSong extractSongFromFile(File file) {
+    private FileSystemSong extractSongFromFile(File file) throws Exception{
         String absolutePath = file.getAbsolutePath();
 
         if (!absolutePath.endsWith(".mp3")) return null;
 
-        FileSystemSong s = new FileSystemSong();
-        s.setName(String.valueOf(counter++));
-        s.setUrl(absolutePath);
-        return s;
+        MusicMetadataSet src_set = null;
+        try {
+            src_set = new MyID3().read(file);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        FileSystemSong song = new FileSystemSong();
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(absolutePath);
+
+        if (src_set == null){
+            song.setName(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+            song.setArtist(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        }else {
+            IMusicMetadata metadata = src_set.getSimplified();
+            song.setName(metadata.getSongTitle());
+            song.setArtist(metadata.getArtist());
+        }
+        song.setDuration(Integer.parseInt(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)));
+        song.setUrl(absolutePath);
+        return song;
     }
 
     private List<FileSystemSong> getSongsFromMediaStore() {
@@ -83,7 +105,6 @@ public class GetAudioFromStore extends BaseAsyncTask<List<FileSystemSong>> {
         int artistIndex = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
         int nameIndex = musicCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
         int durIndex = musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
-        int idIndex = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID);
         int pathIndex = musicCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
 
         while (musicCursor.moveToNext()){
@@ -94,7 +115,6 @@ public class GetAudioFromStore extends BaseAsyncTask<List<FileSystemSong>> {
             song.setArtist(musicCursor.getString(artistIndex));
             song.setDuration(musicCursor.getInt(durIndex));
             song.setName(musicCursor.getString(nameIndex));
-            song.setId(musicCursor.getInt(idIndex));
             song.setUrl(path);
             songs.add(song);
         }

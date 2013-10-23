@@ -6,13 +6,5 @@ package com.music.fmv.models.notdbmodels;
  * Time: 10:38 AM
  */
 public class FileSystemSong extends PlayAbleSong {
-    private int id;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

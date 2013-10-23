@@ -16,15 +16,13 @@ import java.util.ArrayList;
  * Date: 7/22/13
  * Time: 12:08 PM
  */
-public class MusicFragment extends BaseFragment implements RefreshableViewPager.Refreshable {
+public class MusicFragment extends BaseFragment{
     public static final int NATIVE_MUSIC_TAB = 0;
     public static final int LOADED_MUSIC_TAB = 1;
-
 
     private View loadedB;
     private View nativeB;
     private ViewPager pager;
-
 
     @Override
     protected View createView(Bundle savedInstanceState) {
@@ -32,21 +30,29 @@ public class MusicFragment extends BaseFragment implements RefreshableViewPager.
         nativeB = v.findViewById(R.id.native_music_tab);
         loadedB = v.findViewById(R.id.loaded_music_tab);
         pager = (ViewPager) v.findViewById(R.id.music_pager);
+
         nativeB.setOnClickListener(tabsListener);
         loadedB.setOnClickListener(tabsListener);
-        ViewUtils.selectButton(nativeB, loadedB);
+
+        ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>();
+        fragments.add(NATIVE_MUSIC_TAB, new NativeMusicListfragment());
+        fragments.add(LOADED_MUSIC_TAB, new LoadedMusicListfragment());
+        pager.setAdapter(new FragmentAdapter(baseActivity.getSupportFragmentManager(), fragments));
         pager.setOnPageChangeListener(pagerListener);
+
+        ViewUtils.selectButton(nativeB, loadedB);
+
         return v;
     }
 
     public void nativeMusicClicked(){
         ViewUtils.selectButton(nativeB, loadedB);
-        pager.setCurrentItem(NATIVE_MUSIC_TAB, false);
+        pager.setCurrentItem(NATIVE_MUSIC_TAB);
     }
 
     public void loadedMusicClicked(){
         ViewUtils.selectButton(loadedB, nativeB);
-        pager.setCurrentItem(LOADED_MUSIC_TAB, false);
+        pager.setCurrentItem(LOADED_MUSIC_TAB);
     }
 
 
@@ -76,13 +82,4 @@ public class MusicFragment extends BaseFragment implements RefreshableViewPager.
             }
         }
     };
-
-    @Override
-    public void refresh() {
-        ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>();
-        fragments.add(NATIVE_MUSIC_TAB, new NativeMusicListfragment());
-        fragments.add(LOADED_MUSIC_TAB, new LoadedMusicListfragment());
-        pager.setAdapter(new FragmentAdapter(baseActivity.getSupportFragmentManager(), fragments));
-        ViewUtils.selectButton(nativeB, loadedB);
-    }
 }

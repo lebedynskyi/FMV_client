@@ -8,6 +8,7 @@ import com.music.fmv.adapters.NativeSongAdapter;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.notdbmodels.FileSystemSong;
 import com.music.fmv.tasks.GetAudioFromStore;
+import com.music.fmv.widgets.RefreshableViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  * Date: 10/22/13
  * Time: 12:25 PM
  */
-public class LoadedMusicListfragment extends BaseFragment{
+public class LoadedMusicListfragment extends BaseFragment implements RefreshableViewPager.Refreshable{
     private View emptyView;
     private View progressView;
     private SwipeListView songsLIstView;
@@ -61,5 +62,10 @@ public class LoadedMusicListfragment extends BaseFragment{
             songsLIstView.setEmptyView(emptyView);
             progressView.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void refresh() {
+        initSongs();
     }
 }

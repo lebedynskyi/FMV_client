@@ -115,19 +115,19 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.search_btn:
-                    pager.setCurrentItem(SEARCH_TAB, false);
+                    pager.setCurrentItem(SEARCH_TAB);
                     searchTabClicked();
                     break;
                 case R.id.music_btn:
-                    pager.setCurrentItem(MUSIC_TAB, false);
+                    pager.setCurrentItem(MUSIC_TAB);
                     musicTabClicked();
                     break;
                 case R.id.settings_tab:
-                    pager.setCurrentItem(SETTINGS_TAB, false);
+                    pager.setCurrentItem(SETTINGS_TAB);
                     settingsTabClicked();
                     break;
                 case R.id.history_btn:
-                    pager.setCurrentItem(HISTORY_TAB, false);
+                    pager.setCurrentItem(HISTORY_TAB);
                     historyClicked();
             }
         }
