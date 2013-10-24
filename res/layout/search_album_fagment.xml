@@ -19,7 +19,7 @@
             swipe:swipeCloseAllItemsWhenMoveList="true"
             swipe:swipeOpenOnLongPress="false"
             swipe:swipeAnimationTime="150"
-            swipe:swipeOffsetLeft="170dp"/>
+            swipe:swipeOffsetLeft="150dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

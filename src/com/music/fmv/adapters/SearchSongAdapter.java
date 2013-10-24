@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
-import com.music.fmv.models.notdbmodels.InternetSong;
+import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ import java.util.ArrayList;
  * Time: 2:43 PM
  */
 
-public class SearchSongAdapter extends FixedBaseAdapter<InternetSong> {
+public class SearchSongAdapter extends FixedBaseAdapter<PlayAbleSong> {
     private AdapterCallback callback;
     private SwipeListView listView;
 
-    public SearchSongAdapter(Context c, ArrayList<InternetSong> list, SwipeListView listView) {
+    public SearchSongAdapter(Context c, ArrayList<PlayAbleSong> list, SwipeListView listView) {
         super(list, c);
         this.listView = listView;
     }
@@ -31,12 +31,12 @@ public class SearchSongAdapter extends FixedBaseAdapter<InternetSong> {
     }
 
     @Override
-    public InternetSong getItem(int position) {
+    public PlayAbleSong getItem(int position) {
         return mData.get(position);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent, InternetSong song) {
+    public View getView(int position, View convertView, ViewGroup parent, PlayAbleSong song) {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -79,10 +79,10 @@ public class SearchSongAdapter extends FixedBaseAdapter<InternetSong> {
     }
 
     private class ButtonListener implements View.OnClickListener {
-        private InternetSong model;
+        private PlayAbleSong model;
         private int position;
 
-        private ButtonListener(InternetSong model, int position) {
+        private ButtonListener(PlayAbleSong model, int position) {
             this.model = model;
             this.position = position;
         }
@@ -104,10 +104,10 @@ public class SearchSongAdapter extends FixedBaseAdapter<InternetSong> {
     }
 
     public interface AdapterCallback {
-        public void playClicked(InternetSong model, int pos);
+        public void playClicked(PlayAbleSong model, int pos);
 
-        public void addToQueueClicked(InternetSong model);
+        public void addToQueueClicked(PlayAbleSong model);
 
-        public void downloadClicked(InternetSong model);
+        public void downloadClicked(PlayAbleSong model);
     }
 }

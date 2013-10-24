@@ -9,14 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.google.analytics.tracking.android.*;
 import com.music.fmv.R;
-import com.music.fmv.models.notdbmodels.Captcha;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
-import com.music.fmv.widgets.CaptchaDialog;
 
 /**
- * User: Vitalii Lebedynskyi
+ * User: vitaliylebedinskiy
  * Date: 7/12/13
  * Time: 5:38 PM
  */
@@ -118,13 +116,6 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
         mCore.showToast(R.string.network_unavailable);
         return false;
-    }
-
-    public void showCaptchaDialog(Captcha c, CaptchaDialog.CaptchaCallBack callBack) {
-        CaptchaDialog dialog = new CaptchaDialog();
-        dialog.setCaptcha(c);
-        dialog.setCaptchaCallBack(callBack);
-        dialog.show(getSupportFragmentManager(), c.getUrl());
     }
 
     protected abstract void onCreated(Bundle state);

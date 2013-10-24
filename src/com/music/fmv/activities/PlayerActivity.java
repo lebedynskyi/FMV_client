@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.managers.PlayerManager;
-import com.music.fmv.models.notdbmodels.InternetSong;
+import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.services.Player;
 import com.music.fmv.widgets.FixedSlidingTray;
 
@@ -203,7 +203,7 @@ public class PlayerActivity extends BaseActivity {
         }
 
         @Override
-        public void onSongPlaying(InternetSong song) {
+        public void onSongPlaying(PlayAbleSong song) {
             if (song != null) {
                 songNameTV.setText(song.getName());
                 songArtistTV.setText(song.getArtist());

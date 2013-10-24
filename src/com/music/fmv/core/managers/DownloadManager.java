@@ -3,6 +3,7 @@ package com.music.fmv.core.managers;
 import com.music.fmv.R;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.notdbmodels.InternetSong;
+import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 import com.music.fmv.tasks.threads.IDownloadListener;
 import com.music.fmv.tasks.threads.SongLoader;
@@ -40,12 +41,12 @@ public class DownloadManager extends Manager {
         //TODO implemented
     }
 
-    public void download(InternetSong model) {
+    public void download(PlayAbleSong model) {
         download(model, downloadListener);
     }
 
 
-    public void download(InternetSong model, IDownloadListener listener) {
+    public void download(PlayAbleSong model, IDownloadListener listener) {
         if (!NetworkUtil.isNetworkAvailable(core.getContext())) {
             core.showToast(R.string.network_unavailable);
             return;

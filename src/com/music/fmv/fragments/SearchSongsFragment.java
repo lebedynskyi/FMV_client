@@ -16,6 +16,7 @@ import com.music.fmv.adapters.SearchSongAdapter;
 import com.music.fmv.core.Core;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.notdbmodels.InternetSong;
+import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.tasks.SearchSongsTask;
 import com.music.fmv.utils.ViewUtils;
 
@@ -28,7 +29,7 @@ import java.util.ArrayList;
  */
 public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpdateListener {
     private SwipeListView songsListView;
-    private ArrayList<InternetSong> songsInAdapter = new ArrayList<InternetSong>();
+    private ArrayList<PlayAbleSong> songsInAdapter = new ArrayList<PlayAbleSong>();
     private SearchSongAdapter adapter;
     private boolean songTaskRunned;
     private String lastQuery;
@@ -182,19 +183,19 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
 
     private SearchSongAdapter.AdapterCallback adapterCallback = new SearchSongAdapter.AdapterCallback() {
         @Override
-        public void playClicked(InternetSong model, int pos) {
+        public void playClicked(PlayAbleSong model, int pos) {
             core.getPlayerManager().getPlayer(null).play(songsInAdapter, pos);
             mMediator.startPlayerActivity();
         }
 
         @Override
-        public void addToQueueClicked(InternetSong model) {
+        public void addToQueueClicked(PlayAbleSong model) {
             core.getPlayerManager().getPlayer(null).add(model);
             Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void downloadClicked(InternetSong model) {
+        public void downloadClicked(PlayAbleSong model) {
             core.getDownloadManager().download(model);
         }
     };

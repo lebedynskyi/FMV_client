@@ -2,6 +2,7 @@ package com.music.fmv.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.NativeSongAdapter;
@@ -33,6 +34,7 @@ public class LoadedMusicListfragment extends BaseFragment implements Refreshable
         songsLIstView = (SwipeListView) v.findViewById(R.id.songs_list);
         adapter = new NativeSongAdapter(baseActivity, songs, songsLIstView);
         songsLIstView.setAdapter(adapter);
+        songsLIstView.setSwipeListViewListener(listViewListener);
         initSongs();
         return v;
     }
@@ -68,4 +70,16 @@ public class LoadedMusicListfragment extends BaseFragment implements Refreshable
     public void refresh() {
         initSongs();
     }
+
+    private BaseSwipeListViewListener listViewListener = new BaseSwipeListViewListener() {
+        @Override
+        public void onClickBackView(int position) {
+            songsLIstView.closeAnimate(position);
+        }
+
+        @Override
+        public void onClickFrontView(int position) {
+            songsLIstView.openAnimate(position);
+        }
+    };
 }

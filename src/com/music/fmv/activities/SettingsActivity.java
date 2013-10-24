@@ -54,7 +54,6 @@ public class SettingsActivity extends PreferenceActivity {
         imagesFolderPref.setOnPreferenceClickListener(new FileChooserListener(IMAGES_FOLDER_REQUEST));
 
         CheckBoxPreference useOneFolderCheck = (CheckBoxPreference) findPreference(getString(R.string.USE_ONE_FOlDER_KEY));
-        applyAppearForStorrageSettings(useOneFolderCheck.getPreferenceManager().getSharedPreferences().getBoolean("use_one_folder", false));
 
         useOneFolderCheck.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -63,6 +62,7 @@ public class SettingsActivity extends PreferenceActivity {
                 return true;
             }
         });
+        applyAppearForStorrageSettings(getPreferenceManager().getSharedPreferences().getBoolean(getString(R.string.USE_ONE_FOlDER_KEY), false));
     }
 
     public void startChooserActivity(int requestCode) {

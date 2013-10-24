@@ -9,10 +9,9 @@ import com.music.fmv.views.LoadDialog;
 
 /**
  * Created with IntelliJ IDEA.
- * User: lebed
+ * User: Vitalii Lebednskyi
  * Date: 7/14/13
  * Time: 8:49 AM
- * To change this template use File | Settings | File Templates.
  */
 public abstract class BaseAsyncTask<T> extends AsyncTask<Object, Object, T> {
     protected Context context;
