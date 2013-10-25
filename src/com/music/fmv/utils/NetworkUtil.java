@@ -37,7 +37,7 @@ public final class NetworkUtil {
         return doRequest(urlRequest, Method.POST, data);
     }
 
-    public static String doRequest(String urlRequest, Method method, Stringz data) throws Exception {
+    public static String doRequest(String urlRequest, Method method, String data) throws Exception {
         URL url = new URL(urlRequest);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(5000);
