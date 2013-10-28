@@ -6,22 +6,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
-import com.music.fmv.models.notdbmodels.FileSystemSong;
+import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.utils.TimeUtils;
 
 import java.util.ArrayList;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedinskiy
  * Date: 8/1/13
  * Time: 2:43 PM
  */
 
-public class NativeSongAdapter extends FixedBaseAdapter<FileSystemSong> {
+public class NativeSongAdapter extends FixedBaseAdapter<PlayAbleSong> {
     private AdapterCallback callback;
     private SwipeListView listView;
 
-    public NativeSongAdapter(Context c, ArrayList<FileSystemSong> list, SwipeListView listView) {
+    public NativeSongAdapter(Context c, ArrayList<PlayAbleSong> list, SwipeListView listView) {
         super(list, c);
         this.listView = listView;
     }
@@ -31,12 +31,12 @@ public class NativeSongAdapter extends FixedBaseAdapter<FileSystemSong> {
     }
 
     @Override
-    public FileSystemSong getItem(int position) {
+    public PlayAbleSong getItem(int position) {
         return mData.get(position);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent, FileSystemSong song) {
+    public View getView(int position, View convertView, ViewGroup parent, PlayAbleSong song) {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -68,10 +68,10 @@ public class NativeSongAdapter extends FixedBaseAdapter<FileSystemSong> {
     }
 
     private class ButtonListener implements View.OnClickListener {
-        private FileSystemSong model;
+        private PlayAbleSong model;
         private int position;
 
-        private ButtonListener(FileSystemSong model, int position) {
+        private ButtonListener(PlayAbleSong model, int position) {
             this.model = model;
             this.position = position;
         }
@@ -90,7 +90,7 @@ public class NativeSongAdapter extends FixedBaseAdapter<FileSystemSong> {
     }
 
     public interface AdapterCallback {
-        public void playClicked(FileSystemSong model, int pos);
-        public void addToQueueClicked(FileSystemSong model);
+        public void playClicked(PlayAbleSong model, int pos);
+        public void addToQueueClicked(PlayAbleSong model);
     }
 }

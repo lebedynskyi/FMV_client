@@ -23,7 +23,7 @@ import com.music.fmv.utils.ViewUtils;
 import java.util.ArrayList;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 8/5/13
  * Time: 12:32 PM
  */

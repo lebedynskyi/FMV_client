@@ -11,7 +11,7 @@ import com.music.fmv.services.Player;
 import com.music.fmv.services.PlayerService;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 8/12/13
  * Time: 12:07 PM
  */

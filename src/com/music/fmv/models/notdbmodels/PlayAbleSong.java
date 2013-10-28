@@ -70,7 +70,7 @@ public abstract class PlayAbleSong extends BaseSerializableModel{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        InternetSong that = (InternetSong) o;
+        PlayAbleSong that = (PlayAbleSong) o;
 
         return !(artist != null ? !artist.equals(that.getArtist()) : that.getArtist()!= null) && !(name != null ? !name.equals(that.getName()) : that.getName() != null);
     }

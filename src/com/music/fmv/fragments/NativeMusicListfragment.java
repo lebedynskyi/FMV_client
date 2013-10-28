@@ -2,12 +2,14 @@ package com.music.fmv.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.NativeSongAdapter;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.models.notdbmodels.FileSystemSong;
+import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.tasks.GetAudioFromStore;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class NativeMusicListfragment extends BaseFragment{
     private View emptyView;
     private View progressView;
     private SwipeListView songsLIstView;
-    private ArrayList<FileSystemSong> songs = new ArrayList<FileSystemSong>();
+    private ArrayList<PlayAbleSong> songs = new ArrayList<PlayAbleSong>();
     private NativeSongAdapter adapter;
 
     @Override
@@ -32,6 +34,7 @@ public class NativeMusicListfragment extends BaseFragment{
         progressView = v.findViewById(R.id.progress_bar);
         songsLIstView = (SwipeListView) v.findViewById(R.id.songs_list);
         adapter = new NativeSongAdapter(baseActivity, songs, songsLIstView);
+        adapter.setCallback(adapterCallback);
         songsLIstView.setAdapter(adapter);
         songsLIstView.setSwipeListViewListener(listViewListener);
         initSongs();
@@ -74,6 +77,21 @@ public class NativeMusicListfragment extends BaseFragment{
         @Override
         public void onClickFrontView(int position) {
             songsLIstView.openAnimate(position);
+        }
+    };
+
+
+    private NativeSongAdapter.AdapterCallback adapterCallback = new NativeSongAdapter.AdapterCallback() {
+        @Override
+        public void playClicked(PlayAbleSong model, int pos) {
+            core.getPlayerManager().getPlayer(null).play(songs, pos);
+            mMediator.startPlayerActivity();
+        }
+
+        @Override
+        public void addToQueueClicked(PlayAbleSong model) {
+            core.getPlayerManager().getPlayer(null).add(model);
+            Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }
     };
 }
