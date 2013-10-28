@@ -148,6 +148,7 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     @Override
     public void onHistoryClicked(SearchQueryCache model) {
         searchTabClicked();
+        pager.setCurrentItem(SEARCH_TAB);
         Fragment fr = pager.getFragment(SEARCH_TAB);
         if (fr != null && fr instanceof ISearchFragment){
             ((ISearchFragment) fr).search(model);

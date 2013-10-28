@@ -17,7 +17,7 @@ import com.music.fmv.widgets.RefreshableViewPager;
 import java.util.ArrayList;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 8/5/13
  * Time: 12:39 PM
  */
@@ -48,8 +48,11 @@ public class SearchFragment extends BaseFragment implements ISearchFragment {
         fragments.add(ARTIST_TAB, new SearchArtistFragment());
         fragments.add(ALBUM_TAB, new SearchAlbumFragment());
         fragments.add(SONG_TAB, new SearchSongsFragment());
+
         pager.setAdapter(new FragmentAdapter(getActivity().getSupportFragmentManager(), fragments));
         pager.setOnPageChangeListener(pagerListener);
+        pager.setOffscreenPageLimit(3);
+
         ViewUtils.selectButton(artistBtn, albumButton, songsButton);
         baseActivity.sendScreenStatistic("Artist tab");
         return mainView;
@@ -96,14 +99,17 @@ public class SearchFragment extends BaseFragment implements ISearchFragment {
         switch (type){
             case ARTIST:
                 fr = pager.getFragment(ARTIST_TAB);
+                pager.setCurrentItem(ARTIST_TAB);
                 artistTabClicked();
                 break;
             case ALBUM:
                 fr = pager.getFragment(ALBUM_TAB);
+                pager.setCurrentItem(ALBUM_TAB);
                 albumTabClicked();
                 break;
             case SONG:
                 fr = pager.getFragment(SONG_TAB);
+                pager.setCurrentItem(SONG_TAB);
                 songsTabClicked();
                 break;
         }
