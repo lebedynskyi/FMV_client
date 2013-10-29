@@ -52,6 +52,7 @@ public class PlayerActivity extends BaseActivity {
     private RefreshTimer refresher;
     private boolean fromNitification;
     private View backBTN;
+    private FixedSlidingTray tray;
 
     @Override
     protected void onCreated(Bundle state) {
@@ -96,7 +97,9 @@ public class PlayerActivity extends BaseActivity {
     }
 
     public void playListClicked(View v) {
-
+        if (tray.isOpened()) {
+            tray.animateClose();
+        } else tray.animateOpen();
     }
 
     public void initViews() {
@@ -129,16 +132,8 @@ public class PlayerActivity extends BaseActivity {
         shuffleNormDrawable = getResources().getDrawable(R.drawable.player_shuffle_selector);
         shuffleActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
 
-        View handle = findViewById(R.id.handle);
-        final FixedSlidingTray tray = (FixedSlidingTray) findViewById(R.id.drawer);
-        handle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (tray.isOpened()) {
-                    tray.animateClose();
-                } else tray.animateOpen();
-            }
-        });
+        tray = (FixedSlidingTray) findViewById(R.id.drawer);
+
     }
 
     private void refreshProgress() {
@@ -227,6 +222,10 @@ public class PlayerActivity extends BaseActivity {
 
     private void startImageTask() {
         //TODO implemented
+    }
+
+    private void downloadClicked(View v){
+
     }
 
     private class RefreshTimer extends CountDownTimer {

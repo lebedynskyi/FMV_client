@@ -90,12 +90,14 @@ public class LoadedMusicListfragment extends BaseFragment implements Refreshable
     private NativeSongAdapter.AdapterCallback adapterCallback = new NativeSongAdapter.AdapterCallback() {
         @Override
         public void playClicked(PlayAbleSong model, int pos) {
+            songsListView.closeOpenedItems();
             core.getPlayerManager().getPlayer(null).play(songs, pos);
             mMediator.startPlayerActivity();
         }
 
         @Override
         public void addToQueueClicked(PlayAbleSong model) {
+            songsListView.closeOpenedItems();
             core.getPlayerManager().getPlayer(null).add(model);
             Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }

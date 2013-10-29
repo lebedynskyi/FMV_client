@@ -19,10 +19,9 @@
         <item>en</item>
         <item>fr</item>
     </string-array>
+    <!--CLOSE SETTINGS STRINGS THAT NOT USED IN UI-->
 
-    <!--SETTINGS STRINGS THAT NOT USED IN UI-->
-
-    <string name="app_name">fMV</string>
+    <string name="app_name">FMS</string>
     <string name="network_unavailable">Network unavailable. Please check your connection.</string>
     <string name="request_error">Error during retrieving information.</string>
     <string name="empty_result">Search returned 0 rows.</string>

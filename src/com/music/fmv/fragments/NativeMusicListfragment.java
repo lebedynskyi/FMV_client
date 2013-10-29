@@ -23,7 +23,7 @@ import java.util.List;
 public class NativeMusicListfragment extends BaseFragment{
     private View emptyView;
     private View progressView;
-    private SwipeListView songsLIstView;
+    private SwipeListView songsListView;
     private ArrayList<PlayAbleSong> songs = new ArrayList<PlayAbleSong>();
     private NativeSongAdapter adapter;
 
@@ -32,11 +32,11 @@ public class NativeMusicListfragment extends BaseFragment{
         View v = inflateView(R.layout.native_music_fragment);
         emptyView = v.findViewById(R.id.empty_text);
         progressView = v.findViewById(R.id.progress_bar);
-        songsLIstView = (SwipeListView) v.findViewById(R.id.songs_list);
-        adapter = new NativeSongAdapter(baseActivity, songs, songsLIstView);
+        songsListView = (SwipeListView) v.findViewById(R.id.songs_list);
+        adapter = new NativeSongAdapter(baseActivity, songs, songsListView);
         adapter.setCallback(adapterCallback);
-        songsLIstView.setAdapter(adapter);
-        songsLIstView.setSwipeListViewListener(listViewListener);
+        songsListView.setAdapter(adapter);
+        songsListView.setSwipeListViewListener(listViewListener);
         initSongs();
         return v;
     }
@@ -59,11 +59,11 @@ public class NativeMusicListfragment extends BaseFragment{
 
     private void prepareProgress(boolean isLoading) {
         if (isLoading){
-            songsLIstView.setEmptyView(null);
+            songsListView.setEmptyView(null);
             emptyView.setVisibility(View.GONE);
             progressView.setVisibility(View.VISIBLE);
         }else {
-            songsLIstView.setEmptyView(emptyView);
+            songsListView.setEmptyView(emptyView);
             progressView.setVisibility(View.GONE);
         }
     }
@@ -71,12 +71,12 @@ public class NativeMusicListfragment extends BaseFragment{
     private BaseSwipeListViewListener listViewListener = new BaseSwipeListViewListener() {
         @Override
         public void onClickBackView(int position) {
-            songsLIstView.closeAnimate(position);
+            songsListView.closeAnimate(position);
         }
 
         @Override
         public void onClickFrontView(int position) {
-            songsLIstView.openAnimate(position);
+            songsListView.openAnimate(position);
         }
     };
 
@@ -84,12 +84,14 @@ public class NativeMusicListfragment extends BaseFragment{
     private NativeSongAdapter.AdapterCallback adapterCallback = new NativeSongAdapter.AdapterCallback() {
         @Override
         public void playClicked(PlayAbleSong model, int pos) {
+            songsListView.closeOpenedItems();
             core.getPlayerManager().getPlayer(null).play(songs, pos);
             mMediator.startPlayerActivity();
         }
 
         @Override
         public void addToQueueClicked(PlayAbleSong model) {
+            songsListView.closeOpenedItems();
             core.getPlayerManager().getPlayer(null).add(model);
             Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }

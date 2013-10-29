@@ -190,12 +190,14 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
 
         @Override
         public void addToQueueClicked(PlayAbleSong model) {
+            songsListView.closeOpenedItems();
             core.getPlayerManager().getPlayer(null).add(model);
             Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void downloadClicked(PlayAbleSong model) {
+            songsListView.closeOpenedItems();
             core.getDownloadManager().download(model);
         }
     };
