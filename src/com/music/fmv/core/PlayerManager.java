@@ -1,4 +1,4 @@
-package com.music.fmv.core.managers;
+package com.music.fmv.core;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
-import com.music.fmv.core.Core;
 import com.music.fmv.services.Player;
 import com.music.fmv.services.PlayerService;
 
@@ -27,12 +26,11 @@ public class PlayerManager extends Manager {
         bindToPlayer();
     }
 
-    public Player getPlayer(PostInitializationListener initializationListener) {
+    public void getPlayer(PostInitializationListener initializationListener) {
         if (player == null) {
             this.initListener = initializationListener;
             bindToPlayer();
-        }
-        return player;
+        }else initializationListener.onPlayerAvailable(player);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class PlayerManager extends Manager {
         public void onServiceConnected(ComponentName name, IBinder service) {
             Bind b = (Bind) service;
             player = b.getService();
-            if (initListener != null) initListener.onPlayerCreated(player);
+            if (initListener != null) initListener.onPlayerAvailable(player);
         }
 
         @Override
@@ -71,6 +69,6 @@ public class PlayerManager extends Manager {
     }
 
     public interface PostInitializationListener {
-        public void onPlayerCreated(Player p);
+        public void onPlayerAvailable(Player p);
     }
 }

@@ -29,6 +29,7 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     public static final int HISTORY_TAB = 1;
     public static final int MUSIC_TAB = 2;
     public static final int SETTINGS_TAB = 3;
+    public static final int BACK_CLICK_OFFSET = 1500;
 
     private RefreshableViewPager pager;
 
@@ -137,11 +138,11 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     @Override
     public void onBackPressed() {
         Date d  = Calendar.getInstance().getTime();
-        if ((d.getTime() - lastBackTime) < 1000){
+        if ((d.getTime() - lastBackTime) < BACK_CLICK_OFFSET){
             super.onBackPressed();
         }else {
             lastBackTime = d.getTime();
-            Toast.makeText(this, R.string.press_one_more_to_exit, 1000).show();
+            Toast.makeText(this, R.string.press_one_more_to_exit, BACK_CLICK_OFFSET).show();
         }
     }
 

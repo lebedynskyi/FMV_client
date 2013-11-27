@@ -14,9 +14,11 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
 import com.music.fmv.core.Core;
+import com.music.fmv.core.PlayerManager;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.services.Player;
 import com.music.fmv.tasks.SearchSongsTask;
 import com.music.fmv.utils.ViewUtils;
 
@@ -183,16 +185,26 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
 
     private SearchSongAdapter.AdapterCallback adapterCallback = new SearchSongAdapter.AdapterCallback() {
         @Override
-        public void playClicked(PlayAbleSong model, int pos) {
-            core.getPlayerManager().getPlayer(null).play(songsInAdapter, pos);
-            mMediator.startPlayerActivity();
+        public void playClicked(PlayAbleSong model,final int pos) {
+            core.getPlayerManager().getPlayer(new PlayerManager.PostInitializationListener() {
+                @Override
+                public void onPlayerAvailable(Player p) {
+                    p.play(songsInAdapter, pos);
+                    mMediator.startPlayerActivity();
+                }
+            });
         }
 
         @Override
-        public void addToQueueClicked(PlayAbleSong model) {
+        public void addToQueueClicked(final PlayAbleSong model) {
             songsListView.closeOpenedItems();
-            core.getPlayerManager().getPlayer(null).add(model);
-            Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
+            core.getPlayerManager().getPlayer(new PlayerManager.PostInitializationListener() {
+                @Override
+                public void onPlayerAvailable(Player p) {
+                    p.add(model);
+                    Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         @Override

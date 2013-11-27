@@ -1,4 +1,4 @@
-package com.music.fmv.core.managers;
+package com.music.fmv.core;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,7 +8,6 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 import com.music.fmv.R;
 import com.music.fmv.activities.PlayerActivity;
-import com.music.fmv.core.Core;
 
 /**
  * User: vitaliylebedinskiy
@@ -21,7 +20,7 @@ public class NotifyManager extends Manager {
 
     private NotificationManager mNotifyManager;
 
-    public NotifyManager(Core coreManager) {
+    NotifyManager(Core coreManager) {
         super(coreManager);
         mNotifyManager = (NotificationManager) core.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
     }

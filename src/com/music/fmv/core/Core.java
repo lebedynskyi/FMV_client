@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.widget.Toast;
 import com.music.fmv.R;
-import com.music.fmv.core.managers.*;
+import com.music.fmv.db.DBHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
@@ -24,6 +24,7 @@ public final class Core {
     private static Core instance;
     private final Context app;
     private Handler handler;
+    private DBHelper dbHelper;
 
     private NotifyManager mNotificationManager;
     private CacheManager mCacheManager;
@@ -53,6 +54,7 @@ public final class Core {
         downloadManager = new DownloadManager(this);
         updateListeners = new HashSet<WeakReference<IUpdateListener>>();
         playerManager = new PlayerManager(this);
+        dbHelper = DBHelper.getInstance(app);
     }
 
     public NotifyManager getNotificationManager() {
@@ -145,5 +147,9 @@ public final class Core {
 
     public interface IUpdateListener {
         public void needUpdate();
+    }
+
+    public DBHelper getDbHelper(){
+        return dbHelper;
     }
 }

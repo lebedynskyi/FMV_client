@@ -8,8 +8,10 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.NativeSongAdapter;
 import com.music.fmv.core.BaseFragment;
+import com.music.fmv.core.PlayerManager;
 import com.music.fmv.models.notdbmodels.FileSystemSong;
 import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.services.Player;
 import com.music.fmv.tasks.GetAudioFromStore;
 import com.music.fmv.widgets.RefreshableViewPager;
 
@@ -89,17 +91,27 @@ public class LoadedMusicListfragment extends BaseFragment implements Refreshable
 
     private NativeSongAdapter.AdapterCallback adapterCallback = new NativeSongAdapter.AdapterCallback() {
         @Override
-        public void playClicked(PlayAbleSong model, int pos) {
+        public void playClicked(PlayAbleSong model, final int pos) {
             songsListView.closeOpenedItems();
-            core.getPlayerManager().getPlayer(null).play(songs, pos);
-            mMediator.startPlayerActivity();
+            core.getPlayerManager().getPlayer(new PlayerManager.PostInitializationListener() {
+                @Override
+                public void onPlayerAvailable(Player p) {
+                    p.play(songs, pos);
+                    mMediator.startPlayerActivity();
+                }
+            });
         }
 
         @Override
-        public void addToQueueClicked(PlayAbleSong model) {
+        public void addToQueueClicked(final PlayAbleSong model) {
             songsListView.closeOpenedItems();
-            core.getPlayerManager().getPlayer(null).add(model);
-            Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
+            core.getPlayerManager().getPlayer(new PlayerManager.PostInitializationListener() {
+                @Override
+                public void onPlayerAvailable(Player p) {
+                    p.add(model);
+                    Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     };
 }

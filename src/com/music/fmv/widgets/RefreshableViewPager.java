@@ -11,7 +11,7 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.FragmentAdapter;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 8/5/13
  * Time: 12:30 PM
  */

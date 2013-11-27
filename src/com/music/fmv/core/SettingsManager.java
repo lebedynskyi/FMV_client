@@ -1,10 +1,9 @@
-package com.music.fmv.core.managers;
+package com.music.fmv.core;
 
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import com.music.fmv.R;
-import com.music.fmv.core.Core;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +19,7 @@ public class SettingsManager extends Manager {
 
     private SharedPreferences prefs;
 
-    public SettingsManager(Core coreManager) {
+    SettingsManager(Core coreManager) {
         super(coreManager);
         prefs = PreferenceManager.getDefaultSharedPreferences(coreManager.getContext());
     }

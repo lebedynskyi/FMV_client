@@ -1,10 +1,7 @@
-package com.music.fmv.core.managers;
+package com.music.fmv.core;
 
-import com.music.fmv.core.Core;
-import com.music.fmv.db.DBHelper;
 import com.music.fmv.models.dbmodels.ModelType;
 import com.music.fmv.models.dbmodels.SearchQueryCache;
-import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.utils.FileUtils;
 
@@ -19,11 +16,9 @@ import java.util.List;
  * Time: 6:08 PM
  */
 public class CacheManager extends Manager {
-    private DBHelper dbHelper;
-
-    public CacheManager(Core core) {
+    CacheManager(Core core) {
         super(core);
-        dbHelper = DBHelper.getInstance(core.getContext());
+
     }
 
     public boolean isSongExists(PlayAbleSong song) {
@@ -44,15 +39,15 @@ public class CacheManager extends Manager {
 
     public void addSearchQueryToCache(SearchQueryCache model) {
         try {
-            List<SearchQueryCache> list = dbHelper.getQueryCacheDAO().queryBuilder().where().eq("query", model.getQuery()).and().eq("queryType", model.getQueryType()).query();
+            List<SearchQueryCache> list = core.getDbHelper().getQueryCacheDAO().queryBuilder().where().eq("query", model.getQuery()).and().eq("queryType", model.getQueryType()).query();
             if (list.isEmpty()){
-                dbHelper.getQueryCacheDAO().createOrUpdate(model);
+                core.getDbHelper().getQueryCacheDAO().createOrUpdate(model);
                 return;
             }
 
             for (SearchQueryCache c: list){
                 c.setRate(c.getRate() + 1);
-                dbHelper.getQueryCacheDAO().createOrUpdate(c);
+                core.getDbHelper().getQueryCacheDAO().createOrUpdate(c);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,7 +55,7 @@ public class CacheManager extends Manager {
     }
 
     public List<SearchQueryCache> getCachedQueries(ModelType  queryType, int i, String query) throws SQLException {
-        return dbHelper.getQueryCacheDAO().queryBuilder()
+        return core.getDbHelper().getQueryCacheDAO().queryBuilder()
                 .distinct()
                 .selectColumns("query", "queryType")
                 .limit(i > 0 ? (long)i : null)

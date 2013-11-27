@@ -23,6 +23,10 @@ public abstract class PlayAbleSong extends BaseSerializableModel{
         throw new IllegalStateException("PlayAbleSong doesn't have UrlForUrl");
     }
 
+    public String getId(){
+        throw new IllegalStateException("PlayAbleSong doesn't have id");
+    }
+
     public String getUrl() {
         return url;
     }

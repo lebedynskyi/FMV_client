@@ -1,6 +1,5 @@
 package com.music.fmv.activities;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -9,223 +8,137 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
-import com.music.fmv.core.managers.PlayerManager;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.core.PlayerManager;
 import com.music.fmv.services.Player;
-import com.music.fmv.widgets.FixedSlidingTray;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 8/1/13
  * Time: 10:33 AM
  */
-public class PlayerActivity extends BaseActivity {
+public class PlayerActivity extends BaseActivity  implements Player.PlayerListener{
     public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
     private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
-
-    private View pausePlayBTN;
-    private View shuffleBTN;
-    private View loopBTN;
 
     private TextView songNameTV;
     private TextView songArtistTV;
     private TextView curProgressTV;
     private TextView durationTV;
-    private SeekBar progressSlider;
 
+    private SeekBar progressSlider;
     private ImageView songCover;
-    private View imageContainer;
 
     private Player player;
 
-    //TODO create selectors
-    //backgrounds for buttons
-    private Drawable pauseDrawable;
-    private Drawable playDrawable;
-    private Drawable loopNormDrawable;
-    private Drawable loopActiveDrawable;
-    private Drawable shuffleNormDrawable;
-    private Drawable shuffleActiveDrawable;
-
     private RefreshTimer refresher;
+
     private boolean fromNitification;
-    private View backBTN;
-    private FixedSlidingTray tray;
+    private View pausePlayBTN;
+    private View shuffleBTN;
+    private View loopBTN;
 
     @Override
     protected void onCreated(Bundle state) {
-        setContentView(R.layout.player_activity);
+        setContentView(R.layout.audio_player_activity);
+        fromNitification = getIntent().getBooleanExtra(FROM_NOTIFY_FLAG, false);
+
         initViews();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        playerListener.needRefreshControls();
-
-        refreshProgress();
-        refresher = new RefreshTimer(1 * 60 * 1000, 500);
+        mCore.getPlayerManager().getPlayer(playerRetrieverListener);
+        if (refresher != null){
+            refresher.cancel();
+        }
+        refresher = new RefreshTimer(1 * 60 * 1000, 250);
         refresher.start();
-        player = mCore.getPlayerManager().getPlayer(initListener);
-
-        fromNitification = getIntent().getIntExtra(FROM_NOTIFY_FLAG, -1) != -1;
-
-        if (player == null) return;
-        player.setPlayerListener(playerListener);
-        Player.PlayerStatus status = player.getStatus();
-        if (status != null) {
-            playerListener.onSongPlaying(status.getCurrentSong());
-        }
     }
 
-    private void initPlayList() {
-        if (player != null) {
-            Player.PlayerStatus status = player.getStatus();
-            if (status == null) return;
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (player != null){
+            player.setPlayerListener(null);
         }
-    }
 
-    public void backClicked(View v) {
-        if (fromNitification) {
-            mMediator.startMain();
-            finish();
+        if (refresher != null){
+            refresher.cancel();
+            refresher = null;
         }
-        super.onBackPressed();
-    }
-
-    public void playListClicked(View v) {
-        if (tray.isOpened()) {
-            tray.animateClose();
-        } else tray.animateOpen();
     }
 
     public void initViews() {
         shuffleBTN = findViewById(R.id.shuffle);
         pausePlayBTN = findViewById(R.id.play_pause);
         loopBTN = findViewById(R.id.loop);
+        View prev = findViewById(R.id.prev);
+        View next = findViewById(R.id.next);
+
         shuffleBTN.setOnClickListener(controlsListener);
         pausePlayBTN.setOnClickListener(controlsListener);
         loopBTN.setOnClickListener(controlsListener);
-
-        View prev = findViewById(R.id.prev);
-        View next = findViewById(R.id.next);
         prev.setOnClickListener(controlsListener);
         next.setOnClickListener(controlsListener);
 
-        songCover = (ImageView) findViewById(R.id.song_image);
-        imageContainer = findViewById(R.id.image_container);
+        songCover = (ImageView) findViewById(R.id.cover_image);
+        songCover.setImageDrawable(getResources().getDrawable(R.drawable.empty_cover_image));
 
-        songNameTV = (TextView) findViewById(R.id.song_name);
-        songArtistTV = (TextView) findViewById(R.id.song_owner);
+        songNameTV = (TextView) findViewById(R.id.aplayer_title);
+        songArtistTV = (TextView) findViewById(R.id.aplayer_artist);
         durationTV = (TextView) findViewById(R.id.full_time);
         curProgressTV = (TextView) findViewById(R.id.current_time);
         progressSlider = (SeekBar) findViewById(R.id.curr_progress);
         progressSlider.setOnSeekBarChangeListener(seekBarListener);
-
-        pauseDrawable = getResources().getDrawable(R.drawable.player_pause_selector);
-        playDrawable = getResources().getDrawable(R.drawable.player_play_selector);
-        loopNormDrawable = getResources().getDrawable(R.drawable.player_loop_selector);
-        loopActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_repeat_down);
-        shuffleNormDrawable = getResources().getDrawable(R.drawable.player_shuffle_selector);
-        shuffleActiveDrawable = getResources().getDrawable(R.drawable.ic_audio_shuffle_down);
-
-        tray = (FixedSlidingTray) findViewById(R.id.drawer);
-
     }
 
     private void refreshProgress() {
         if (player == null) return;
         Player.PlayerStatus status = player.getStatus();
-        if (status != null) {
+
+        if (status != null){
+            durationTV.setText(TIME_SD.format(new Date(status.getDuration())));
+            curProgressTV.setText(TIME_SD.format(new Date(status.getCurrentProgress())));
             progressSlider.setProgress(status.getCurrentProgress());
-            curProgressTV.setText(TIME_SD.format(status.getCurrentProgress()));
+        }else {
+            durationTV.setText("0.0");
+            curProgressTV.setText("0.0");
+            progressSlider.setProgress(0);
         }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        player.setPlayerListener(null);
-        if (refresher != null) {
-            refresher.cancel();
-            refresher = null;
-        }
+    public void onActionApplied() {
+        if (player == null) return;
+        Player.PlayerStatus status = player.getStatus();
+
+        if (status == null || !status.isPlaying()){
+            pausePlayBTN.setSelected(false);
+        }else pausePlayBTN.setSelected(true);
+
+        if (status == null || !status.isLoop()){
+            loopBTN.setSelected(false);
+        }else loopBTN.setSelected(true);
+
+        if (status == null || !status.isShuffle()){
+            shuffleBTN.setSelected(false);
+        }else shuffleBTN.setSelected(true);
     }
 
-    private View.OnClickListener controlsListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.next:
-                    player.next();
-                    break;
-                case R.id.shuffle:
-                    player.setShuffle(!player.isShuffle());
-                    break;
-                case R.id.play_pause:
-                    player.pause();
-                    break;
-                case R.id.prev:
-                    player.previous();
-                    break;
-                case R.id.loop:
-                    player.setLoop(!player.isLoop());
-            }
-        }
-    };
+    @Override
+    public void onNewSong() {
+        if (player == null) return;
+        Player.PlayerStatus st = player.getStatus();
+        if (st == null || st.getCurrentSong() == null) return;
 
-    private Player.PlayerListener playerListener = new Player.PlayerListener() {
-        @Override
-        public void needRefreshControls() {
-            if (player == null) return;
-            Player.PlayerStatus status = player.getStatus();
-            if (status == null) return;
-
-            if (status.isPlaying()) {
-                pausePlayBTN.setBackgroundDrawable(pauseDrawable);
-            } else pausePlayBTN.setBackgroundDrawable(playDrawable);
-
-            if (status.isShuffle()) {
-                shuffleBTN.setBackgroundDrawable(shuffleActiveDrawable);
-            } else shuffleBTN.setBackgroundDrawable(shuffleNormDrawable);
-
-            if (status.isLoop()) {
-                loopBTN.setBackgroundDrawable(loopActiveDrawable);
-            } else loopBTN.setBackgroundDrawable(loopNormDrawable);
-        }
-
-        @Override
-        public void onSongPlaying(PlayAbleSong song) {
-            if (song != null) {
-                songNameTV.setText(song.getName());
-                songArtistTV.setText(song.getArtist());
-                pausePlayBTN.setBackgroundDrawable(pauseDrawable);
-                startImageTask();
-            }
-
-            Player.PlayerStatus status = player.getStatus();
-            if (status != null) {
-                durationTV.setText(TIME_SD.format(status.getDuration()));
-                progressSlider.setMax(status.getDuration());
-            }
-        }
-
-        @Override
-        public void onPlayingStopped() {
-            pausePlayBTN.setBackgroundDrawable(playDrawable);
-            progressSlider.setProgress(0);
-        }
-    };
-
-    private void startImageTask() {
-        //TODO implemented
-    }
-
-    private void downloadClicked(View v){
-
+        songNameTV.setText(st.getCurrentSong().getName());
+        songArtistTV.setText(st.getCurrentSong().getArtist());
+        progressSlider.setMax(st.getCurrentSong().getDuration());
+        onActionApplied();
     }
 
     private class RefreshTimer extends CountDownTimer {
@@ -247,40 +160,58 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private SeekBar.OnSeekBarChangeListener seekBarListener = new SeekBar.OnSeekBarChangeListener() {
+        private boolean blocked = false;
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser) {
+            if (fromUser && !blocked) {
                 player.seek(progress);
             }
         }
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
+            blocked = true;
+
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
+            blocked = false;
         }
     };
 
 
-    private PlayerManager.PostInitializationListener initListener = new PlayerManager.PostInitializationListener() {
+    private PlayerManager.PostInitializationListener playerRetrieverListener = new PlayerManager.PostInitializationListener() {
         @Override
-        public void onPlayerCreated(Player p) {
-            PlayerActivity.this.player = p;
-            player = mCore.getPlayerManager().getPlayer(this);
-            if (player == null) {
-                return;
+        public void onPlayerAvailable(Player p) {
+            if (p != null){
+                player = p;
+                p.setPlayerListener(PlayerActivity.this);
             }
+            onActionApplied();
+            onNewSong();
+        }
+    };
 
-            player.setPlayerListener(playerListener);
-            Player.PlayerStatus status = player.getStatus();
-            if (status != null) {
-                playerListener.onSongPlaying(status.getCurrentSong());
+    private View.OnClickListener controlsListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.next:
+                    player.next();
+                    break;
+                case R.id.shuffle:
+                    player.setShuffle(!player.isShuffle());
+                    break;
+                case R.id.play_pause:
+                    player.pause();
+                    break;
+                case R.id.prev:
+                    player.previous();
+                    break;
+                case R.id.loop:
+                    player.setLoop(!player.isLoop());
             }
-
-            playerListener.needRefreshControls();
-            refreshProgress();
         }
     };
 }

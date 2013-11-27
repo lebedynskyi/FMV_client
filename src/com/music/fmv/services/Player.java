@@ -11,39 +11,22 @@ import java.util.List;
  */
 public interface Player {
     public void pause();
-
     public void previous();
-
     public void next();
-
     public void stop();
-
-    public boolean isPlaying();
-
     public void setShuffle(boolean value);
-
     public boolean isShuffle();
-
     public void setLoop(boolean value);
-
     public boolean isLoop();
-
     public void seek(int position);
-
     public void play(List<PlayAbleSong> songs, int position);
-
     public PlayerStatus getStatus();
-
     public void setPlayerListener(PlayerListener listener);
-
     public void add(PlayAbleSong model);
 
     public interface PlayerListener {
-        public void onSongPlaying(PlayAbleSong song);
-
-        public void onPlayingStopped();
-
-        public void needRefreshControls();
+        public void onNewSong();
+        public void onActionApplied();
     }
 
     public class PlayerStatus {

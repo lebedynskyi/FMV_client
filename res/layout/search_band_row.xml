@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Textsing"
-            android:id="@+id/band_name" android:layout_toRightOf="@+id/band_icon" android:layout_alignParentEnd="false"
+            android:id="@+id/band_name" android:layout_toRightOf="@+id/band_icon"
             android:singleLine="true" android:ellipsize="end" android:textSize="17sp" android:textColor="@color/black"
             android:layout_marginLeft="5dp"/>
     <TextView

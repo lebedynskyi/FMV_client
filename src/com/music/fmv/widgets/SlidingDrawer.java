@@ -34,10 +34,10 @@ import com.music.fmv.utils.Log;
  * MultipleOrientationSlidingDrawer is a copy of SlidingTray (http://aniqroid.sileria.com/doc/api/com/sileria/android/view/SlidingTray.html)
  * which is a modification of {@link android.widget.SlidingDrawer} with two major changes:
  * <ul>
- * <li>It lets you create the drawer programmatically instead of just via xml</li>
- * <li>Secondly you can {@link #setOrientation(Orientation)} to any 4 corners of the parent</li>
+ *     <li>It lets you create the drawer programmatically instead of just via xml</li>
+ *     <li>Secondly you can {@link #setOrientation(Orientation)} to any 4 corners of the parent</li>
  * </ul>
- * <p/>
+ *
  * A SlidingDrawer hides content out of the screen and allows the user to drag a handle
  * to bring the content on screen. SlidingDrawer can be used vertically or horizontally.
  * <p/>
@@ -54,61 +54,59 @@ import com.music.fmv.utils.Log;
  * // handle
  * Button handle = new Button( this );
  * handle.setText( "Push Me" );
- * <p/>
+ *
  * // content
  * TextView content = T.newText( "Sample Text." );
- * <p/>
+ *
  * // drawer
  * MultipleOrientationSlidingDrawer drawer = new MultipleOrientationSlidingDrawer( this, handle, content, MultipleOrientationSlidingDrawer.Orientation.TOP );
  * </pre></blockquote>
- * <p/>
- * <p/>
+ *
+ *
  * <strong>XML Example:</strong>
- * <p/>
+ *
  * <blockquote><pre class="prettyprint">
  * &lt;com.your.app.MultipleOrientationSlidingDrawer
- * xmlns:custom="http://schemas.android.com/apk/res-auto/com.your.app"
- * android:id="@+id/drawer"
- * android:layout_width="match_parent"
- * android:layout_height="match_parent"
- * custom:orientation="top"
- * custom:handle="@+id/handle_id"
- * custom:content="@+id/content"&gt;
- * <p/>
- * &lt;ImageView
- * android:id="@+id/handle_id"
- * android:layout_width="88dip"
- * android:layout_height="44dip" /&gt;
- * <p/>
- * &lt;GridView
- * android:id="@+id/content"
- * android:layout_width="match_parent"
- * android:layout_height="match_parent" /&gt;
- * <p/>
+ *     xmlns:custom="http://schemas.android.com/apk/res-auto/com.your.app"
+ *     android:id="@+id/drawer"
+ *     android:layout_width="match_parent"
+ *     android:layout_height="match_parent"
+ *     custom:orientation="top"
+ *     custom:handle="@+id/handle_id"
+ *     custom:content="@+id/content"&gt;
+ *
+ *     &lt;ImageView
+ *         android:id="@+id/handle_id"
+ *         android:layout_width="88dip"
+ *         android:layout_height="44dip" /&gt;
+ *
+ *     &lt;GridView
+ *         android:id="@+id/content"
+ *         android:layout_width="match_parent"
+ *         android:layout_height="match_parent" /&gt;
+ *
  * &lt;/com.your.app.MultipleOrientationSlidingDrawer&gt;
  * </pre></blockquote>
  *
  * @author Ahmed Shakil
  * @author PatrickF
  */
-public class SlidingTray extends ViewGroup {
+public class SlidingDrawer extends ViewGroup {
 
-    private static final int TAP_THRESHOLD = 6;
-    private static final float MAXIMUM_TAP_VELOCITY = 100.0f;
+    private static final int   TAP_THRESHOLD          = 6;
+    private static final float MAXIMUM_TAP_VELOCITY   = 100.0f;
     private static final float MAXIMUM_MINOR_VELOCITY = 150.0f;
     private static final float MAXIMUM_MAJOR_VELOCITY = 200.0f;
-    private static final float MAXIMUM_ACCELERATION = 2000.0f;
-    private static final int VELOCITY_UNITS = 1000;
-    private static final int MSG_ANIMATE = 1000;
+    private static final float MAXIMUM_ACCELERATION   = 2000.0f;
+    private static final int VELOCITY_UNITS           = 1000;
+    private static final int MSG_ANIMATE              = 1000;
     private static final int ANIMATION_FRAME_DURATION = 1000 / 60;
 
-    private static final int EXPANDED_FULL_OPEN = -10001;
-    private static final int COLLAPSED_FULL_CLOSED = -10002;
+    private static final int EXPANDED_FULL_OPEN       = -10001;
+    private static final int COLLAPSED_FULL_CLOSED    = -10002;
 
     private final int mHandleId;
     private final int mContentId;
-
-    private int deviceHeight;
 
     private View mHandle;
     private View mContent;
@@ -122,9 +120,10 @@ public class SlidingTray extends ViewGroup {
 
     private Orientation mOrientation;
     private Side mHandlePos;
-
     private boolean mVertical;
     private boolean mInvert;
+
+    private boolean canSwipe;
 
     private boolean mExpanded;
     private int mBottomOffset;
@@ -154,30 +153,31 @@ public class SlidingTray extends ViewGroup {
     private final int mMaximumMajorVelocity;
     private final int mMaximumAcceleration;
     private final int mVelocityUnits;
-    private int mLastDeltaY;
+    private boolean isPressedOnHandle;
+    private boolean isLastPointOnHandle;
 
     /**
      * Construct a <code>MultipleOrientationSlidingDrawer</code> object programmatically with the specified
      * <code>handle</code>, <code>content</code> and <code>orientation</code>.
      *
-     * @param context     Activity context
-     * @param handle      Cannot be <code>null</code>
-     * @param content     Cannot be <code>null</code>
+     * @param context Activity context
+     * @param handle  Cannot be <code>null</code>
+     * @param content Cannot be <code>null</code>
      * @param orientation TOP, LEFT, BOTTOM or RIGHT.
      */
-    public SlidingTray(Context context, View handle, View content, Orientation orientation) {
-        super(context);
+    public SlidingDrawer(Context context, View handle, View content, Orientation orientation) {
+        super( context );
 
         // handle
         if (handle == null)
             throw new NullPointerException("Handle cannot be null.");
-        addView(mHandle = handle);
+        addView( mHandle = handle );
         mHandle.setOnClickListener(new DrawerToggler());
 
         // content
         if (content == null)
             throw new IllegalArgumentException("Content cannot be null.");
-        addView(mContent = content);
+        addView( mContent = content );
         mContent.setVisibility(View.GONE);
 
         mHandleId = mContentId = 0;
@@ -191,50 +191,45 @@ public class SlidingTray extends ViewGroup {
         mMaximumMajorVelocity = (int) (MAXIMUM_MAJOR_VELOCITY * density + 0.5f);
         mMaximumAcceleration = (int) (MAXIMUM_ACCELERATION * density + 0.5f);
         mVelocityUnits = (int) (VELOCITY_UNITS * density + 0.5f);
-
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        deviceHeight = wm.getDefaultDisplay().getHeight();
     }
 
     /**
      * Creates a new SlidingDrawer from a specified set of attributes defined in XML.
      *
      * @param context The application's environment.
-     * @param attrs   The attributes defined in XML.
+     * @param attrs The attributes defined in XML.
      */
-    public SlidingTray(Context context, AttributeSet attrs) {
+    public SlidingDrawer(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        deviceHeight = wm.getDefaultDisplay().getHeight();
     }
 
     /**
      * Creates a new SlidingDrawer from a specified set of attributes defined in XML.
      *
-     * @param context  The application's environment.
-     * @param attrs    The attributes defined in XML.
+     * @param context The application's environment.
+     * @param attrs The attributes defined in XML.
      * @param defStyle The style to apply to this widget.
      */
-    public SlidingTray(Context context, AttributeSet attrs, int defStyle) {
+    public SlidingDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MultipleOrientationSlidingDrawer, defStyle, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SlidingDrawer, defStyle, 0);
 
-        int orientation = a.getInteger(R.styleable.MultipleOrientationSlidingDrawer_orientation, Orientation.TOP.value);
+        int orientation = a.getInteger(R.styleable.SlidingDrawer_orientation,Orientation.TOP.value);
         setOrientation(Orientation.getByValue(orientation));
         mHandlePos = Side.getByValue(orientation);
-        mBottomOffset = (int) a.getDimension(R.styleable.MultipleOrientationSlidingDrawer_bottomOffset, 0.0f);
-        mTopOffset = (int) a.getDimension(R.styleable.MultipleOrientationSlidingDrawer_topOffset, 0.0f);
-        mAllowSingleTap = a.getBoolean(R.styleable.MultipleOrientationSlidingDrawer_allowSingleTap, true);
-        mAnimateOnClick = a.getBoolean(R.styleable.MultipleOrientationSlidingDrawer_animateOnClick, true);
+        mBottomOffset = (int) a.getDimension(R.styleable.SlidingDrawer_bottomOffset, 0.0f);
+        mTopOffset = (int) a.getDimension(R.styleable.SlidingDrawer_topOffset, 0.0f);
+        mAllowSingleTap = a.getBoolean(R.styleable.SlidingDrawer_allowSingleTap, true);
+        mAnimateOnClick = a.getBoolean(R.styleable.SlidingDrawer_animateOnClick, true);
+        canSwipe = a.getBoolean(R.styleable.SlidingDrawer_canSwiping, true);
 
-
-        int handleId = a.getResourceId(R.styleable.MultipleOrientationSlidingDrawer_handle, 0);
+        int handleId = a.getResourceId(R.styleable.SlidingDrawer_handle, 0);
         if (handleId == 0) {
             throw new IllegalArgumentException("The handle attribute is required and must refer "
                     + "to a valid child.");
         }
 
-        int contentId = a.getResourceId(R.styleable.MultipleOrientationSlidingDrawer_content, 0);
+        int contentId = a.getResourceId(R.styleable.SlidingDrawer_content, 0);
         if (contentId == 0) {
             throw new IllegalArgumentException("The content attribute is required and must refer "
                     + "to a valid child.");
@@ -259,15 +254,12 @@ public class SlidingTray extends ViewGroup {
 //        a.recycle();
 
         setAlwaysDrawnWithCacheEnabled(false);
-
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        deviceHeight = wm.getDefaultDisplay().getHeight();
     }
 
     /**
      * Get the current orientation of this sliding tray.
      */
-    public Orientation getOrientation() {
+    public Orientation getOrientation () {
         return mOrientation;
     }
 
@@ -278,7 +270,7 @@ public class SlidingTray extends ViewGroup {
      *
      * @param orientation orientation of the sliding tray.
      */
-    public void setOrientation(Orientation orientation) {
+    public void setOrientation (Orientation orientation) {
         mOrientation = orientation;
 
         mVertical = mOrientation == Orientation.BOTTOM || mOrientation == Orientation.TOP;
@@ -291,7 +283,7 @@ public class SlidingTray extends ViewGroup {
     /**
      * Get the current positioning of this sliding tray handle.
      */
-    public Side getHandlePosition() {
+    public Side getHandlePosition () {
         return mHandlePos;
     }
 
@@ -302,10 +294,9 @@ public class SlidingTray extends ViewGroup {
      * or must be {@link Side#LEFT}, {@link Side#CENTER} or {@link Side#RIGHT} for vertical orientation.
      * <p/>
      * Default is {@linkplain Side#CENTER}.
-     *
      * @param side Handle Pos of the drawer handle.
      */
-    public void setHandlePosition(Side side) {
+    public void setHandlePosition (Side side) {
         mHandlePos = side;
         requestLayout();
         invalidate();
@@ -315,10 +306,9 @@ public class SlidingTray extends ViewGroup {
      * Add padding to drawer handle when handle is not centered.
      * <p/>
      * Note this padding is only effective when handle is not centered.
-     *
      * @param padding padding in pixels.
      */
-    public void setHandlePadding(int padding) {
+    public void setHandlePadding (int padding) {
         mHandlePad = padding;
         requestLayout();
         invalidate();
@@ -347,10 +337,10 @@ public class SlidingTray extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+        int widthSpecSize =  MeasureSpec.getSize(widthMeasureSpec);
 
         int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
+        int heightSpecSize =  MeasureSpec.getSize(heightMeasureSpec);
 
         if (widthSpecMode == MeasureSpec.UNSPECIFIED || heightSpecMode == MeasureSpec.UNSPECIFIED) {
             throw new RuntimeException("SlidingDrawer cannot have UNSPECIFIED dimensions");
@@ -373,7 +363,7 @@ public class SlidingTray extends ViewGroup {
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw (Canvas canvas) {
         final long drawingTime = getDrawingTime();
         final View handle = mHandle;
         final Orientation orientation = mOrientation;
@@ -386,46 +376,32 @@ public class SlidingTray extends ViewGroup {
                 // called when opening
 
                 switch (orientation) {
-                    case TOP:
-                        canvas.drawBitmap(cache, 0, handle.getTop() - cache.getHeight(), null);
-                        break;
-                    case LEFT:
-                        canvas.drawBitmap(cache, handle.getLeft() - cache.getWidth(), 0, null);
-                        break;
-                    case BOTTOM:
-                        canvas.drawBitmap(cache, 0, handle.getBottom(), null);
-                        break;
-                    case RIGHT:
-                        canvas.drawBitmap(cache, handle.getRight(), 0, null);
-                        break;
+                    case TOP:    canvas.drawBitmap(cache, 0, handle.getTop()-cache.getHeight(), null); break;
+                    case LEFT:   canvas.drawBitmap(cache, handle.getLeft()-cache.getWidth(), 0, null); break;
+                    case BOTTOM: canvas.drawBitmap(cache, 0, handle.getBottom(), null); break;
+                    case RIGHT:  canvas.drawBitmap(cache, handle.getRight(), 0, null);  break;
                 }
-            } else {
+            }
+            else {
                 // called when closing
                 canvas.save();
                 switch (orientation) {
-                    case TOP:
-                        canvas.translate(0, handle.getTop() - mContent.getHeight());
-                        break;
-                    case LEFT:
-                        canvas.translate(handle.getLeft() - mContent.getWidth(), 0);
-                        break;
-                    case BOTTOM:
-                        canvas.translate(0, handle.getTop() - mTopOffset);
-                        break;
-                    case RIGHT:
-                        canvas.translate(handle.getLeft() - mTopOffset, 0);
-                        break;
+                    case TOP:    canvas.translate(0, handle.getTop() - mContent.getHeight() );  break;
+                    case LEFT:   canvas.translate( handle.getLeft() - mContent.getWidth(), 0);   break;
+                    case BOTTOM: canvas.translate(0, handle.getTop() - mTopOffset );    break;
+                    case RIGHT:  canvas.translate(handle.getLeft() - mTopOffset, 0);    break;
                 }
                 drawChild(canvas, mContent, drawingTime);
                 canvas.restore();
             }
-        } else if (mExpanded) {
+        }
+        else if (mExpanded) {
             drawChild(canvas, mContent, drawingTime);
         }
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    protected void onLayout (boolean changed, int l, int t, int r, int b) {
         if (mTracking) {
             return;
         }
@@ -439,7 +415,7 @@ public class SlidingTray extends ViewGroup {
         int childHeight = handle.getMeasuredHeight();
 
         int childLeft = 0;
-        int childTop = 0;
+        int childTop  = 0;
 
         final View content = mContent;
 
@@ -448,33 +424,21 @@ public class SlidingTray extends ViewGroup {
 
             case TOP:
                 switch (mHandlePos) {
-                    case LEFT:
-                        childLeft = mHandlePad;
-                        break;
-                    case RIGHT:
-                        childLeft = width - childWidth - mHandlePad;
-                        break;
-                    default:
-                        childLeft = (width - childWidth) / 2;
-                        break;
+                    case LEFT:	childLeft = mHandlePad; break;
+                    case RIGHT:	childLeft = width - childWidth - mHandlePad; break;
+                    default:	childLeft = (width - childWidth) / 2; break;
                 }
-                childTop = mExpanded ? height - childHeight - mTopOffset : -mBottomOffset;
+                childTop = mExpanded ? height - childHeight - mTopOffset: -mBottomOffset;
 
                 content.layout(0, height - childHeight - mTopOffset - content.getMeasuredHeight(),
-                        content.getMeasuredWidth(), height - childHeight - mTopOffset);
+                        content.getMeasuredWidth(), height - childHeight - mTopOffset );
                 break;
 
             case BOTTOM:
                 switch (mHandlePos) {
-                    case LEFT:
-                        childLeft = mHandlePad;
-                        break;
-                    case RIGHT:
-                        childLeft = width - childWidth - mHandlePad;
-                        break;
-                    default:
-                        childLeft = (width - childWidth) / 2;
-                        break;
+                    case LEFT:	childLeft = mHandlePad; break;
+                    case RIGHT:	childLeft = width - childWidth - mHandlePad; break;
+                    default:	childLeft = (width - childWidth) / 2; break;
                 }
                 childTop = mExpanded ? mTopOffset : height - childHeight + mBottomOffset;
 
@@ -485,37 +449,25 @@ public class SlidingTray extends ViewGroup {
             case RIGHT:
                 childLeft = mExpanded ? mTopOffset : width - childWidth + mBottomOffset;
                 switch (mHandlePos) {
-                    case TOP:
-                        childTop = mHandlePad;
-                        break;
-                    case BOTTOM:
-                        childTop = height - childHeight - mHandlePad;
-                        break;
-                    default:
-                        childTop = (height - childHeight) / 2;
-                        break;
+                    case TOP:	 childTop = mHandlePad; break;
+                    case BOTTOM: childTop = height - childHeight - mHandlePad; break;
+                    default:	 childTop = (height - childHeight) / 2; break;
                 }
 
-                content.layout(mTopOffset + childWidth, 0,
+                content.layout( mTopOffset + childWidth, 0,
                         mTopOffset + childWidth + content.getMeasuredWidth(),
                         content.getMeasuredHeight());
                 break;
 
             case LEFT:
-                childLeft = mExpanded ? width - childWidth - mTopOffset : -mBottomOffset;
+                childLeft = mExpanded ? width - childWidth - mTopOffset: -mBottomOffset;
                 switch (mHandlePos) {
-                    case TOP:
-                        childTop = mHandlePad;
-                        break;
-                    case BOTTOM:
-                        childTop = height - childHeight - mHandlePad;
-                        break;
-                    default:
-                        childTop = (height - childHeight) / 2;
-                        break;
+                    case TOP:	 childTop = mHandlePad; break;
+                    case BOTTOM: childTop = height - childHeight - mHandlePad; break;
+                    default:	 childTop = (height - childHeight) / 2; break;
                 }
 
-                content.layout(width - childWidth - mTopOffset - content.getMeasuredWidth(), 0,
+                content.layout( width - childWidth - mTopOffset - content.getMeasuredWidth(), 0,
                         width - childWidth - mTopOffset, content.getMeasuredHeight());
                 break;
         }
@@ -557,7 +509,7 @@ public class SlidingTray extends ViewGroup {
             }
 
             final int pt = getSide();
-            mTouchDelta = (int) (y - pt);
+            mTouchDelta = (int)(y - pt);
             prepareTracking(pt);
             mVelocityTracker.addMovement(event);
         }
@@ -565,25 +517,17 @@ public class SlidingTray extends ViewGroup {
         return true;
     }
 
-    private int getSide() {
+    private int getSide () {
         return mVertical ? mHandle.getTop() : mHandle.getLeft();
     }
 
-    private int getOppositeSide() {
-        int pt = 0;
+    private int getOppositeSide () {
+        int pt=0;
         switch (mOrientation) {
-            case TOP:
-                pt = mHandle.getBottom();
-                break;
-            case LEFT:
-                pt = mHandle.getRight();
-                break;
-            case BOTTOM:
-                pt = mHandle.getTop();
-                break;
-            case RIGHT:
-                pt = mHandle.getLeft();
-                break;
+            case TOP:    pt = mHandle.getBottom(); break;
+            case LEFT:   pt = mHandle.getRight(); break;
+            case BOTTOM: pt = mHandle.getTop(); break;
+            case RIGHT:  pt = mHandle.getLeft(); break;
         }
         return pt;
     }
@@ -594,12 +538,22 @@ public class SlidingTray extends ViewGroup {
             return true;
         }
 
+        if (!canSwipe){
+            final int top = mHandle.getTop();
+            final int left = mHandle.getLeft();
+            if (inThreshold( top, left )) {
+                Log.e("TEST !!!!!!!", "--------------In----------");
+            }else {
+                Log.e("TEST !!!!!!!", "--------------OUT---------");
+            }
+        }
+
         if (mTracking) {
             mVelocityTracker.addMovement(event);
             final int action = event.getAction();
             switch (action) {
                 case MotionEvent.ACTION_MOVE:
-                    moveHandle((int) (mVertical ? event.getY() : event.getX()) - mTouchDelta);
+                    moveHandle((int)  (mVertical ? event.getY() : event.getX()) - mTouchDelta);
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL: {
@@ -639,15 +593,15 @@ public class SlidingTray extends ViewGroup {
 
                     if (Math.abs(velocity) < mMaximumTapVelocity) {
 
-                        if (inThreshold(top, left)) {
+                        if (inThreshold( top, left )) {
                             if (mAllowSingleTap) {
                                 playSoundEffect(SoundEffectConstants.CLICK);
 
                                 if (mExpanded) {
                                     //animateClose(vertical ? top : left);
-                                    animateClose(getSide());
+                                    animateClose( getSide() );
                                 } else {
-                                    animateOpen(getSide());
+                                    animateOpen( getSide() );
                                     //animateOpen(vertical ? top : left);
                                 }
                             } else {
@@ -668,19 +622,19 @@ public class SlidingTray extends ViewGroup {
         return mTracking || mAnimating || super.onTouchEvent(event);
     }
 
-    private boolean inThreshold(int top, int left) {
+    private boolean inThreshold (int top, int left) {
         switch (mOrientation) {
             case TOP:
-                return (!mExpanded && top < mTapThreshold - mBottomOffset) ||
-                        (mExpanded && top > getBottom() - getTop() - mHandleHeight - mTopOffset - mTapThreshold);
+                return  (!mExpanded && top < mTapThreshold - mBottomOffset) ||
+                        ( mExpanded && top > getBottom() - getTop() - mHandleHeight - mTopOffset - mTapThreshold);
             case LEFT:
-                return (!mExpanded && left < mTapThreshold - mBottomOffset) ||
-                        (mExpanded && left > getRight() - getLeft() - mHandleWidth - mTopOffset - mTapThreshold);
+                return  (!mExpanded && left < mTapThreshold - mBottomOffset) ||
+                        ( mExpanded && left > getRight() - getLeft() - mHandleWidth - mTopOffset - mTapThreshold);
             case BOTTOM:
-                return (mExpanded && top < mTapThreshold + mTopOffset) ||
-                        (!mExpanded && top > mBottomOffset + getBottom() - getTop() - mHandleHeight - mTapThreshold);
+                return  ( mExpanded && top < mTapThreshold + mTopOffset) ||
+                        (!mExpanded && top > mBottomOffset + getBottom() - getTop() -  mHandleHeight - mTapThreshold);
             case RIGHT:
-                return (mExpanded && left < mTapThreshold + mTopOffset) ||
+                return  ( mExpanded && left < mTapThreshold + mTopOffset) ||
                         (!mExpanded && left > mBottomOffset + getRight() - getLeft() - mHandleWidth - mTapThreshold);
         }
         return false;
@@ -710,7 +664,8 @@ public class SlidingTray extends ViewGroup {
                     if (velocity > 0) {
                         mAnimatedVelocity = 0;
                     }
-                } else {
+                }
+                else {
                     // We are expanded, but they didn't move sufficiently to cause
                     // us to retract.  Animate back to the expanded position.
                     mAnimatedAcceleration = mMaximumAcceleration;
@@ -718,7 +673,8 @@ public class SlidingTray extends ViewGroup {
                         mAnimatedVelocity = 0;
                     }
                 }
-            } else if (always || (velocity > mMaximumMajorVelocity ||
+            }
+            else if (always || (velocity > mMaximumMajorVelocity ||
                     (position > mTopOffset + (mVertical ? mHandleHeight : mHandleWidth) &&
                             velocity > -mMaximumMajorVelocity))) {
                 // We are expanded, but they didn't move sufficiently to cause
@@ -806,29 +762,24 @@ public class SlidingTray extends ViewGroup {
     private void moveHandle(int position) {
         final View handle = mHandle;
 
-        switch (mOrientation) {
+        switch(mOrientation) {
             case TOP:
                 if (position == EXPANDED_FULL_OPEN) {
-                    handle.offsetTopAndBottom(getBottom() - getTop() - mTopOffset - mHandleHeight - handle.getTop());
+                    handle.offsetTopAndBottom( getBottom() - getTop() - mTopOffset - mHandleHeight - handle.getTop() );
                     invalidate();
-                    return;
                 } else if (position == COLLAPSED_FULL_CLOSED) {
-                    handle.offsetTopAndBottom(-mBottomOffset - handle.getTop());
+                    handle.offsetTopAndBottom( -mBottomOffset - handle.getTop() );
                     invalidate();
                 } else {
                     final int top = handle.getTop();
                     int deltaY = position - top;
                     if (position < -mBottomOffset) {
                         deltaY = -mBottomOffset - top;
-                    } else if (position > getBottom() - getTop() - mTopOffset - mHandleHeight) {
+                    }
+                    else if (position > getBottom() - getTop() - mTopOffset - mHandleHeight) {
                         deltaY = getBottom() - getTop() - mTopOffset - mHandleHeight - top;
                     }
-
-                    if (deltaY != 0) {
-                        handle.offsetTopAndBottom(deltaY);
-                        Log.e("SLIDER!!!!!!!!!!!!!!!", String.format("deltaY = %s", deltaY));
-                    }
-
+                    handle.offsetTopAndBottom(deltaY);
 
                     final Rect frame = mFrame;
                     final Rect region = mInvalidate;
@@ -839,18 +790,18 @@ public class SlidingTray extends ViewGroup {
                     region.union(frame.left, frame.top - deltaY, frame.right, frame.bottom - deltaY);
                     region.union(0, frame.bottom - deltaY, getWidth(), frame.bottom - deltaY + mContent.getHeight());
 
-                    // todo fix the region calc.
-//                    invalidate( region );
+                    // TODO fix the region calc.
+                    // invalidate( region );
                     invalidate();
                 }
                 break;
 
             case BOTTOM:
                 if (position == EXPANDED_FULL_OPEN) {
-                    handle.offsetTopAndBottom(mTopOffset - handle.getTop());
+                    handle.offsetTopAndBottom( mTopOffset - handle.getTop());
                     invalidate();
                 } else if (position == COLLAPSED_FULL_CLOSED) {
-                    handle.offsetTopAndBottom(mBottomOffset + getBottom() - getTop() - mHandleHeight - handle.getTop());
+                    handle.offsetTopAndBottom( mBottomOffset + getBottom() - getTop() -	mHandleHeight - handle.getTop());
                     invalidate();
                 } else {
                     final int top = handle.getTop();
@@ -877,10 +828,10 @@ public class SlidingTray extends ViewGroup {
 
             case RIGHT:
                 if (position == EXPANDED_FULL_OPEN) {
-                    handle.offsetLeftAndRight(mTopOffset - handle.getLeft());
+                    handle.offsetLeftAndRight( mTopOffset - handle.getLeft());
                     invalidate();
                 } else if (position == COLLAPSED_FULL_CLOSED) {
-                    handle.offsetLeftAndRight(-mBottomOffset);
+                    handle.offsetLeftAndRight( -mBottomOffset );
                     invalidate();
                 } else {
                     final int left = handle.getLeft();
@@ -907,17 +858,18 @@ public class SlidingTray extends ViewGroup {
 
             case LEFT:
                 if (position == EXPANDED_FULL_OPEN) {
-                    handle.offsetLeftAndRight(getRight() - getLeft() - mTopOffset - mHandleWidth - handle.getLeft());
+                    handle.offsetLeftAndRight( getRight() - getLeft() - mTopOffset - mHandleWidth - handle.getLeft() );
                     invalidate();
                 } else if (position == COLLAPSED_FULL_CLOSED) {
-                    handle.offsetLeftAndRight(-mBottomOffset - handle.getLeft());
+                    handle.offsetLeftAndRight(-mBottomOffset - handle.getLeft() );
                     invalidate();
                 } else {
                     final int left = handle.getLeft();
                     int deltaX = position - left;
                     if (position < -mBottomOffset) {
                         deltaX = -mBottomOffset - left;
-                    } else if (position > getRight() - getLeft() - mTopOffset - mHandleWidth) {
+                    }
+                    else if (position > getRight() - getLeft() - mTopOffset - mHandleWidth) {
                         deltaX = getRight() - getLeft() - mTopOffset - mHandleWidth - left;
                     }
                     handle.offsetLeftAndRight(deltaX);
@@ -937,7 +889,8 @@ public class SlidingTray extends ViewGroup {
         }
     }
 
-    protected void prepareContent() {
+    private void prepareContent() {
+
         if (mAnimating) {
             return;
         }
@@ -957,7 +910,7 @@ public class SlidingTray extends ViewGroup {
         content.setVisibility(View.GONE);
     }
 
-    public void measureContent() {
+    public void measureContent () {
         final View content = mContent;
         if (mVertical) {
             final int childHeight = mHandle.getHeight();
@@ -965,22 +918,25 @@ public class SlidingTray extends ViewGroup {
             content.measure(MeasureSpec.makeMeasureSpec(getRight() - getLeft(), MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
             if (mOrientation == Orientation.TOP) {
-                content.layout(0, height - content.getMeasuredHeight(), content.getMeasuredWidth(), height);
-            } else {
+                content.layout(0, height - content.getMeasuredHeight(), content.getMeasuredWidth(), height );
+            }
+            else {
                 content.layout(0, mTopOffset + childHeight, content.getMeasuredWidth(),
                         mTopOffset + childHeight + content.getMeasuredHeight());
             }
 
-        } else {
+        }
+        else {
             final int childWidth = mHandle.getWidth();
             int width = getRight() - getLeft() - childWidth - mTopOffset;
             content.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(getBottom() - getTop(), MeasureSpec.EXACTLY));
-            if (mOrientation == Orientation.RIGHT) {
+            if (mOrientation == Orientation.RIGHT ) {
                 content.layout(childWidth + mTopOffset, 0,
                         mTopOffset + childWidth + content.getMeasuredWidth(), content.getMeasuredHeight());
-            } else {
-                content.layout(width - content.getMeasuredWidth(), 0, width, content.getMeasuredHeight());
+            }
+            else {
+                content.layout( width - content.getMeasuredWidth(), 0, width, content.getMeasuredHeight());
             }
         }
     }
@@ -1016,7 +972,8 @@ public class SlidingTray extends ViewGroup {
                     mCurrentAnimationTime += ANIMATION_FRAME_DURATION;
                     mHandler.sendMessageAtTime(mHandler.obtainMessage(MSG_ANIMATE), mCurrentAnimationTime);
                 }
-            } else {
+            }
+            else {
                 if (mAnimationPosition >= mBottomOffset + (mVertical ? getHeight() : getWidth()) - 1) {
                     mAnimating = false;
                     closeDrawer();
@@ -1122,7 +1079,7 @@ public class SlidingTray extends ViewGroup {
         if (scrollListener != null) {
             scrollListener.onScrollStarted();
         }
-        animateClose(getSide());
+        animateClose( getSide() );
 
         if (scrollListener != null) {
             scrollListener.onScrollEnded();
@@ -1144,7 +1101,7 @@ public class SlidingTray extends ViewGroup {
         if (scrollListener != null) {
             scrollListener.onScrollStarted();
         }
-        animateOpen(getSide());
+        animateOpen( getSide() );
 
         sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
 
@@ -1154,8 +1111,8 @@ public class SlidingTray extends ViewGroup {
     }
 
     private void closeDrawer() {
-        moveHandle(COLLAPSED_FULL_CLOSED);
-        mContent.setVisibility(View.GONE);
+        moveHandle( COLLAPSED_FULL_CLOSED );
+        mContent.setVisibility( View.GONE );
         mContent.destroyDrawingCache();
 
         if (!mExpanded) {
@@ -1170,7 +1127,7 @@ public class SlidingTray extends ViewGroup {
     }
 
     private void openDrawer() {
-        moveHandle(EXPANDED_FULL_OPEN);
+        moveHandle( EXPANDED_FULL_OPEN );
         mContent.setVisibility(View.VISIBLE);
 
         if (mExpanded) {
@@ -1181,6 +1138,28 @@ public class SlidingTray extends ViewGroup {
 
         if (mOnDrawerOpenListener != null) {
             mOnDrawerOpenListener.onDrawerOpened();
+        }
+    }
+
+
+
+    /**
+     * Drawer click listener.
+     */
+    private class DrawerToggler implements OnClickListener {
+        public void onClick(View v) {
+            if (mLocked) {
+                return;
+            }
+            // mAllowSingleTap isn't relevant here; you're *always*
+            // allowed to open/close the drawer by clicking with the
+            // trackball.
+
+            if (mAnimateOnClick) {
+                animateToggle();
+            } else {
+                toggle();
+            }
         }
     }
 
@@ -1208,9 +1187,9 @@ public class SlidingTray extends ViewGroup {
      * drawer opened or drawer closed event.
      *
      * @param onDrawerScrollListener The listener to be notified when scrolling
-     *                               starts or stops.
+     *        starts or stops.
      */
-    public void setOnDrawerScrollListener(OnDrawerScrollListener onDrawerScrollListener) {
+    public void setOnDrawerScrollListener (OnDrawerScrollListener onDrawerScrollListener) {
         mOnDrawerScrollListener = onDrawerScrollListener;
     }
 
@@ -1229,9 +1208,9 @@ public class SlidingTray extends ViewGroup {
      * May not return a valid size until the view is layed out.
      *
      * @return Return the height if the component is vertical
-     *         otherwise returns the width for Horizontal orientation.
+     * otherwise returns the width for Horizontal orientation.
      */
-    public int getHandleSize() {
+    public int getHandleSize () {
         return mVertical ? mHandle.getHeight() : mHandle.getWidth();
     }
 
@@ -1281,58 +1260,38 @@ public class SlidingTray extends ViewGroup {
         return mTracking || mAnimating;
     }
 
-    public int getBottomOffset() {
+    public int getBottomOffset () {
         return mBottomOffset;
     }
 
-    public void setBottomOffset(int offset) {
+    public void setBottomOffset (int offset) {
         this.mBottomOffset = offset;
         invalidate();
     }
 
-    public int getTopOffset() {
+    public int getTopOffset () {
         return mTopOffset;
     }
 
-    public void setTopOffset(int offset) {
+    public void setTopOffset (int offset) {
         this.mTopOffset = offset;
         invalidate();
     }
 
-    public boolean isAllowSingleTap() {
+    public boolean isAllowSingleTap () {
         return mAllowSingleTap;
     }
 
-    public void setAllowSingleTap(boolean mAllowSingleTap) {
+    public void setAllowSingleTap (boolean mAllowSingleTap) {
         this.mAllowSingleTap = mAllowSingleTap;
     }
 
-    public boolean isAnimateOnClick() {
+    public boolean isAnimateOnClick () {
         return mAnimateOnClick;
     }
 
-    public void setAnimateOnClick(boolean mAnimateOnClick) {
+    public void setAnimateOnClick (boolean mAnimateOnClick) {
         this.mAnimateOnClick = mAnimateOnClick;
-    }
-
-    /**
-     * Drawer click listener.
-     */
-    private class DrawerToggler implements OnClickListener {
-        public void onClick(View v) {
-            if (mLocked) {
-                return;
-            }
-            // mAllowSingleTap isn't relevant here; you're *always*
-            // allowed to open/close the drawer by clicking with the
-            // trackball.
-
-            if (mAnimateOnClick) {
-                animateToggle();
-            } else {
-                toggle();
-            }
-        }
     }
 
     private class SlidingHandler extends Handler {
@@ -1391,8 +1350,8 @@ public class SlidingTray extends ViewGroup {
         }
 
         public static Side getByValue(int value) {
-            for (Side s : Side.values()) {
-                if (s.value == value) {
+            for(Side s: Side.values()) {
+                if(s.value == value) {
                     return s;
                 }
             }
@@ -1409,8 +1368,8 @@ public class SlidingTray extends ViewGroup {
         }
 
         public static Orientation getByValue(int value) {
-            for (Orientation s : Orientation.values()) {
-                if (s.value == value) {
+            for(Orientation s: Orientation.values()) {
+                if(s.value == value) {
                     return s;
                 }
             }

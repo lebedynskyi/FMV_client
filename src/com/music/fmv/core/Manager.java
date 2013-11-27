@@ -1,4 +1,4 @@
-package com.music.fmv.core.managers;
+package com.music.fmv.core;
 
 import com.music.fmv.core.Core;
 
@@ -10,7 +10,7 @@ import com.music.fmv.core.Core;
 public abstract class Manager {
     protected Core core;
 
-    protected Manager(Core coreManager) {
+    Manager(Core coreManager) {
         core = coreManager;
     }
 

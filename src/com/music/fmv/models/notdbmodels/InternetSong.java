@@ -23,7 +23,7 @@ public class InternetSong extends PlayAbleSong {
     }
 
     public String getUrlForUrl() {
-        return "http://pleer.com/site_api/files/get_url?id=" + id;
+        return urlForUrl;
     }
 
     public void setUrlForUrl(String urlForUrl) {

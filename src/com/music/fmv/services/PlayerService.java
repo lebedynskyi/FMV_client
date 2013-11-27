@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
-import com.music.fmv.core.managers.PlayerManager;
+import com.music.fmv.core.PlayerManager;
 import com.music.fmv.models.notdbmodels.PlayAbleSong;
 
 import java.util.ArrayList;
@@ -26,13 +26,10 @@ import java.util.Set;
  */
 
 public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, Player {
-
     private MediaPlayer mPlayer;
     private Core core;
     private final ArrayList<PlayAbleSong> playerQueue = new ArrayList<PlayAbleSong>();
     private PlayerListener playerListener;
-
-    private Set<MediaPlayer> preparedPlayers = new HashSet<MediaPlayer>(2);
     private PlayAbleSong currentSong;
     private boolean isShuffle;
 
@@ -95,11 +92,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public boolean isPlaying() {
-        return mPlayer != null && mPlayer.isPlaying();
-    }
-
-    @Override
     public void setShuffle(boolean v) {
         isShuffle = v;
         notifyStateCallback();
@@ -151,9 +143,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        preparedPlayers.add(mp);
         mp.start();
-        notifyNewSong(currentSong);
+        notifyNewSong();
     }
 
     @Override
@@ -173,7 +164,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         boolean isPlaying = false;
         boolean isLoop = false;
 
-        if (mPlayer != null && preparedPlayers.contains(mPlayer)) {
+        if (mPlayer != null) {
             duration = mPlayer.getDuration();
             currentPos = mPlayer.getCurrentPosition();
             isPlaying = mPlayer.isPlaying();
@@ -190,7 +181,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
         releasePlayer();
         currentSong = song;
-        notifyNewSong(song);
+        notifyNewSong();
         showNotification();
         if (core.getCacheManager().isSongExists(song)) {
             playFromFile(song);
@@ -228,7 +219,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private void releasePlayer() {
         if (mPlayer != null) {
-            preparedPlayers.remove(mPlayer);
             mPlayer.stop();
             mPlayer.release();
             mPlayer = null;
@@ -247,11 +237,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     private void notifyStateCallback() {
-        if (playerListener != null) playerListener.needRefreshControls();
+        if (playerListener != null) playerListener.onActionApplied();
     }
 
-    private void notifyNewSong(PlayAbleSong song) {
-        if (playerListener != null) playerListener.onSongPlaying(song);
+    private void notifyNewSong() {
+        if (playerListener != null) playerListener.onNewSong();
     }
 
     @Override
@@ -271,16 +261,14 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         @Override
         public void run() {
             try {
-                String songUrl = new Api().getUrlOfSong(song.getUrlForUrl(), song.getUrlKey());
-                if (!TextUtils.isEmpty(songUrl)) {
-                    song.setUrl(songUrl);
-                    core.getHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            playFromPath(song.getUrl());
-                        }
-                    });
-                }
+                String songUrl = new Api().getUrlOfSong(song);
+                song.setUrl(songUrl);
+                core.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        playFromPath(song.getUrl());
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,10 +1,7 @@
 package com.music.fmv.api;
 
 import android.text.TextUtils;
-import com.music.fmv.models.notdbmodels.BandInfoModel;
-import com.music.fmv.models.notdbmodels.InternetSong;
-import com.music.fmv.models.notdbmodels.SearchAlbumModel;
-import com.music.fmv.models.notdbmodels.SearchBandModel;
+import com.music.fmv.models.notdbmodels.*;
 import com.music.fmv.utils.NetworkUtil;
 import org.json.JSONObject;
 
@@ -21,6 +18,7 @@ import java.util.List;
  */
 
 public class Api {
+    public static final int API_VERSION = 1;
     //test and real urls
     private static final String TEST_URL = "http://vetal.romcheg.me/";
     private static final String REAL_URL = "http://vetal.romcheg.me/";
@@ -41,6 +39,7 @@ public class Api {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("artist", searchQuery);
         params.put("lan", language);
+        params.put("version", String.valueOf(API_VERSION));
 
         if (page != null) {
             params.put("page", page.toString());
@@ -50,13 +49,9 @@ public class Api {
         urlBuilder.append(API_URL).append(SEARCH_BAND_COMMAND);
         String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
 
-        if (!TextUtils.isEmpty(jsonResponse)) {
-            JSONObject response = new JSONObject(jsonResponse);
-            checkError(response);
-            return ApiUtils.parseSearchBand(response);
-        }
-
-        return null;
+        JSONObject response = new JSONObject(jsonResponse);
+        checkError(response);
+        return ApiUtils.parseSearchBand(response);
     }
 
 
@@ -66,6 +61,8 @@ public class Api {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("album", searchQuery);
         params.put("lan", language);
+        params.put("version", String.valueOf(API_VERSION));
+
         if (page != null) {
             params.put("page", page.toString());
         }
@@ -74,20 +71,17 @@ public class Api {
         urlBuilder.append(API_URL).append(SEARCH_ALBUMS_COMMAND);
 
         String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
-
-        if (!TextUtils.isEmpty(jsonResponse)) {
-            JSONObject response = new JSONObject(jsonResponse);
-            checkError(response);
-            return ApiUtils.parseSearchAlbum(response);
-        }
-
-        return null;
+        JSONObject response = new JSONObject(jsonResponse);
+        checkError(response);
+        return ApiUtils.parseSearchAlbum(response);
     }
 
     public ArrayList<InternetSong> searchSongs(String query, Integer page) throws Exception {
         if (TextUtils.isEmpty(query)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("song", query);
+        params.put("version", String.valueOf(API_VERSION));
+
         if (page != null) {
             params.put("page", page.toString());
         }
@@ -96,23 +90,19 @@ public class Api {
         urlBuilder.append(API_URL).append(SEARCH_SONGS_COMMAND);
 
         String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
-
-        if (!TextUtils.isEmpty(jsonResponse)) {
-            JSONObject response = new JSONObject(jsonResponse);
-            checkError(response);
-            return ApiUtils.parseSearchSongs(response);
-        }
-        return null;
+        JSONObject response = new JSONObject(jsonResponse);
+        checkError(response);
+        return ApiUtils.parseSearchSongs(response);
     }
 
-    public String getUrlOfSong(String apiUrl, String key) throws Exception {
-        if (TextUtils.isEmpty(apiUrl) || TextUtils.isEmpty(key)) throw new IllegalArgumentException("searchQuery cannot be empty");
-        String resp = NetworkUtil.doGet(apiUrl, null);
-        if (resp != null) {
-            JSONObject response = new JSONObject(resp);
-            return response.getString(key);
-        }
-        return null;
+    public String getUrlOfSong(PlayAbleSong song) throws Exception {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("version", String.valueOf(API_VERSION));
+
+        String urlBuilder = song.getUrlForUrl() + song.getId();
+        String resp = NetworkUtil.doGet(urlBuilder, params);
+        JSONObject response = new JSONObject(resp);
+        return response.getString(song.getUrlKey());
     }
 
     public BandInfoModel getBandInfo() {
@@ -122,7 +112,7 @@ public class Api {
     //throws exception if Json response has error
     private void checkError(JSONObject response) throws Exception{
         if (response.has("error")) {
-            throw new Exception("Error in api response");
+            throw new Exception(response.get("error").toString());
         }
     }
 }

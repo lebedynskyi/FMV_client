@@ -33,7 +33,10 @@
             android:ellipsize="end"
             android:gravity="center_vertical|left"
             android:textSize="13sp" android:layout_alignParentRight="true"/>
-    <ImageView android:layout_width="30dp" android:layout_height="30dp" android:id="@+id/is_cached"
-               android:layout_alignParentEnd="false" android:layout_alignParentRight="true"
-               android:layout_alignParentBottom="true" android:src="@drawable/back_item_in_cache"/>
+    <ImageView android:layout_width="30dp"
+               android:layout_height="30dp"
+               android:id="@+id/is_cached"
+               android:layout_alignParentRight="true"
+               android:layout_alignParentBottom="true"
+               android:src="@drawable/back_item_in_cache"/>
 </RelativeLayout>

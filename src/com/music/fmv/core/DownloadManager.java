@@ -1,8 +1,6 @@
-package com.music.fmv.core.managers;
+package com.music.fmv.core;
 
 import com.music.fmv.R;
-import com.music.fmv.core.Core;
-import com.music.fmv.models.notdbmodels.InternetSong;
 import com.music.fmv.models.notdbmodels.PlayAbleSong;
 import com.music.fmv.models.notdbmodels.SearchAlbumModel;
 import com.music.fmv.tasks.threads.IDownloadListener;
@@ -24,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * To change this template use File | Settings | File Templates.
  */
 public class DownloadManager extends Manager {
-    public DownloadManager(Core core) {
+    DownloadManager(Core core) {
         super(core);
     }
 
