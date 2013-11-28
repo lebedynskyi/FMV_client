@@ -1,20 +1,26 @@
-package com.music.fmv.models.notdbmodels;
+package com.music.fmv.models;
 
-import java.util.ArrayList;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 7/12/13
  * Time: 5:49 PM
  */
-public class SearchBandModel extends BaseSerializableModel {
-    public static int AVAILABLE_PAGES = 0;
 
+@DatabaseTable
+public class SearchBandModel extends BaseSerializableModel {
+    public static int AVAILABLE_PAGES = -1;
+
+    @DatabaseField
     private String url;
+    @DatabaseField
     private String image;
+    @DatabaseField
     private String descr;
+    @DatabaseField
     private String name;
-    private ArrayList<String> genres;
 
     public String getUrl() {
         return url;
@@ -38,14 +44,6 @@ public class SearchBandModel extends BaseSerializableModel {
 
     public void setDescr(String descr) {
         this.descr = descr;
-    }
-
-    public ArrayList<String> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(ArrayList<String> genres) {
-        this.genres = genres;
     }
 
     public String getName() {

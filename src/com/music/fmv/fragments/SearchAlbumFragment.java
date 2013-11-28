@@ -11,9 +11,10 @@ import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchAlbumsAdapter;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.notdbmodels.SearchAlbumModel;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.tasks.SearchAlbumsTask;
+import com.music.fmv.utils.Log;
 import com.music.fmv.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -165,4 +166,10 @@ public class SearchAlbumFragment extends BaseSearchFragment{
             } else albumsListsView.openAnimate(position);
         }
     };
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e(getClass().getSimpleName(), "OnDestroyView, need save state");
+    }
 }

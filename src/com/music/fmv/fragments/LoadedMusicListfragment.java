@@ -9,9 +9,9 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.NativeSongAdapter;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.core.PlayerManager;
-import com.music.fmv.models.notdbmodels.FileSystemSong;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
-import com.music.fmv.services.Player;
+import com.music.fmv.models.FileSystemSong;
+import com.music.fmv.models.PlayAbleSong;
+import com.music.fmv.core.Player;
 import com.music.fmv.tasks.GetAudioFromStore;
 import com.music.fmv.widgets.RefreshableViewPager;
 

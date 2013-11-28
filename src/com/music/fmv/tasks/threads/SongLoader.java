@@ -1,7 +1,7 @@
 package com.music.fmv.tasks.threads;
 
 import com.music.fmv.api.Api;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.models.PlayAbleSong;
 import com.music.fmv.utils.NetworkUtil;
 
 import java.io.File;

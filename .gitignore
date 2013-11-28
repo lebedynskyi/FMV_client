@@ -24,3 +24,6 @@ build.xml
 proguard-project.txt
 project.properties
 *.idea/
+
+#MAC os invisible file
+.DS_Store

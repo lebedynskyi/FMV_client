@@ -9,10 +9,8 @@ import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.PlayerManager;
-import com.music.fmv.services.Player;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.music.fmv.core.Player;
+import com.music.fmv.utils.TimeUtils;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -21,7 +19,6 @@ import java.util.Date;
  */
 public class PlayerActivity extends BaseActivity  implements Player.PlayerListener{
     public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
-    private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
 
     private TextView songNameTV;
     private TextView songArtistTV;
@@ -101,8 +98,8 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         Player.PlayerStatus status = player.getStatus();
 
         if (status != null){
-            durationTV.setText(TIME_SD.format(new Date(status.getDuration())));
-            curProgressTV.setText(TIME_SD.format(new Date(status.getCurrentProgress())));
+            durationTV.setText(TimeUtils.extractTimeFromSong(status.getDuration()));
+            curProgressTV.setText(TimeUtils.extractTimeFromSong(status.getCurrentProgress()));
             progressSlider.setProgress(status.getCurrentProgress());
         }else {
             durationTV.setText("0.0");

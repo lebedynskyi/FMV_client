@@ -28,7 +28,7 @@ import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 import com.music.fmv.R;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.models.PlayAbleSong;
 
 import java.io.File;
 import java.io.FileFilter;

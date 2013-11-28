@@ -3,8 +3,8 @@ package com.music.fmv.tasks;
 import android.content.Context;
 import android.text.TextUtils;
 import com.music.fmv.R;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.SearchQueryCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,9 @@ public class AutocompleterTask extends BaseAsyncTask<ArrayList<String>> {
 
     @Override
     protected ArrayList<String> doInBackground(Object... params) {
+        if (TextUtils.isEmpty(cuurentString)){
+            return null;
+        }
         try {
             List<SearchQueryCache> cache = core.getCacheManager().getCachedQueries(queryType, 5, cuurentString);
             return extractString(cache);
@@ -38,17 +41,12 @@ public class AutocompleterTask extends BaseAsyncTask<ArrayList<String>> {
 
     private ArrayList<String> extractString(List<SearchQueryCache> cache) {
         ArrayList<String> words = new ArrayList<String>();
-        int length = cuurentString.length();
         for (SearchQueryCache c: cache){
             String query = c.getQuery();
-            if (TextUtils.isEmpty(query) || length == 0) continue;
+            if (TextUtils.isEmpty(query)) continue;
 
-            int queryLength = query.length();
-
-            if (queryLength <= length + 5) {
-                String color = core.getContext().getString(R.color.blue_button).substring(3);
-                words.add(query.replace(cuurentString, "<font color=#" + color + ">" + cuurentString + "</font>"));
-            }
+            String color = core.getContext().getString(R.color.blue_button).substring(3);
+            words.add(query.replace(cuurentString, "<font color=#" + color + ">" + cuurentString + "</font>"));
         }
         return words;
     }

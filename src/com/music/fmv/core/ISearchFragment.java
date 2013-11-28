@@ -1,6 +1,6 @@
 package com.music.fmv.core;
 
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.SearchQueryCache;
 
 /**
  * User: Vitalii Lebedynskyi

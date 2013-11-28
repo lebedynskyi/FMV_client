@@ -1,4 +1,4 @@
-package com.music.fmv.models.notdbmodels;
+package com.music.fmv.models;
 
 import java.io.Serializable;
 

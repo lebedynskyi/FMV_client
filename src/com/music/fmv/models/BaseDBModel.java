@@ -1,4 +1,4 @@
-package com.music.fmv.models.dbmodels;
+package com.music.fmv.models;
 
 import com.j256.ormlite.field.DatabaseField;
 

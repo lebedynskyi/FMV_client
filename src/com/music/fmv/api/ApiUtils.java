@@ -1,7 +1,7 @@
 package com.music.fmv.api;
 
 import android.text.TextUtils;
-import com.music.fmv.models.notdbmodels.*;
+import com.music.fmv.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,14 +14,13 @@ import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
- * User: lebed
+ * User: Vitalii Lebednskyi
  * Date: 7/16/13
  * Time: 8:47 AM
  * To change this template use File | Settings | File Templates.
  */
 public class ApiUtils {
     public static final String RESPONSE_TAG = "response";
-
 
     public static String encodeString(String s) {
         if (TextUtils.isEmpty(s)) return "";
@@ -62,15 +61,6 @@ public class ApiUtils {
                     model.setDescr(artistData.optString("descr"));
                     model.setUrl(artistData.optString("url"));
                     model.setImage(artistData.optString("image"));
-                    JSONArray genres = artistData.optJSONArray("genres");
-
-                    if (genres != null) {
-                        ArrayList<String> modelGenres = new ArrayList<String>();
-                        for (int j = 0; j < genres.length(); j++) {
-                            modelGenres.add(genres.optString(i));
-                        }
-                        model.setGenres(modelGenres);
-                    }
                     result.add(model);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -83,35 +73,8 @@ public class ApiUtils {
     }
 
     public static BandInfoModel parseBandInfo(JSONObject response) {
-        response = response.optJSONObject(RESPONSE_TAG);
-        BandInfoModel model = new BandInfoModel();
-        JSONArray images = response.optJSONArray("images");
-        JSONArray similar = response.optJSONArray("similar");
-        model.setDescr(response.optString("descr"));
 
-        if (images != null) {
-            ArrayList<String> imagesUrls = new ArrayList<String>();
-            for (int i = 0; i < images.length(); i++) {
-                imagesUrls.add(images.optString(i));
-            }
-            model.setImages(imagesUrls);
-        }
-
-        if (similar != null) {
-            ArrayList<SimilarBandModel> similarsModels = new ArrayList<SimilarBandModel>();
-            for (int i = 0; i < similar.length(); i++) {
-                JSONObject tempSimilarJson = similar.optJSONObject(i);
-                SimilarBandModel similarBandModel = new SimilarBandModel();
-                similarBandModel.setUrl(tempSimilarJson.optString("url"));
-                similarBandModel.setImage(tempSimilarJson.optString("image"));
-                similarBandModel.setName(tempSimilarJson.optString("name"));
-                similarsModels.add(similarBandModel);
-            }
-
-            model.setSimilars(similarsModels);
-        }
-
-        return model;
+        return null;
     }
 
     public static List<SearchAlbumModel> parseSearchAlbum(JSONObject response) throws Exception {

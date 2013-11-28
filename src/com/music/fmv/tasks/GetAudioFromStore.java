@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import com.music.fmv.models.notdbmodels.FileSystemSong;
+import com.music.fmv.models.FileSystemSong;
 import org.cmc.music.metadata.IMusicMetadata;
 import org.cmc.music.metadata.MusicMetadataSet;
 import org.cmc.music.myid3.MyID3;

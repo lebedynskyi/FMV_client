@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
-import com.music.fmv.services.Player;
 import com.music.fmv.services.PlayerService;
 
 /**

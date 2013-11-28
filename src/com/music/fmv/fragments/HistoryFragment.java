@@ -9,8 +9,8 @@ import com.music.fmv.adapters.HistorySearchAdapter;
 import com.music.fmv.adapters.sectionadapter.SectionAdapter;
 import com.music.fmv.adapters.sectionadapter.Sectionizer;
 import com.music.fmv.core.BaseFragment;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.SearchQueryCache;
 import com.music.fmv.widgets.RefreshableViewPager;
 
 import java.util.List;

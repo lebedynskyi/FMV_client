@@ -15,11 +15,12 @@ import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.PlayerManager;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.notdbmodels.InternetSong;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
-import com.music.fmv.services.Player;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.InternetSong;
+import com.music.fmv.models.PlayAbleSong;
+import com.music.fmv.core.Player;
 import com.music.fmv.tasks.SearchSongsTask;
+import com.music.fmv.utils.Log;
 import com.music.fmv.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -225,5 +226,11 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
     public void onPause() {
         super.onPause();
         core.unregisterListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e(getClass().getSimpleName(), "OnDestroyView, need save state");
     }
 }

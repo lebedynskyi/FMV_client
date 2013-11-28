@@ -1,7 +1,7 @@
 package com.music.fmv.utils;
 
-import com.music.fmv.models.notdbmodels.InternetSong;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.models.InternetSong;
+import com.music.fmv.models.PlayAbleSong;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,6 +22,11 @@ public class TimeUtils {
             duration = song.getDuration();
         }
         Date d = new Date(duration);
+        return MM_SS_DATE_FORMAT.format(d);
+    }
+
+    public static CharSequence extractTimeFromSong(int time) {
+        Date d = new Date(time);
         return MM_SS_DATE_FORMAT.format(d);
     }
 }

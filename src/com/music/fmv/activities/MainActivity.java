@@ -14,7 +14,7 @@ import com.music.fmv.fragments.HistoryFragment;
 import com.music.fmv.fragments.MusicFragment;
 import com.music.fmv.fragments.SearchFragment;
 import com.music.fmv.fragments.SettingsFragment;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.SearchQueryCache;
 import com.music.fmv.tasks.GetAudioFromStore;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;

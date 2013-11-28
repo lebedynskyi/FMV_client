@@ -8,11 +8,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchBandAdapter;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.notdbmodels.BandInfoModel;
-import com.music.fmv.models.notdbmodels.SearchBandModel;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.BandInfoModel;
+import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.tasks.GetBandTask;
 import com.music.fmv.tasks.SearchBandTask;
+import com.music.fmv.utils.Log;
 import com.music.fmv.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -201,4 +202,11 @@ public class SearchArtistFragment extends BaseSearchFragment{
             }
         }
     };
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e(getClass().getSimpleName(), "OnDestroyView, need save state");
+    }
 }

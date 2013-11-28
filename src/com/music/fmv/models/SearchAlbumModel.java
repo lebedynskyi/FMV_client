@@ -1,19 +1,29 @@
-package com.music.fmv.models.notdbmodels;
+package com.music.fmv.models;
 
 import android.text.TextUtils;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 7/19/13
  * Time: 12:15 PM
  */
+
+@DatabaseTable
 public class SearchAlbumModel extends BaseSerializableModel {
-    public static int AVAILABLE_PAGES = 0;
+    public static int AVAILABLE_PAGES = -1;
+    @DatabaseField
     private String artistName;
+    @DatabaseField
     private String albumName;
+    @DatabaseField
     private String artistUrl;
+    @DatabaseField
     private String albumUrl;
+    @DatabaseField
     private String briefDescr;
+    @DatabaseField
     private String image;
 
     public String getImage() {

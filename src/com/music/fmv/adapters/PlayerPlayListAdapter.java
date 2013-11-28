@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.music.fmv.R;
-import com.music.fmv.models.notdbmodels.InternetSong;
+import com.music.fmv.models.InternetSong;
 import com.music.fmv.utils.TimeUtils;
 
 import java.util.List;

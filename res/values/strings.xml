@@ -21,6 +21,7 @@
     </string-array>
     <!--CLOSE SETTINGS STRINGS THAT NOT USED IN UI-->
 
+    <!--Some tips in app-->
     <string name="app_name">FMS</string>
     <string name="network_unavailable">Network unavailable. Please check your connection.</string>
     <string name="request_error">Error during retrieving information.</string>

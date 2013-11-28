@@ -2,8 +2,8 @@ package com.music.fmv.tasks;
 
 import android.content.Context;
 import com.music.fmv.api.Api;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.notdbmodels.SearchBandModel;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.SearchBandModel;
 
 import java.util.List;
 

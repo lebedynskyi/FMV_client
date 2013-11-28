@@ -1,4 +1,4 @@
-package com.music.fmv.models.dbmodels;
+package com.music.fmv.models;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -8,6 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Date: 10/11/13
  * Time: 11:00 AM
  */
+
 @DatabaseTable(tableName = "searh_query_cache")
 public class SearchQueryCache extends BaseDBModel{
     @DatabaseField()
@@ -16,8 +17,6 @@ public class SearchQueryCache extends BaseDBModel{
     private String queryType;
     @DatabaseField
     private long rate;
-
-    public SearchQueryCache(){}
 
     public SearchQueryCache(String query, ModelType queryType) {
         this.query = query;

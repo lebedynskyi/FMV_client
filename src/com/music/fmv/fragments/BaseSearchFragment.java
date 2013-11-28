@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseFragment;
 import com.music.fmv.core.ISearchFragment;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.SearchQueryCache;
 import com.music.fmv.tasks.AutocompleterTask;
 import com.music.fmv.widgets.AutocompletePopupWindow;
 
@@ -82,7 +82,7 @@ public abstract class BaseSearchFragment extends BaseFragment implements ISearch
                 @Override
                 protected void onPostExecute(ArrayList<String> strings) {
                     super.onPostExecute(strings);
-                    if (strings == null || strings.size() == 0 || isCancelled()) return;
+                    if (strings == null || strings.isEmpty() || isCancelled()) return;
 
                     autocompleteWindow = new AutocompletePopupWindow(context, strings, sourceEditText);
                     autocompleteWindow.setWindowLayoutMode(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

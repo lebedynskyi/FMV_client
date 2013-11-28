@@ -3,8 +3,8 @@ package com.music.fmv.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 import com.music.fmv.core.Core;
-import com.music.fmv.models.dbmodels.ModelType;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.ModelType;
+import com.music.fmv.models.SearchQueryCache;
 import com.music.fmv.views.LoadDialog;
 
 /**

@@ -1,4 +1,4 @@
-package com.music.fmv.models.dbmodels;
+package com.music.fmv.models;
 
 public enum ModelType {
     SONG, ARTIST, ALBUM

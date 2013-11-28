@@ -1,6 +1,6 @@
-package com.music.fmv.services;
+package com.music.fmv.core;
 
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.models.PlayAbleSong;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ public interface Player {
     public void pause();
     public void previous();
     public void next();
-    public void stop();
     public void setShuffle(boolean value);
     public boolean isShuffle();
     public void setLoop(boolean value);

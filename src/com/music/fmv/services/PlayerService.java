@@ -9,13 +9,12 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
+import com.music.fmv.core.Player;
 import com.music.fmv.core.PlayerManager;
-import com.music.fmv.models.notdbmodels.PlayAbleSong;
+import com.music.fmv.models.PlayAbleSong;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +24,7 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 
+//TODO REFACTOR IT
 public class PlayerService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, Player {
     private MediaPlayer mPlayer;
     private Core core;
@@ -76,6 +76,18 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     public void next() {
+        if (isShuffle()){
+            playNextSong();
+        }else {
+            playNextSong();
+        }
+    }
+
+    private void playNextRandomSong(){
+
+    }
+
+    private void playNextSong(){
         int curPosition = playerQueue.indexOf(currentSong);
 
         if (curPosition + 1 < playerQueue.size() && curPosition != -1) {
@@ -85,10 +97,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
             clearNotify();
             notifyStateCallback();
         }
-    }
-
-    public void stop() {
-        if (mPlayer != null) mPlayer.stop();
     }
 
     @Override

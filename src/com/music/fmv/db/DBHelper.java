@@ -6,7 +6,10 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.music.fmv.models.dbmodels.SearchQueryCache;
+import com.music.fmv.models.InternetSong;
+import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.models.SearchBandModel;
+import com.music.fmv.models.SearchQueryCache;
 
 import java.sql.SQLException;
 
@@ -34,17 +37,18 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
 
     private RuntimeExceptionDao<SearchQueryCache, Integer> queryCacheDAO;
 
-
     private DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTableIfNotExists(connectionSource, SearchQueryCache.class);
-        } catch (SQLException e) {
+            TableUtils.createTableIfNotExists(connectionSource, SearchAlbumModel.class);
+            TableUtils.createTableIfNotExists(connectionSource, SearchBandModel.class);
+            TableUtils.createTableIfNotExists(connectionSource, InternetSong.class);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
