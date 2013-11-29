@@ -18,6 +18,10 @@ public class SearchQueryCache extends BaseDBModel{
     @DatabaseField
     private long rate;
 
+    public SearchQueryCache(){
+
+    }
+
     public SearchQueryCache(String query, ModelType queryType) {
         this.query = query;
         this.queryType = queryType.name();

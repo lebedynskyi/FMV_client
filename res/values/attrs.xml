@@ -26,4 +26,9 @@
         <attr name="allowSingleTap" format="boolean" />
         <attr name="animateOnClick" format="boolean|color" />
     </declare-styleable>
+
+    <declare-styleable name="PlayerSliding">
+        <attr name="handleID" format="reference"/>
+        <attr name="contentID" format="reference"/>
+    </declare-styleable>
 </resources>

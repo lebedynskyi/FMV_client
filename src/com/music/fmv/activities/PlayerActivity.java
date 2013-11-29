@@ -11,6 +11,7 @@ import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.PlayerManager;
 import com.music.fmv.core.Player;
 import com.music.fmv.utils.TimeUtils;
+import com.music.fmv.widgets.PlayerSliding;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -27,6 +28,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
 
     private SeekBar progressSlider;
     private ImageView songCover;
+    private PlayerSliding sliding;
 
     private Player player;
 
@@ -91,6 +93,16 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         curProgressTV = (TextView) findViewById(R.id.current_time);
         progressSlider = (SeekBar) findViewById(R.id.curr_progress);
         progressSlider.setOnSeekBarChangeListener(seekBarListener);
+        sliding = (PlayerSliding) findViewById(R.id.drawer);
+
+        sliding.getHandle().findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sliding.isOpen()){
+                    sliding.close();
+                }sliding.open();
+            }
+        });
     }
 
     private void refreshProgress() {
