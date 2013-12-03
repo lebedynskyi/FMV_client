@@ -4,35 +4,9 @@
                 android:background="@drawable/bg_audio_player"
                 android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-    <LinearLayout android:gravity="center" android:id="@+id/audio_player_buttons" android:layout_width="fill_parent"
-                  android:layout_height="60dp" android:layout_marginLeft="10.0dip"
-                  android:layout_marginTop="60dp"
-                  android:layout_marginRight="10.0dip" android:layout_marginBottom="10.0dip"
-                  android:layout_alignParentBottom="true">
-        <ImageView android:id="@+id/shuffle" android:background="@drawable/player_shuffle_selector"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:scaleType="center" android:layout_weight="1" android:layout_margin="10dp"/>
-        <ImageView android:id="@+id/prev" android:background="@drawable/player_prev_selector"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:scaleType="centerInside" android:layout_weight="1"/>
-        <ImageView android:id="@+id/play_pause" android:background="@drawable/play_pause_selector"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:scaleType="centerInside" android:layout_weight="1"/>
-        <ImageView android:id="@+id/next" android:background="@drawable/player_next_selector"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:scaleType="centerInside" android:layout_weight="1"/>
-        <ImageView android:id="@+id/loop" android:background="@drawable/player_loop_selector"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:scaleType="center" android:layout_weight="1" android:layout_margin="10dp"/>
-    </LinearLayout>
     <LinearLayout android:gravity="center_vertical" android:id="@+id/audio_player_progress_wrap"
                   android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:layout_above="@id/audio_player_buttons" android:layout_alignParentLeft="true">
+                  android:layout_above="@+id/audio_player_buttons" android:layout_alignParentLeft="true">
         <TextView android:textSize="12.5dip" android:textStyle="italic" android:textColor="#b2ffffff"
                   android:gravity="center" android:id="@+id/current_time" android:layout_width="40.0dip"
                   android:layout_height="wrap_content"/>
@@ -61,13 +35,37 @@
             android:orientation="vertical"
             android:layout_above="@+id/aplayer_title"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:gravity="center_vertical|center_horizontal">
+            android:layout_height="fill_parent" android:gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="55dp">
         <com.music.fmv.views.SquareImageView android:layout_width="match_parent"
-                                             android:paddingTop="55dp"
                                              android:layout_height="match_parent"
                                              android:id="@+id/cover_image"/>
     </LinearLayout>
 
+    <LinearLayout android:gravity="center" android:id="@+id/audio_player_buttons" android:layout_width="fill_parent"
+                  android:layout_height="65dp"
+                  android:layout_alignParentBottom="true" android:layout_marginTop="15dp">
+        <ImageView android:id="@+id/shuffle" android:background="@drawable/player_shuffle_selector"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="center" android:layout_weight="1" android:layout_margin="10dp"/>
+        <ImageView android:id="@+id/prev" android:background="@drawable/player_prev_selector"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="centerInside" android:layout_weight="1"/>
+        <ImageView android:id="@+id/play_pause" android:background="@drawable/play_pause_selector"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="centerInside" android:layout_weight="1"/>
+        <ImageView android:id="@+id/next" android:background="@drawable/player_next_selector"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="centerInside" android:layout_weight="1"/>
+        <ImageView android:id="@+id/loop" android:background="@drawable/player_loop_selector"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="center" android:layout_weight="1" android:layout_margin="10dp"/>
+    </LinearLayout>
     <com.music.fmv.widgets.PlayerSliding
             android:id="@+id/drawer"
             android:layout_width="match_parent"
@@ -77,35 +75,27 @@
         <LinearLayout
                 android:id="@+id/content_c"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <ImageView android:src="@drawable/icon"
+                android:layout_height="match_parent" android:background="@color/black">
+            <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-                </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:id="@+id/listView"/>
+        </LinearLayout>
         <RelativeLayout android:id="@id/handle_c"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="#333333">
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="#ffffff"
-                    android:clickable="false"
-                    android:paddingLeft="15dp"
-                    android:text="Handle Text"
-                    android:gravity="center_horizontal|center_vertical" android:id="@+id/textView"/>
-            <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/button" android:layout_toRightOf="@+id/textView" android:layout_centerVertical="true"/>
-            <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="New Button"
-                    android:id="@+id/button1" android:layout_toRightOf="@+id/button"
-                    />
+            <com.music.fmv.views.GlowButton android:layout_width="100dp"
+                  android:layout_height="match_parent"
+                  appattrs:text="@string/back"
+                  appattrs:text_gravity="left"
+                  appattrs:leftDrawable="@drawable/back_button_selector"
+                  android:id="@+id/back_btn"/>
+            <com.music.fmv.views.GlowButton android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  appattrs:text="@string/show_playlist"
+                  android:id="@+id/show_playlist_btn" android:layout_toRightOf="@+id/back_btn"/>
         </RelativeLayout>
     </com.music.fmv.widgets.PlayerSliding>
 </RelativeLayout>

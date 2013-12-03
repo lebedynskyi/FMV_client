@@ -3,6 +3,9 @@ package com.music.fmv.models;
 import android.text.TextUtils;
 import com.j256.ormlite.field.DatabaseField;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * User: Vitalii Lebedynskyi
  * Date: 10/22/13
@@ -11,6 +14,8 @@ import com.j256.ormlite.field.DatabaseField;
 
 
 public abstract class PlayAbleSong extends BaseSerializableModel{
+    public static final SimpleDateFormat MM_SS_DATE_FORMAT = new SimpleDateFormat("mm:ss");
+
     @DatabaseField
     private String url;
     @DatabaseField
@@ -19,6 +24,8 @@ public abstract class PlayAbleSong extends BaseSerializableModel{
     private String name;
     @DatabaseField
     private int duration;
+
+    private String niceDuration;
 
     // url == null will be used getUrlForUrl and getUrlKey
     public String getUrlKey(){
@@ -95,5 +102,15 @@ public abstract class PlayAbleSong extends BaseSerializableModel{
         if (artist == null) return name == null ? "" : name;
         if (name == null) return artist;
         return artist + " - " + name;
+    }
+
+
+    public String getNiceDuration(){
+        if (TextUtils.isEmpty(niceDuration)) {
+            Date d = new Date(this instanceof InternetSong ? duration * 1000 : duration);
+            niceDuration = MM_SS_DATE_FORMAT.format(d);
+        }
+
+        return niceDuration;
     }
 }

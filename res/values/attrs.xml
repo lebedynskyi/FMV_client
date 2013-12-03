@@ -1,30 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="GlowButton">
-        <attr name="selectable" format="boolean"/>
         <attr name="text" format="string"/>
+        <attr name="text_gravity" format="enum">
+            <enum name="center" value="1"/>
+            <enum name="left" value="3"/>
+            <enum name="right" value="5"/>
+        </attr>
+        <attr name="leftDrawable" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="RefreshableViewPager">
         <attr name="scrollable" format="boolean"/>
         <attr name="autoRefresh" format="boolean"/>
         <attr name="refreshDelay" format="integer"/>
-    </declare-styleable>
-
-    <declare-styleable name="SlidingDrawer">
-        <attr name="orientation">
-            <enum name="top" value="0" />
-            <enum name="left" value="1" />
-            <enum name="bottom" value="2" />
-            <enum name="right" value="3" />
-        </attr>
-        <attr name="handle" format="reference" />
-        <attr name="canSwiping" format="boolean" />
-        <attr name="content" format="reference" />
-        <attr name="bottomOffset" format="dimension" />
-        <attr name="topOffset" format="dimension" />
-        <attr name="allowSingleTap" format="boolean" />
-        <attr name="animateOnClick" format="boolean|color" />
     </declare-styleable>
 
     <declare-styleable name="PlayerSliding">

@@ -78,6 +78,8 @@ public class PlayerSliding extends ViewGroup{
         invalidate();
     }
 
+
+
     public View getHandle(){
         return mHandle;
     }
@@ -93,5 +95,10 @@ public class PlayerSliding extends ViewGroup{
 
     public boolean isOpen() {
         return getScrollY() < 0 ;
+    }
+
+    public static interface SliderListener{
+        public void onOpened();
+        public void onClose();
     }
 }

@@ -36,7 +36,7 @@ public class PlayerPlayListAdapter extends FixedBaseAdapter<InternetSong> {
 
         holder.name.setText(song.getName());
         holder.artist.setText(song.getArtist());
-        holder.duration.setText(TimeUtils.extractTimeFromSong(song));
+        holder.duration.setText(song.getNiceDuration());
 
         if (core.getCacheManager().isSongExists(song)) {
             holder.isCached.setVisibility(View.VISIBLE);

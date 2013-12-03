@@ -8,10 +8,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
-import com.music.fmv.core.PlayerManager;
 import com.music.fmv.core.Player;
-import com.music.fmv.utils.TimeUtils;
+import com.music.fmv.core.PlayerManager;
 import com.music.fmv.widgets.PlayerSliding;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -20,6 +22,9 @@ import com.music.fmv.widgets.PlayerSliding;
  */
 public class PlayerActivity extends BaseActivity  implements Player.PlayerListener{
     public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
+    private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
+
+    private boolean progressBlocked = false;
 
     private TextView songNameTV;
     private TextView songArtistTV;
@@ -28,7 +33,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
 
     private SeekBar progressSlider;
     private ImageView songCover;
-    private PlayerSliding sliding;
+    private PlayerSliding playerSlider;
 
     private Player player;
 
@@ -43,7 +48,6 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     protected void onCreated(Bundle state) {
         setContentView(R.layout.audio_player_activity);
         fromNitification = getIntent().getBooleanExtra(FROM_NOTIFY_FLAG, false);
-
         initViews();
     }
 
@@ -93,14 +97,25 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         curProgressTV = (TextView) findViewById(R.id.current_time);
         progressSlider = (SeekBar) findViewById(R.id.curr_progress);
         progressSlider.setOnSeekBarChangeListener(seekBarListener);
-        sliding = (PlayerSliding) findViewById(R.id.drawer);
 
-        sliding.getHandle().findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        playerSlider = (PlayerSliding) findViewById(R.id.drawer);
+        playerSlider.getHandle().findViewById(R.id.show_playlist_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sliding.isOpen()){
-                    sliding.close();
-                }else sliding.open();
+                if (playerSlider.isOpen()){
+                    playerSlider.close();
+                }else {
+                    playerSlider.open();
+                }
+            }
+        });
+
+        playerSlider.getHandle().findViewById(R.id.back_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fromNitification){
+                    mMediator.startMain();
+                }else onBackPressed();
             }
         });
     }
@@ -109,14 +124,20 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         if (player == null) return;
         Player.PlayerStatus status = player.getStatus();
 
+        String curTime = "0.0";
+        String fulTime = "0.0";
+        int progress = 0;
+
         if (status != null){
-            durationTV.setText(TimeUtils.extractTimeFromSong(status.getDuration()));
-            curProgressTV.setText(TimeUtils.extractTimeFromSong(status.getCurrentProgress()));
-            progressSlider.setProgress(status.getCurrentProgress());
-        }else {
-            durationTV.setText("0.0");
-            curProgressTV.setText("0.0");
-            progressSlider.setProgress(0);
+            fulTime= TIME_SD.format(new Date(status.getDuration()));
+            curTime = TIME_SD.format(new Date(status.getCurrentProgress()));
+            progress = status.getCurrentProgress();
+        }
+
+        durationTV.setText(fulTime);
+        curProgressTV.setText(curTime);
+        if (!progressBlocked){
+            progressSlider.setProgress(progress);
         }
     }
 
@@ -169,23 +190,26 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     }
 
     private SeekBar.OnSeekBarChangeListener seekBarListener = new SeekBar.OnSeekBarChangeListener() {
-        private boolean blocked = false;
+        public int newProgress;
+
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser && !blocked) {
-                player.seek(progress);
+            if (fromUser) {
+                this.newProgress = progress;
             }
         }
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-            blocked = true;
-
+            progressBlocked = true;
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            blocked = false;
+            if (player != null){
+                player.seek(newProgress);
+            }
+            progressBlocked = false;
         }
     };
 

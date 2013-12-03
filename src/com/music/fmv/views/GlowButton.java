@@ -3,9 +3,10 @@ package com.music.fmv.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.music.fmv.R;
 
@@ -16,13 +17,13 @@ import com.music.fmv.R;
  * Time: 22:01
  * To change this template use File | Settings | File Templates.
  */
-public class GlowButton extends RelativeLayout {
+public class GlowButton extends LinearLayout {
     private TextView textView;
     private View baseView;
+    private ImageView leftDrawable;
+
     private int whiteColor;
-    private int textColor;
-    private int blackColor;
-    private boolean selectable = true;
+    private int blueColor;
 
     public GlowButton(Context context) {
         super(context);
@@ -46,15 +47,20 @@ public class GlowButton extends RelativeLayout {
 
     private void initAttr(AttributeSet attrs) {
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.GlowButton);
-        this.selectable = arr.getBoolean(R.styleable.GlowButton_selectable, true);
         this.textView.setText(arr.getString(R.styleable.GlowButton_text));
+        int left_drawable =  arr.getResourceId(R.styleable.GlowButton_leftDrawable, 0);
+        if (left_drawable != 0){
+            leftDrawable.setImageDrawable(getContext().getResources().getDrawable(left_drawable));
+        }
+        textView.setGravity(arr.getInt(R.styleable.GlowButton_text_gravity, Gravity.CENTER_HORIZONTAL));
     }
 
     private void initUI() {
         textView = (TextView) baseView.findViewById(R.id.blue_button_text_view);
-        textColor = getContext().getResources().getColor(R.color.blue_button);
+        leftDrawable = (ImageView) findViewById(R.id.left_image);
+
+        blueColor = getContext().getResources().getColor(R.color.blue_button);
         whiteColor = getContext().getResources().getColor(R.color.white);
-        blackColor = getContext().getResources().getColor(R.color.black);
     }
 
     public void setText(String text) {
@@ -65,36 +71,9 @@ public class GlowButton extends RelativeLayout {
         return this.textView.getText().toString();
     }
 
-    public void setTextColor(int color) {
-        this.textColor = color;
-        textView.setTextColor(textColor);
-    }
-
-    public void setSelected(boolean selected) {
-        super.setSelected(selected);
-        if (selected) {
-            glow();
-        } else {
-            unglow();
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!selectable) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    setSelected(true);
-                    return true;
-                case MotionEvent.ACTION_UP:
-                    setSelected(false);
-            }
-        }
-        return super.onTouchEvent(event);
-    }
-
-    public void setSelectable(boolean value) {
-        this.selectable = value;
+    public void setBlueColor(int color) {
+        this.blueColor = color;
+        textView.setTextColor(blueColor);
     }
 
     private void unglow() {
@@ -103,7 +82,17 @@ public class GlowButton extends RelativeLayout {
     }
 
     private void glow() {
-        textView.setTextColor(textColor);
-        textView.setShadowLayer(8, 0, 0, textColor);
+        textView.setTextColor(blueColor);
+        textView.setShadowLayer(8, 0, 0, blueColor);
+    }
+
+    @Override
+    protected void drawableStateChanged(){
+        super.drawableStateChanged();
+        if (isSelected() || isPressed()){
+            glow();
+        }else{
+            unglow();
+        }
     }
 }
