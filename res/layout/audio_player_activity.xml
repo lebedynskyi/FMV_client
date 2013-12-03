@@ -74,10 +74,14 @@
             android:layout_height="match_parent"
             appattrs:handleID="@+id/handle_c"
             appattrs:contentID="@+id/content_c">
-        <ListView
+        <LinearLayout
                 android:id="@+id/content_c"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
+            <ImageView android:src="@drawable/icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                </LinearLayout>
         <RelativeLayout android:id="@id/handle_c"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"

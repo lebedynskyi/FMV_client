@@ -100,7 +100,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
             public void onClick(View v) {
                 if (sliding.isOpen()){
                     sliding.close();
-                }sliding.open();
+                }else sliding.open();
             }
         });
     }
