@@ -9,6 +9,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.widget.Toast;
 import com.music.fmv.R;
+import com.music.fmv.core.Core;
 
 import java.io.File;
 
@@ -18,10 +19,10 @@ import java.io.File;
  * Time: 10:59 AM
  */
 public class SettingsActivity extends PreferenceActivity {
-    private final int DOWNLOAD_FOLDER_REQUEST = 1522;
-    private final int SONGS_FOLDER_REQUEST = 1523;
-    private final int IMAGES_FOLDER_REQUEST = 1524;
-    private final int ALBUMS_FOLDER_REQUEST = 1525;
+    private static final int DOWNLOAD_FOLDER_REQUEST = 1522;
+    private static final int SONGS_FOLDER_REQUEST = 1523;
+    private static final int IMAGES_FOLDER_REQUEST = 1524;
+    private static final int ALBUMS_FOLDER_REQUEST = 1525;
 
     private FileChooserCallback fileChooserCallback;
 
@@ -54,7 +55,6 @@ public class SettingsActivity extends PreferenceActivity {
         imagesFolderPref.setOnPreferenceClickListener(new FileChooserListener(IMAGES_FOLDER_REQUEST));
 
         CheckBoxPreference useOneFolderCheck = (CheckBoxPreference) findPreference(getString(R.string.USE_ONE_FOlDER_KEY));
-
         useOneFolderCheck.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -62,7 +62,16 @@ public class SettingsActivity extends PreferenceActivity {
                 return true;
             }
         });
+
         applyAppearForStorrageSettings(getPreferenceManager().getSharedPreferences().getBoolean(getString(R.string.USE_ONE_FOlDER_KEY), false));
+        refreshDescriptions();
+    }
+
+    private void refreshDescriptions() {
+        downloadFolderPref.setSummary(prepareDescr(R.string.pref_download_folder_descr, Core.getInstance(this).getSettingsManager().getDownloadFolder()));
+        songsFolderPref.setSummary(prepareDescr(R.string.pref_song_folder_descr, Core.getInstance(this).getSettingsManager().getSongsFolder()));
+        albumsFolderPref.setSummary(prepareDescr(R.string.pref_album_folder_descr, Core.getInstance(this).getSettingsManager().getAlbumsFolder()));
+        imagesFolderPref.setSummary(prepareDescr(R.string.pref_image_folder_descr, Core.getInstance(this).getSettingsManager().getImageCacheFolder()));
     }
 
     public void startChooserActivity(int requestCode) {
@@ -79,14 +88,15 @@ public class SettingsActivity extends PreferenceActivity {
 
     public void onFilePicked(int requestCode, File file) {
         if (requestCode == DOWNLOAD_FOLDER_REQUEST){
-            prefs.edit().putString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), file.getAbsolutePath()).commit();
+            prefs.edit().putString(getString(R.string.DOWNLOAD_FOLDER_CACHE_KEY), file.getAbsolutePath() + "/").commit();
         }else if (requestCode == SONGS_FOLDER_REQUEST){
-            prefs.edit().putString(getString(R.string.SONG_FOLDER_CACHE_KEY), file.getAbsolutePath()).commit();
+            prefs.edit().putString(getString(R.string.SONG_FOLDER_CACHE_KEY), file.getAbsolutePath() + "/").commit();
         }else if (requestCode == IMAGES_FOLDER_REQUEST){
-            prefs.edit().putString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), file.getAbsolutePath()).commit();
+            prefs.edit().putString(getString(R.string.IMAGE_CACHE_FOLDER_KEY), file.getAbsolutePath() + "/").commit();
         }else if (requestCode == ALBUMS_FOLDER_REQUEST){
-            prefs.edit().putString(getString(R.string.ALBUMS_CACHE_FOLDER_KEY), file.getAbsolutePath()).commit();
+            prefs.edit().putString(getString(R.string.ALBUMS_CACHE_FOLDER_KEY), file.getAbsolutePath() + "/").commit();
         }
+        refreshDescriptions();
     }
 
     public static interface FileChooserCallback {
@@ -119,5 +129,11 @@ public class SettingsActivity extends PreferenceActivity {
             startChooserActivity(requestCode);
             return true;
         }
+    }
+
+    private String prepareDescr(int stringID, String part2){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(stringID)).append("\n").append(getString(R.string.current)).append(part2);
+        return sb.toString();
     }
 }

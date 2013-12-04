@@ -21,19 +21,15 @@
                             android:summary="@string/pref_use_one_folder_descr"/>
 
         <Preference android:title="@string/pref_download_folder"
-                    android:summary="@string/pref_download_folder_descr"
                     android:key="@string/DOWNLOAD_FOLDER_CACHE_KEY"/>
 
         <Preference android:title="@string/pref_song_folder"
-                    android:summary="@string/pref_song_folder_descr"
                     android:key="@string/SONG_FOLDER_CACHE_KEY"/>
 
         <Preference android:title="@string/pref_album_folder"
-                    android:summary="@string/pref_album_folder_descr"
                     android:key="@string/ALBUMS_CACHE_FOLDER_KEY"/>
 
         <Preference android:title="@string/pref_image_folder"
-                    android:summary="@string/pref_image_folder_descr"
                     android:key="@string/IMAGE_CACHE_FOLDER_KEY"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -18,6 +18,7 @@ import java.util.List;
  * Time: 11:25 AM
  * To change this template use File | Settings | File Templates.
  */
+
 public class PlayerListAdapter extends FixedBaseAdapter<PlayAbleSong> {
     public PlayerListAdapter(List<PlayAbleSong> mData, Context context) {
         super(mData, context);

@@ -25,7 +25,7 @@
     <string name="app_name">FMS</string>
     <string name="network_unavailable">Network unavailable. Please check your connection.</string>
     <string name="request_error">Error during retrieving information.</string>
-    <string name="empty_result">Search returned 0 rows.</string>
+    <string name="empty_result">Search has returned 0 rows.</string>
     <string name="search_hint">Enter a search request</string>
     <string name="empty_list">No items to show</string>
 
@@ -40,26 +40,12 @@
     <string name="music">Music</string>
     <string name="settings">Settings</string>
 
-
-    <string name="cannot_play_song">Cannot play the song</string>
-    <string name="field_cannot_be_empty">Field cannot be empty</string>
-    <string name="song_downloading">Song is downloading</string>
-    <string name="song_downloading_error">Some songs was not downloaded</string>
-    <string name="downloading_finish">All songs downloaded successfully</string>
-    <string name="file_already_exists">The song already downloaded</string>
-    <string name="already_in_queue">The song is downloading already</string>
-    <string name="waiting">Waiting...</string>
-    <string name="song_added_to_current_list">The song %s has added to current play list</string>
-    <string name="back">Back</string>
-    <string name="show_playlist">Show playlist</string>
-    <string name="hide_playlist">Hide playlist</string>
-
     <!--   Preferences !!!!!!!  -->
     <string name="pref_storage_title">Storage settings:</string>
     <string name="pref_common_title">Common settings:</string>
 
     <string name="pref_use_one_folder">Use one folder</string>
-    <string name="pref_use_one_folder_descr">All file will be saved in separated folders like songs, albums etc...</string>
+    <string name="pref_use_one_folder_descr">All file will be saved in separated folders like songs, albums, etc...</string>
 
     <string name="pref_download_folder">Download folder</string>
     <string name="pref_download_folder_descr">Folder for saving all files after downloading</string>
@@ -92,4 +78,18 @@
     <string name="all_music">All music</string>
     <string name="downloaded_music">Loaded music</string>
 
+    <!--     MISC    -->
+    <string name="cannot_play_song">Cannot play the song</string>
+    <string name="field_cannot_be_empty">Field cannot be empty</string>
+    <string name="song_downloading">Song is downloading</string>
+    <string name="song_downloading_error">Some songs was not downloaded</string>
+    <string name="downloading_finish">All songs downloaded successfully</string>
+    <string name="file_already_exists">The song already downloaded</string>
+    <string name="already_in_queue">The song is downloading already</string>
+    <string name="waiting">Waiting...</string>
+    <string name="song_added_to_current_list">The song %s has added to current play list</string>
+    <string name="back">Back</string>
+    <string name="show_playlist">Show playlist</string>
+    <string name="hide_playlist">Hide playlist</string>
+    <string name="current">Current value: "</string>
 </resources>
