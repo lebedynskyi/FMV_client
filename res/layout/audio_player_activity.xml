@@ -72,20 +72,18 @@
             android:layout_height="match_parent"
             appattrs:handleID="@+id/handle_c"
             appattrs:contentID="@+id/content_c">
-        <LinearLayout
-                android:id="@+id/content_c"
+        <ListView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:background="@color/black">
-            <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/listView"/>
-        </LinearLayout>
-        <RelativeLayout android:id="@id/handle_c"
+                android:layout_height="match_parent"
+                android:cacheColorHint="#00000000"
+                android:background="@color/black"
+                android:dividerHeight="1px"
+                android:divider="@color/gray"
+                android:id="@+id/content_c"/>
+        <LinearLayout android:id="@id/handle_c"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@drawable/black_top">
-
             <com.music.fmv.views.GlowButton android:layout_width="100dp"
                   android:layout_height="match_parent"
                   appattrs:text="@string/back"
@@ -96,6 +94,6 @@
                   android:layout_height="match_parent"
                   appattrs:text="@string/show_playlist"
                   android:id="@+id/show_playlist_btn" android:layout_toRightOf="@+id/back_btn"/>
-        </RelativeLayout>
+        </LinearLayout>
     </com.music.fmv.widgets.PlayerSliding>
 </RelativeLayout>

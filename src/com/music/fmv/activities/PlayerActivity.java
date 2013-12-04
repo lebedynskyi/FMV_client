@@ -3,15 +3,16 @@ package com.music.fmv.activities;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.*;
 import com.music.fmv.R;
+import com.music.fmv.adapters.PlayerListAdapter;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.Player;
 import com.music.fmv.core.PlayerManager;
 import com.music.fmv.views.GlowButton;
 import com.music.fmv.widgets.PlayerSliding;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,6 +47,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     private View pausePlayBTN;
     private View shuffleBTN;
     private View loopBTN;
+    private PlayerListAdapter playListAdater;
 
     @Override
     protected void onCreated(Bundle state) {
@@ -110,8 +112,10 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
             @Override
             public void onClick(View v) {
                 if (playerSlider.isOpen()) {
+                    playListBTN.setText(getResources().getString(R.string.show_playlist));
                     playerSlider.close();
                 } else {
+                    playListBTN.setText(getResources().getString(R.string.hide_playlist));
                     playerSlider.open();
                 }
             }
@@ -227,15 +231,34 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
             if (p != null){
                 player = p;
                 p.setPlayerListener(PlayerActivity.this);
+                preparePlayList(p);
             }
             onActionApplied();
             onNewSong();
         }
     };
 
+    private void preparePlayList(Player p) {
+        Player.PlayerStatus st = p.getStatus();
+        if (st == null) return;
+
+        ListView lv = (ListView) playerSlider.findViewById(R.id.content_c);
+        playListAdater = new PlayerListAdapter(st.getCurrentQueue(), this);
+        lv.setAdapter(playListAdater);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                player.play(position);
+                playListAdater.notifyDataSetChanged();
+            }
+        });
+    }
+
     private View.OnClickListener controlsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if(playerSlider.isOpen()) return;
+
             switch (v.getId()) {
                 case R.id.next:
                     player.next();
@@ -258,14 +281,24 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     private PlayerSliding.SliderListener sliderListener = new PlayerSliding.SliderListener() {
         @Override
         public void onOpened() {
-            backBTN.setVisibility(View.GONE);
-            playListBTN.setText(getResources().getString(R.string.hide_playlist));
+            ObjectAnimator playeListOpener = ObjectAnimator.ofFloat(playListBTN, "translationX", backBTN.getMeasuredWidth() / -2);
+            playeListOpener.setDuration(200);
+            playeListOpener.start();
+
+            ObjectAnimator backOpener = ObjectAnimator.ofFloat(backBTN, "translationX", -backBTN.getMeasuredWidth());
+            backOpener.setDuration(50);
+            backOpener.start();
         }
 
         @Override
         public void onClose() {
-            backBTN.setVisibility(View.VISIBLE);
-            playListBTN.setText(getResources().getString(R.string.show_playlist));
+            ObjectAnimator playeListOpener = ObjectAnimator.ofFloat(playListBTN, "translationX", 0);
+            playeListOpener.setDuration(50);
+            playeListOpener.start();
+
+            ObjectAnimator backOpener = ObjectAnimator.ofFloat(backBTN, "translationX", 0);
+            backOpener.setDuration(200);
+            backOpener.start();
         }
     };
 }

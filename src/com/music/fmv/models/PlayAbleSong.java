@@ -105,7 +105,7 @@ public abstract class PlayAbleSong extends BaseSerializableModel{
     }
 
 
-    public String getNiceDuration(){
+    public String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       getNiceDuration(){
         if (TextUtils.isEmpty(niceDuration)) {
             Date d = new Date(this instanceof InternetSong ? duration * 1000 : duration);
             niceDuration = MM_SS_DATE_FORMAT.format(d);

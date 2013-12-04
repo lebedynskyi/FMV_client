@@ -2,10 +2,10 @@ package com.music.fmv.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.widget.ScrollerCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.OverScroller;
 import com.music.fmv.R;
 
 /**
@@ -17,7 +17,7 @@ import com.music.fmv.R;
  */
 
 public class PlayerSliding extends ViewGroup{
-    public static final int ANIMATION_TIME = 600;
+    public static final int ANIMATION_TIME = 400;
 
     private View mHandle;
     private View mContent;
@@ -25,7 +25,7 @@ public class PlayerSliding extends ViewGroup{
     private int handleID;
     private int contentID;
 
-    private OverScroller scroller;
+    private ScrollerCompat scroller;
     private SliderListener listener;
 
     public PlayerSliding(Context context, AttributeSet attrs) {
@@ -37,8 +37,6 @@ public class PlayerSliding extends ViewGroup{
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.PlayerSliding);
         handleID = arr.getResourceId(R.styleable.PlayerSliding_handleID, -1);
         contentID = arr.getResourceId(R.styleable.PlayerSliding_contentID, -1);
-
-        setWillNotDraw(false);
     }
 
     @Override
@@ -56,7 +54,7 @@ public class PlayerSliding extends ViewGroup{
             throw new IllegalStateException("View must contain reference on exist child");
         }
 
-        scroller  = new OverScroller(getContext());
+        scroller  = ScrollerCompat.create(getContext());
     }
 
     @Override

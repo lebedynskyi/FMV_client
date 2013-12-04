@@ -19,6 +19,7 @@ public interface Player {
     public boolean isLoop();
     public void seek(int position);
     public void play(List<PlayAbleSong> songs, int position);
+    public void play(int position);
     public PlayerStatus getStatus();
     public void setPlayerListener(PlayerListener listener);
     public void add(PlayAbleSong model);

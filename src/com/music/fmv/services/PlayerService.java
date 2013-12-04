@@ -166,6 +166,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
+    public void play(int position) {
+        playSong(playerQueue.get(position));
+    }
+
+    @Override
     public PlayerStatus getStatus() {
         int duration = 0;
         int currentPos = 0;
