@@ -3,7 +3,6 @@ package com.music.fmv.activities;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.PlayerListAdapter;
@@ -43,7 +42,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
 
     private RefreshTimer refresher;
 
-    private boolean fromNitification;
+    private boolean fromNotification;
     private View pausePlayBTN;
     private View shuffleBTN;
     private View loopBTN;
@@ -52,7 +51,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     @Override
     protected void onCreated(Bundle state) {
         setContentView(R.layout.audio_player_activity);
-        fromNitification = getIntent().getBooleanExtra(FROM_NOTIFY_FLAG, false);
+        fromNotification = getIntent().getBooleanExtra(FROM_NOTIFY_FLAG, false);
         initViews();
     }
 
@@ -63,7 +62,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         if (refresher != null){
             refresher.cancel();
         }
-        refresher = new RefreshTimer(1 * 60 * 1000, 250);
+        refresher = new RefreshTimer(1 * 60 * 1000, 500);
         refresher.start();
     }
 
@@ -124,7 +123,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fromNitification) {
+                if (fromNotification) {
                     mMediator.startMain();
                 } else onBackPressed();
             }
@@ -195,7 +194,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         @Override
         public void onFinish() {
             refresher = null;
-            refresher = new RefreshTimer(1 * 60 * 1000, 250);
+            refresher = new RefreshTimer(1 * 60 * 1000, 500);
             refresher.start();
         }
     }
@@ -282,22 +281,22 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         @Override
         public void onOpened() {
             ObjectAnimator playeListOpener = ObjectAnimator.ofFloat(playListBTN, "translationX", backBTN.getMeasuredWidth() / -2);
-            playeListOpener.setDuration(200);
+            playeListOpener.setDuration(250);
             playeListOpener.start();
 
             ObjectAnimator backOpener = ObjectAnimator.ofFloat(backBTN, "translationX", -backBTN.getMeasuredWidth());
-            backOpener.setDuration(50);
+            backOpener.setDuration(150);
             backOpener.start();
         }
 
         @Override
         public void onClose() {
             ObjectAnimator playeListOpener = ObjectAnimator.ofFloat(playListBTN, "translationX", 0);
-            playeListOpener.setDuration(50);
+            playeListOpener.setDuration(150);
             playeListOpener.start();
 
             ObjectAnimator backOpener = ObjectAnimator.ofFloat(backBTN, "translationX", 0);
-            backOpener.setDuration(200);
+            backOpener.setDuration(250);
             backOpener.start();
         }
     };

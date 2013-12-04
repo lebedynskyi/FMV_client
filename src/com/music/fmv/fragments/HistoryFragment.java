@@ -31,9 +31,13 @@ public class HistoryFragment extends BaseFragment implements RefreshableViewPage
     protected View createView(Bundle savedInstanceState) {
         View view = inflateView(R.layout.history_fragment);
         ListView lv = (ListView) view.findViewById(R.id.history_listview);
+        View empty = view.findViewById(R.id.empty);
+        lv.setEmptyView(empty);
+
         historyItems = core.getCacheManager().getHistoryItems();
         adapter = new HistorySearchAdapter(historyItems, baseActivity);
         sectionAdapter = new SectionAdapter<SearchQueryCache>(baseActivity, adapter, R.layout.history_header, R.id.history_header_text, sectionizer);
+
         lv.setAdapter(sectionAdapter);
         lv.setOnItemClickListener(listListener);
         inited = true;
