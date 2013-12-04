@@ -10,6 +10,7 @@ import com.music.fmv.R;
 import com.music.fmv.core.BaseActivity;
 import com.music.fmv.core.Player;
 import com.music.fmv.core.PlayerManager;
+import com.music.fmv.views.GlowButton;
 import com.music.fmv.widgets.PlayerSliding;
 
 import java.text.SimpleDateFormat;
@@ -34,6 +35,8 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     private SeekBar progressSlider;
     private ImageView songCover;
     private PlayerSliding playerSlider;
+    private View backBTN;
+    private GlowButton playListBTN;
 
     private Player player;
 
@@ -99,23 +102,27 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         progressSlider.setOnSeekBarChangeListener(seekBarListener);
 
         playerSlider = (PlayerSliding) findViewById(R.id.drawer);
-        playerSlider.getHandle().findViewById(R.id.show_playlist_btn).setOnClickListener(new View.OnClickListener() {
+        playerSlider.setListener(sliderListener);
+        backBTN = playerSlider.getHandle().findViewById(R.id.back_btn);
+        playListBTN = (GlowButton) playerSlider.getHandle().findViewById(R.id.show_playlist_btn);
+
+        playListBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (playerSlider.isOpen()){
+                if (playerSlider.isOpen()) {
                     playerSlider.close();
-                }else {
+                } else {
                     playerSlider.open();
                 }
             }
         });
 
-        playerSlider.getHandle().findViewById(R.id.back_btn).setOnClickListener(new View.OnClickListener() {
+        backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fromNitification){
+                if (fromNitification) {
                     mMediator.startMain();
-                }else onBackPressed();
+                } else onBackPressed();
             }
         });
     }
@@ -245,6 +252,20 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
                 case R.id.loop:
                     player.setLoop(!player.isLoop());
             }
+        }
+    };
+
+    private PlayerSliding.SliderListener sliderListener = new PlayerSliding.SliderListener() {
+        @Override
+        public void onOpened() {
+            backBTN.setVisibility(View.GONE);
+            playListBTN.setText(getResources().getString(R.string.hide_playlist));
+        }
+
+        @Override
+        public void onClose() {
+            backBTN.setVisibility(View.VISIBLE);
+            playListBTN.setText(getResources().getString(R.string.show_playlist));
         }
     };
 }

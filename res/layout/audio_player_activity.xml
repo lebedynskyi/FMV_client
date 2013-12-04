@@ -84,7 +84,7 @@
         <RelativeLayout android:id="@id/handle_c"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="#333333">
+                        android:background="@drawable/black_top">
 
             <com.music.fmv.views.GlowButton android:layout_width="100dp"
                   android:layout_height="match_parent"
