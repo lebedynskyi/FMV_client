@@ -7,5 +7,8 @@ package com.music.fmv.utils;
  */
 
 public class TimeUtils {
+    public void testUnused(){
+        System.out.print("asd");
+    }
 
 }

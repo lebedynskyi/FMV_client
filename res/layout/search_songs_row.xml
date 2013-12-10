@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="fill_parent"
-             android:layout_height="fill_parent">
+             android:layout_height="wrap_content">
     <LinearLayout
             android:id="@+id/back"
             android:layout_width="match_parent"
@@ -36,19 +36,21 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:gravity="center_vertical|left"
-                android:textSize="22sp"
+                style="@style/ListRowTitle"
                 android:textColor="@color/black" android:layout_toLeftOf="@+id/duration"
                 android:text="dsaDAsdADdASDas"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/song_owner"
-                android:singleLine="true"
+                android:singleLine="false"
                 android:ellipsize="end"
                 android:gravity="center_vertical|left"
-                android:textSize="16sp"
                 android:textColor="@color/black"
-                android:layout_below="@+id/song_name"/>
+                android:layout_below="@+id/song_name" style="@style/ListRowSubtitle"
+                android:layout_alignParentBottom="true"
+                android:text="daasdaSD  daasdaSD  daasdaSD  daasdaSD  daasdaSD  daasdaSD  daasdaSD  daasdaSD  "
+                android:layout_toLeftOf="@+id/is_cached"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,7 +58,7 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:gravity="center_vertical|left"
-                android:textSize="13sp" android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true" style="@style/ListRowSubtitle"/>
         <ImageView android:layout_width="30dp" android:layout_height="30dp" android:id="@+id/is_cached"
                    android:layout_alignParentRight="true"
                    android:layout_alignParentBottom="true" android:src="@drawable/back_item_in_cache"/>

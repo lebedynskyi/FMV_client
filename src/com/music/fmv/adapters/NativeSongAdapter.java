@@ -40,11 +40,13 @@ public class NativeSongAdapter extends FixedBaseAdapter<PlayAbleSong> {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflateView(R.layout.native_songs_row, parent);
+            convertView = inflateView(R.layout.search_songs_row, parent);
             holder.owner = (TextView) convertView.findViewById(R.id.song_owner);
             holder.duration = (TextView) convertView.findViewById(R.id.duration);
             holder.name = (TextView) convertView.findViewById(R.id.song_name);
             holder.play = convertView.findViewById(R.id.song_play);
+            convertView.findViewById(R.id.song_download).setVisibility(View.GONE);
+            convertView.findViewById(R.id.is_cached).setVisibility(View.GONE);
             holder.addToQueue = convertView.findViewById(R.id.song_add_to_queu);
             convertView.setTag(holder);
         } else holder = (ViewHolder) convertView.getTag();

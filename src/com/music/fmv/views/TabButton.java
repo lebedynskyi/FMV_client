@@ -17,26 +17,21 @@ import com.music.fmv.R;
 
 public class TabButton extends RelativeLayout {
     private View view;
-    private ImageView button;
-    private ClickCallBack callBack;
-    private Drawable selectedDraw;
+    private ImageView image;
 
     public TabButton(Context context) {
         super(context);
-        view = inflate(context, R.layout.tab_button, this);
-        initComponentsUI();
+        initComponentsUI(context);
     }
 
     public TabButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        view = inflate(context, R.layout.tab_button, this);
-        initComponentsUI();
+        initComponentsUI(context);
     }
 
     public TabButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        view = inflate(context, R.layout.tab_button, this);
-        initComponentsUI();
+        initComponentsUI(context);
     }
 
     @Override
@@ -44,38 +39,16 @@ public class TabButton extends RelativeLayout {
         return view;
     }
 
-    private void initComponentsUI() {
-        selectedDraw = getContext().getResources().getDrawable(R.drawable.bottom_selected);
-        button = (ImageView) view.findViewById(R.id.tab_btn);
-        setOnClickListener(clickListener);
+    private void initComponentsUI(Context context) {
+        view = inflate(context, R.layout.tab_button, this);
+        image = (ImageView) view.findViewById(R.id.tab_btn);
     }
 
-    public void initUI(Drawable imageSelector, ClickCallBack callBack) {
-        this.callBack = callBack;
-        button.setBackgroundDrawable(imageSelector);
-    }
-
-    @Override
-    public void setSelected(boolean selected) {
-        super.setSelected(selected);
-        button.setSelected(selected);
-        if (selected) {
-            view.setBackgroundDrawable(selectedDraw);
-        } else {
-            view.setBackgroundDrawable(null);
-        }
+    public void initUI(Drawable imageSelector) {
+        image.setImageDrawable(imageSelector);
     }
 
     public interface ClickCallBack {
         public void onClick(View v);
     }
-
-    private OnClickListener clickListener = new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (callBack != null) {
-                callBack.onClick(TabButton.this);
-            }
-        }
-    };
 }

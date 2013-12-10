@@ -15,7 +15,6 @@ import com.music.fmv.fragments.MusicFragment;
 import com.music.fmv.fragments.SearchFragment;
 import com.music.fmv.fragments.SettingsFragment;
 import com.music.fmv.models.SearchQueryCache;
-import com.music.fmv.tasks.GetAudioFromStore;
 import com.music.fmv.utils.ViewUtils;
 import com.music.fmv.views.TabButton;
 import com.music.fmv.widgets.RefreshableViewPager;
@@ -29,7 +28,7 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     public static final int HISTORY_TAB = 1;
     public static final int MUSIC_TAB = 2;
     public static final int SETTINGS_TAB = 3;
-    public static final int BACK_CLICK_OFFSET = 1500;
+    public static final int BACK_CLICK_DELAY = 1500;
 
     private RefreshableViewPager pager;
 
@@ -50,10 +49,15 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
         musicBTN = (TabButton) findViewById(R.id.music_btn);
         settingsBTN = (TabButton) findViewById(R.id.settings_tab);
 
-        searchBTN.initUI(getResources().getDrawable(R.drawable.search_tab_selector), tabListener);
-        historyBTN.initUI(getResources().getDrawable(R.drawable.history_tab_selector), tabListener);
-        musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector), tabListener);
-        settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector), tabListener);
+        searchBTN.initUI(getResources().getDrawable(R.drawable.search_tab_selector));
+        historyBTN.initUI(getResources().getDrawable(R.drawable.history_tab_selector));
+        musicBTN.initUI(getResources().getDrawable(R.drawable.music_tab_selector));
+        settingsBTN.initUI(getResources().getDrawable(R.drawable.settings_tab_selector));
+
+        searchBTN.setOnClickListener(tabListener);
+        historyBTN.setOnClickListener(tabListener);
+        musicBTN.setOnClickListener(tabListener);
+        settingsBTN.setOnClickListener(tabListener);
 
         ArrayList<BaseFragment> fragments = new ArrayList<BaseFragment>(4);
         fragments.add(SEARCH_TAB, createSearchTab());
@@ -66,9 +70,6 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
         pager.setOffscreenPageLimit(4);
         pager.setOnPageChangeListener(pagerListener);
         searchTabClicked();
-
-        GetAudioFromStore task = new GetAudioFromStore(this, false);
-        task.execute();
     }
 
     private BaseFragment createHistoryTab() {
@@ -111,7 +112,7 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     }
 
     //Listener for buttons on the bottom of screen (Tabs)
-    private TabButton.ClickCallBack tabListener = new TabButton.ClickCallBack() {
+    private View.OnClickListener tabListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
@@ -138,16 +139,16 @@ public class MainActivity extends BaseActivity implements HistoryFragment.Histor
     @Override
     public void onBackPressed() {
         Date d  = Calendar.getInstance().getTime();
-        if ((d.getTime() - lastBackTime) < BACK_CLICK_OFFSET){
+        if ((d.getTime() - lastBackTime) < BACK_CLICK_DELAY){
             super.onBackPressed();
         }else {
             lastBackTime = d.getTime();
-            Toast.makeText(this, R.string.press_one_more_to_exit, BACK_CLICK_OFFSET).show();
+            Toast.makeText(this, R.string.press_one_more_to_exit, BACK_CLICK_DELAY).show();
         }
     }
 
     @Override
-    public void onHistoryClicked(SearchQueryCache model) {
+    public void onItemFromHistoryClicked(SearchQueryCache model) {
         searchTabClicked();
         pager.setCurrentItem(SEARCH_TAB);
         Fragment fr = pager.getFragment(SEARCH_TAB);

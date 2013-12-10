@@ -21,6 +21,8 @@ public class SearchBandModel extends BaseSerializableModel {
     private String descr;
     @DatabaseField
     private String name;
+    @DatabaseField
+    private String genres;
 
     public String getUrl() {
         return url;

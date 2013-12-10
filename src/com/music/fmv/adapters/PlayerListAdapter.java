@@ -20,8 +20,13 @@ import java.util.List;
  */
 
 public class PlayerListAdapter extends FixedBaseAdapter<PlayAbleSong> {
+    private int whiteColor;
+    private int blueColor;
+
     public PlayerListAdapter(List<PlayAbleSong> mData, Context context) {
         super(mData, context);
+        blueColor = context.getResources().getColor(R.color.blue_button);
+        whiteColor = context.getResources().getColor(R.color.white);
     }
 
     @Override
@@ -39,17 +44,21 @@ public class PlayerListAdapter extends FixedBaseAdapter<PlayAbleSong> {
         h.artist.setText(item.getArtist());
         h.duration.setText(item.getNiceDuration());
         h.name.setText(item.getName());
-        h.name.setTextColor(context.getResources().getColor(R.color.white));
+
+        h.name.setTextColor(whiteColor);
+        h.duration.setTextColor(whiteColor);
+        h.artist.setTextColor(whiteColor);
 
         core.getPlayerManager().getPlayer(new PlayerManager.PostInitializationListener() {
             @Override
             public void onPlayerAvailable(Player p) {
                 if (p == null) return;
                 Player.PlayerStatus st = p.getStatus();
-                if (st == null) return;
 
-                if (st.getCurrentSong() != null && st.getCurrentSong().equals(item)){
-                    h.name.setTextColor(context.getResources().getColor(R.color.blue_button));
+                if (st != null && item.equals(st.getCurrentSong())){
+                    h.name.setTextColor(blueColor);
+                    h.artist.setTextColor(blueColor);
+                    h.duration.setTextColor(blueColor);
                 }
             }
         });

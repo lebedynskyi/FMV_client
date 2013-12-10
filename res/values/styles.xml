@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="fileChooserName">
-        <item name="android:layout_marginLeft">@dimen/list_item_padding</item>
-        <item name="android:layout_marginRight">@dimen/list_item_padding</item>
-        <item name="android:maxLines">2</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-    <style name="fileChooserIcon">
-        <item name="android:layout_marginLeft">@dimen/list_item_padding</item>
-    </style>
-
+    <!--Themes -->
     <style name="AppCompateTheme" parent="Theme.AppCompat.Light">
         <item name="android:progressBarStyle">@style/NiceProgressBar</item>
         <item name="progressBarStyle">@style/NiceProgressBar</item>
@@ -27,5 +17,32 @@
     <style name="NiceProgressBar" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/blue_rotate</item>
         <item name="android:progressDrawable">@drawable/blue_rotate</item>
+    </style>
+
+
+    <!--Other styles-->
+    <style name="fileChooserName">
+        <item name="android:layout_marginLeft">@dimen/list_item_padding</item>
+        <item name="android:layout_marginRight">@dimen/list_item_padding</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="fileChooserIcon">
+        <item name="android:layout_marginLeft">@dimen/list_item_padding</item>
+    </style>
+
+
+    <style name="ListRowTitle" parent="ListRowSubtitle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ListRowSubtitle">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ListRowSubtitle" parent="ListRowSubtitle">
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

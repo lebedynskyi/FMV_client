@@ -54,7 +54,7 @@ public class HistoryFragment extends BaseFragment implements RefreshableViewPage
     }
 
     public interface HistoryFragmentCallback{
-        public void onHistoryClicked(SearchQueryCache model);
+        public void onItemFromHistoryClicked(SearchQueryCache model);
     }
 
 
@@ -62,7 +62,7 @@ public class HistoryFragment extends BaseFragment implements RefreshableViewPage
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (baseActivity instanceof HistoryFragmentCallback){
-                ((HistoryFragmentCallback) baseActivity).onHistoryClicked(adapter.getItem(sectionAdapter.getIndexForPosition(position)));
+                ((HistoryFragmentCallback) baseActivity).onItemFromHistoryClicked(adapter.getItem(sectionAdapter.getIndexForPosition(position)));
             }
         }
     };
