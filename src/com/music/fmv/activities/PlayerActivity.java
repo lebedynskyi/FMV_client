@@ -21,7 +21,7 @@ import java.util.Date;
  * Date: 8/1/13
  * Time: 10:33 AM
  */
-public class PlayerActivity extends BaseActivity  implements Player.PlayerListener{
+public class PlayerActivity extends BaseActivity implements Player.PlayerListener {
     public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
     private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
 
@@ -32,21 +32,27 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     private TextView curProgressTV;
     private TextView durationTV;
 
+    private View pausePlayBTN;
+    private View shuffleBTN;
+    private View loopBTN;
+
     private SeekBar progressSlider;
     private ImageView songCover;
     private PlayerSliding playerSlider;
     private View backBTN;
+    private View downloadBTN;
     private GlowButton playListBTN;
 
     private Player player;
-
     private RefreshTimer refresher;
+    private PlayerListAdapter playListAdater;
 
     private boolean fromNotification;
-    private View pausePlayBTN;
-    private View shuffleBTN;
-    private View loopBTN;
-    private PlayerListAdapter playListAdater;
+
+    private ObjectAnimator toLeftAnimator;
+    private ObjectAnimator toRightAnimator;
+    private ObjectAnimator returnAnimator1;
+    private ObjectAnimator returnAnimator2;
 
     @Override
     protected void onCreated(Bundle state) {
@@ -59,7 +65,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     protected void onStart() {
         super.onStart();
         mCore.getPlayerManager().getPlayer(playerRetrieverListener);
-        if (refresher != null){
+        if (refresher != null) {
             refresher.cancel();
         }
         refresher = new RefreshTimer(1 * 60 * 1000, 500);
@@ -69,11 +75,11 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     @Override
     protected void onStop() {
         super.onStop();
-        if (player != null){
+        if (player != null) {
             player.setPlayerListener(null);
         }
 
-        if (refresher != null){
+        if (refresher != null) {
             refresher.cancel();
             refresher = null;
         }
@@ -105,6 +111,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         playerSlider = (PlayerSliding) findViewById(R.id.drawer);
         playerSlider.setListener(sliderListener);
         backBTN = playerSlider.getHandle().findViewById(R.id.back_btn);
+        downloadBTN = playerSlider.getHandle().findViewById(R.id.download_btn);
         playListBTN = (GlowButton) playerSlider.getHandle().findViewById(R.id.show_playlist_btn);
 
         playListBTN.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +135,13 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
                 } else onBackPressed();
             }
         });
+
+        downloadBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PlayerActivity.this, "DOWNLOAD!!!!!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void refreshProgress() {
@@ -138,15 +152,15 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         String fulTime = "0.0";
         int progress = 0;
 
-        if (status != null){
-            fulTime= TIME_SD.format(new Date(status.getDuration()));
+        if (status != null) {
+            fulTime = TIME_SD.format(new Date(status.getDuration()));
             curTime = TIME_SD.format(new Date(status.getCurrentProgress()));
             progress = status.getCurrentProgress();
         }
 
         durationTV.setText(fulTime);
         curProgressTV.setText(curTime);
-        if (!progressBlocked){
+        if (!progressBlocked) {
             progressSlider.setProgress(progress);
         }
     }
@@ -156,17 +170,17 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
         if (player == null) return;
         Player.PlayerStatus status = player.getStatus();
 
-        if (status == null || !status.isPlaying()){
+        if (status == null || !status.isPlaying()) {
             pausePlayBTN.setSelected(false);
-        }else pausePlayBTN.setSelected(true);
+        } else pausePlayBTN.setSelected(true);
 
-        if (status == null || !status.isLoop()){
+        if (status == null || !status.isLoop()) {
             loopBTN.setSelected(false);
-        }else loopBTN.setSelected(true);
+        } else loopBTN.setSelected(true);
 
-        if (status == null || !status.isShuffle()){
+        if (status == null || !status.isShuffle()) {
             shuffleBTN.setSelected(false);
-        }else shuffleBTN.setSelected(true);
+        } else shuffleBTN.setSelected(true);
     }
 
     @Override
@@ -216,7 +230,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            if (player != null){
+            if (player != null) {
                 player.seek(newProgress);
             }
             progressBlocked = false;
@@ -227,7 +241,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     private PlayerManager.PostInitializationListener playerRetrieverListener = new PlayerManager.PostInitializationListener() {
         @Override
         public void onPlayerAvailable(Player p) {
-            if (p != null){
+            if (p != null) {
                 player = p;
                 p.setPlayerListener(PlayerActivity.this);
                 preparePlayList(p);
@@ -256,7 +270,7 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     private View.OnClickListener controlsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(playerSlider.isOpen()) return;
+            if (playerSlider.isOpen()) return;
 
             switch (v.getId()) {
                 case R.id.next:
@@ -280,24 +294,34 @@ public class PlayerActivity extends BaseActivity  implements Player.PlayerListen
     private PlayerSliding.SliderListener sliderListener = new PlayerSliding.SliderListener() {
         @Override
         public void onOpened() {
-            ObjectAnimator playeListOpener = ObjectAnimator.ofFloat(playListBTN, "translationX", backBTN.getMeasuredWidth() / -2);
-            playeListOpener.setDuration(250);
-            playeListOpener.start();
+            if (toLeftAnimator == null) {
+                toLeftAnimator = ObjectAnimator.ofFloat(backBTN, "translationX", -backBTN.getMeasuredWidth());
+                toLeftAnimator.setDuration(200);
+            }
 
-            ObjectAnimator backOpener = ObjectAnimator.ofFloat(backBTN, "translationX", -backBTN.getMeasuredWidth());
-            backOpener.setDuration(150);
-            backOpener.start();
+            if (toRightAnimator == null) {
+                toRightAnimator = ObjectAnimator.ofFloat(downloadBTN, "translationX", downloadBTN.getMeasuredWidth());
+                toLeftAnimator.setDuration(200);
+            }
+
+            toLeftAnimator.start();
+            toRightAnimator.start();
         }
 
         @Override
         public void onClose() {
-            ObjectAnimator playeListOpener = ObjectAnimator.ofFloat(playListBTN, "translationX", 0);
-            playeListOpener.setDuration(150);
-            playeListOpener.start();
+            if (returnAnimator1 == null) {
+                returnAnimator1 = ObjectAnimator.ofFloat(backBTN, "translationX", 0);
+                returnAnimator1.setDuration(200);
+            }
 
-            ObjectAnimator backOpener = ObjectAnimator.ofFloat(backBTN, "translationX", 0);
-            backOpener.setDuration(250);
-            backOpener.start();
+            if (returnAnimator2 == null) {
+                returnAnimator2 = ObjectAnimator.ofFloat(downloadBTN, "translationX", 0);
+                returnAnimator2.setDuration(200);
+            }
+
+            returnAnimator1.start();
+            returnAnimator2.start();
         }
     };
 }

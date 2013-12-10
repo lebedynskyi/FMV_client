@@ -80,20 +80,29 @@
                 android:dividerHeight="1px"
                 android:divider="@color/gray"
                 android:id="@+id/content_c"/>
-        <LinearLayout android:id="@id/handle_c"
+        <RelativeLayout android:id="@id/handle_c"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@drawable/black_top">
             <com.music.fmv.views.GlowButton android:layout_width="100dp"
-                  android:layout_height="match_parent"
-                  appattrs:text="@string/back"
-                  appattrs:text_gravity="left"
-                  appattrs:leftDrawable="@drawable/back_button_selector"
-                  android:id="@+id/back_btn"/>
+                                            android:layout_height="match_parent"
+                                            appattrs:text="@string/back"
+                                            appattrs:text_gravity="left"
+                                            appattrs:leftDrawable="@drawable/back_button_selector"
+                                            android:id="@+id/back_btn"/>
             <com.music.fmv.views.GlowButton android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  appattrs:text="@string/show_playlist"
-                  android:id="@+id/show_playlist_btn" android:layout_toRightOf="@+id/back_btn"/>
-        </LinearLayout>
+                                            android:layout_height="match_parent"
+                                            appattrs:text="@string/show_playlist"
+                                            android:id="@+id/show_playlist_btn" android:layout_toRightOf="@+id/back_btn"
+                                            android:layout_toLeftOf="@+id/download_btn"/>
+            <ImageButton
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/back_button_selector"
+                    android:id="@+id/download_btn" android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true" android:layout_alignParentTop="true"
+                    android:background="@drawable/black_background_selector" android:textColor="@color/white"
+                    android:textSize="18sp"/>
+        </RelativeLayout>
     </com.music.fmv.widgets.PlayerSliding>
 </RelativeLayout>
