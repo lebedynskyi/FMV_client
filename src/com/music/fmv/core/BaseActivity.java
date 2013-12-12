@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.google.analytics.tracking.android.*;
 import com.music.fmv.R;
+import com.music.fmv.network.Network;
 import com.music.fmv.utils.ActivityMediator;
-import com.music.fmv.utils.NetworkUtil;
 import com.music.fmv.utils.ViewUtils;
 
 /**
@@ -97,7 +97,7 @@ public abstract class BaseActivity extends ActionBarActivity {
             ViewGroup advertView = (ViewGroup) findViewById(R.id.advert_layout);
             if (advertView == null) return;
 
-            if (NetworkUtil.isNetworkAvailable(this)) {
+            if (Network.isNetworkAvailable(this)) {
                 initAdvert(advertView);
             } else advertView.setVisibility(View.GONE);
         } catch (Exception e) {
@@ -110,7 +110,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected boolean runTask(AsyncTask task) {
-        if (NetworkUtil.isNetworkAvailable(this)) {
+        if (Network.isNetworkAvailable(this)) {
             task.execute();
             return true;
         }

@@ -3,10 +3,10 @@ package com.music.fmv.core;
 import com.music.fmv.R;
 import com.music.fmv.models.PlayAbleSong;
 import com.music.fmv.models.SearchAlbumModel;
+import com.music.fmv.network.Network;
 import com.music.fmv.tasks.threads.IDownloadListener;
 import com.music.fmv.tasks.threads.SongLoader;
 import com.music.fmv.utils.FileUtils;
-import com.music.fmv.utils.NetworkUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,8 +44,8 @@ public class DownloadManager extends Manager {
     }
 
 
-    public void download(PlayAbleSong model, IDownloadListener listener) {
-        if (!NetworkUtil.isNetworkAvailable(core.getContext())) {
+    private void download(PlayAbleSong model, IDownloadListener listener) {
+        if (!Network.isNetworkAvailable(core.getContext())) {
             core.showToast(R.string.network_unavailable);
             return;
         }

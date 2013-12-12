@@ -44,7 +44,7 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
     @Override
     public void onResume() {
         super.onResume();
-        core.registerForUpdates(this);
+        core.registerUpdateListener(this);
     }
 
     @Override
@@ -225,7 +225,7 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
     @Override
     public void onPause() {
         super.onPause();
-        core.unregisterListener(this);
+        core.unregisterupdateListener(this);
     }
 
     @Override

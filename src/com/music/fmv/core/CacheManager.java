@@ -22,6 +22,8 @@ public class CacheManager extends Manager {
     }
 
     public boolean isSongExists(PlayAbleSong song) {
+        if (song == null) return false;
+
         String loadFolder = core.getSettingsManager().getSongsFolder();
         File songFile = FileUtils.getAbsolutheFile(loadFolder, song);
         return songFile.exists();

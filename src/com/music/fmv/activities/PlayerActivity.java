@@ -7,8 +7,11 @@ import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.PlayerListAdapter;
 import com.music.fmv.core.BaseActivity;
+import com.music.fmv.core.Core;
 import com.music.fmv.core.Player;
 import com.music.fmv.core.PlayerManager;
+import com.music.fmv.models.FileSystemSong;
+import com.music.fmv.models.PlayAbleSong;
 import com.music.fmv.views.GlowButton;
 import com.music.fmv.widgets.PlayerSliding;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -21,8 +24,10 @@ import java.util.Date;
  * Date: 8/1/13
  * Time: 10:33 AM
  */
-public class PlayerActivity extends BaseActivity implements Player.PlayerListener {
+public class PlayerActivity extends BaseActivity implements Player.PlayerListener, Core.IUpdateListener {
     public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
+
+
     private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
 
     private boolean progressBlocked = false;
@@ -70,6 +75,7 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         }
         refresher = new RefreshTimer(1 * 60 * 1000, 500);
         refresher.start();
+        mCore.registerUpdateListener(this);
     }
 
     @Override
@@ -83,6 +89,8 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
             refresher.cancel();
             refresher = null;
         }
+
+        mCore.unregisterupdateListener(this);
     }
 
     public void initViews() {
@@ -139,7 +147,9 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         downloadBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PlayerActivity.this, "DOWNLOAD!!!!!", Toast.LENGTH_SHORT).show();
+                if (player != null){
+                    mCore.getDownloadManager().download(player.getCurrentSong());
+                }
             }
         });
     }
@@ -193,6 +203,12 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         songArtistTV.setText(st.getCurrentSong().getArtist());
         progressSlider.setMax(st.getCurrentSong().getDuration());
         onActionApplied();
+        checkDownloadButton();
+    }
+
+    @Override
+    public void needUpdate() {
+        checkDownloadButton();
     }
 
     private class RefreshTimer extends CountDownTimer {
@@ -237,6 +253,13 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         }
     };
 
+    public void checkDownloadButton(){
+        PlayAbleSong song = player.getCurrentSong();
+        boolean downloaded = song instanceof FileSystemSong || mCore.getCacheManager().isSongExists(song);
+
+        downloadBTN.setSelected(downloaded);
+        downloadBTN.setEnabled(!downloaded);
+    }
 
     private PlayerManager.PostInitializationListener playerRetrieverListener = new PlayerManager.PostInitializationListener() {
         @Override

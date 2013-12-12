@@ -123,6 +123,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
+    public PlayAbleSong getCurrentSong() {
+        return currentSong;
+    }
+
+    @Override
     public boolean isShuffle() {
         return isShuffle;
     }

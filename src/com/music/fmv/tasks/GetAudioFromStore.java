@@ -26,8 +26,8 @@ public class GetAudioFromStore extends BaseAsyncTask<List<FileSystemSong>> {
         super(context, showDialog);
     }
 
-    public GetAudioFromStore(Context baseActivity, boolean b, String songsFolder) {
-        super(baseActivity, b);
+    public GetAudioFromStore(Context baseActivity, boolean showDialog, String songsFolder) {
+        super(baseActivity, showDialog);
         this.songsFodler = songsFolder;
     }
 

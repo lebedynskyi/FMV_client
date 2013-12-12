@@ -23,6 +23,7 @@ public interface Player {
     public PlayerStatus getStatus();
     public void setPlayerListener(PlayerListener listener);
     public void add(PlayAbleSong model);
+    public PlayAbleSong getCurrentSong();
 
     public interface PlayerListener {
         public void onNewSong();

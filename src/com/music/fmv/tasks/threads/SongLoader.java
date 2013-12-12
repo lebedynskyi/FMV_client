@@ -2,9 +2,11 @@ package com.music.fmv.tasks.threads;
 
 import com.music.fmv.api.Api;
 import com.music.fmv.models.PlayAbleSong;
-import com.music.fmv.utils.NetworkUtil;
+import com.music.fmv.network.Network;
+import com.music.fmv.network.NetworkRequest;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,15 +29,16 @@ public class SongLoader implements IDownlaoder {
 
     @Override
     public void run() {
-        if (song == null || file == null) return;
         try {
             String songUrl = api.getUrlOfSong(song);
-            if (songUrl == null) return;
-            NetworkUtil.downloadFile(file, songUrl, listener);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            Network.doRequest(new NetworkRequest(songUrl)).readData(outputStream);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onError(song.getName());
+            return;
         }
+
         if (listener != null) listener.onDownloadFinished();
     }
 

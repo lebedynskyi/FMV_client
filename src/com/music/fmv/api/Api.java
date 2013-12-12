@@ -2,7 +2,9 @@ package com.music.fmv.api;
 
 import android.text.TextUtils;
 import com.music.fmv.models.*;
-import com.music.fmv.utils.NetworkUtil;
+import com.music.fmv.network.Network;
+import com.music.fmv.network.NetworkRequest;
+import com.music.fmv.network.NetworkResponse;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ public class Api {
     public static final String SEARCH_SONGS_COMMAND = "songs.search";
 
 
-    //returns List<SearchBandModel>
     public List<SearchBandModel> searchBand(String searchQuery, String language, Integer page) throws Exception {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
         HashMap<String, String> params = new HashMap<String, String>();
@@ -45,19 +46,16 @@ public class Api {
             params.put("page", page.toString());
         }
 
-        StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(API_URL).append(SEARCH_BAND_COMMAND);
-        String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
-
-        JSONObject response = new JSONObject(jsonResponse);
-        checkError(response);
-        return ApiUtils.parseSearchBand(response);
+        NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(API_URL + SEARCH_BAND_COMMAND, params));
+        JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
+        checkError(jsonResponse);
+        return ApiUtils.parseSearchBand(jsonResponse);
     }
 
 
-    //returns List<SearchAlbumModel>
     public List<SearchAlbumModel> searchAlbum(String searchQuery, String language, Integer page) throws Exception {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
+
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("album", searchQuery);
         params.put("lan", language);
@@ -67,13 +65,10 @@ public class Api {
             params.put("page", page.toString());
         }
 
-        StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(API_URL).append(SEARCH_ALBUMS_COMMAND);
-
-        String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
-        JSONObject response = new JSONObject(jsonResponse);
-        checkError(response);
-        return ApiUtils.parseSearchAlbum(response);
+        NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(API_URL + SEARCH_ALBUMS_COMMAND, params));
+        JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
+        checkError(jsonResponse);
+        return ApiUtils.parseSearchAlbum(jsonResponse);
     }
 
     public ArrayList<InternetSong> searchSongs(String query, Integer page) throws Exception {
@@ -86,23 +81,17 @@ public class Api {
             params.put("page", page.toString());
         }
 
-        StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(API_URL).append(SEARCH_SONGS_COMMAND);
-
-        String jsonResponse = NetworkUtil.doGet(urlBuilder.toString(), params);
-        JSONObject response = new JSONObject(jsonResponse);
-        checkError(response);
-        return ApiUtils.parseSearchSongs(response);
+        NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(API_URL + SEARCH_SONGS_COMMAND, params));
+        JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
+        checkError(jsonResponse);
+        return ApiUtils.parseSearchSongs(jsonResponse);
     }
 
     public String getUrlOfSong(PlayAbleSong song) throws Exception {
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("version", String.valueOf(API_VERSION));
-
-        String urlBuilder = song.getUrlForUrl() + song.getId();
-        String resp = NetworkUtil.doGet(urlBuilder, params);
-        JSONObject response = new JSONObject(resp);
-        return response.getString(song.getUrlKey());
+        //TODO we need to implemented sending of statistic
+        NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(song.getUrlForUrl()));
+        JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
+        return jsonResponse.getString(song.getUrlKey());
     }
 
     public BandInfoModel getBandInfo() {

@@ -102,7 +102,7 @@ public final class Core {
         Toast.makeText(app, strID, Toast.LENGTH_SHORT).show();
     }
 
-    public void registerForUpdates(IUpdateListener listener) {
+    public void registerUpdateListener(IUpdateListener listener) {
         updateListeners.add(new WeakReference<IUpdateListener>(listener));
     }
 
@@ -124,7 +124,7 @@ public final class Core {
         }
     }
 
-    public void unregisterListener(IUpdateListener listener) {
+    public void unregisterupdateListener(IUpdateListener listener) {
         Iterator<WeakReference<IUpdateListener>> it = updateListeners.iterator();
         while (it.hasNext()) {
             WeakReference<IUpdateListener> ref = it.next();
