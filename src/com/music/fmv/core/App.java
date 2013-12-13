@@ -11,7 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import java.io.File;
 
 /**
- * User: vitaliylebedinskiy
+ * User: Vitalii Lebedynskyi
  * Date: 7/19/13
  * Time: 12:16 PM
  */
@@ -20,15 +20,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //Initialization of core Manager
         Core core = Core.getInstance(this);
         initImageLoader(core);
-
-        initDefaultLanguage(core);
-    }
-
-    private void initDefaultLanguage(Core core) {
-        //TODO check locale and use it for default settings;
     }
 
     private void initImageLoader(Core core) {
@@ -39,12 +32,7 @@ public class App extends Application {
                 .denyCacheImageMultipleSizesInMemory()
                 .discCache(new FileCountLimitedDiscCache(imageCache, 50))
                 .discCacheExtraOptions(1024, 1024, Bitmap.CompressFormat.PNG, 75, null)
-                .discCacheFileNameGenerator(new FileNameGenerator() {
-                    @Override
-                    public String generate(String imageUri) {
-                        return imageUri.hashCode() + ".png";
-                    }
-                })
+                .discCacheFileNameGenerator(generator)
                 .memoryCache(new LruMemoryCache(4 * 1024 * 1024))
                 .threadPoolSize(3)
                 .enableLogging()
@@ -53,4 +41,11 @@ public class App extends Application {
 
         ImageLoader.getInstance().init(configuration);
     }
+
+    private FileNameGenerator generator = new FileNameGenerator() {
+        @Override
+        public String generate(String imageUri) {
+            return imageUri.hashCode() + ".png";
+        }
+    };
 }

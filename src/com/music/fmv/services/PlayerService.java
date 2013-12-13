@@ -33,6 +33,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private PlayAbleSong currentSong;
     private boolean isShuffle;
 
+    //         SERVICE methods
     @Override
     public void onCreate() {
         super.onCreate();
@@ -53,18 +54,19 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         binder.setService(this);
         return binder;
     }
+    //         SERVICE methods
 
+
+    //         Control buttons
     public void pause() {
-        if (mPlayer != null) {
-            if (mPlayer.isPlaying()) {
-                mPlayer.pause();
-                core.getNotificationManager().removePlayer();
-            } else {
-                mPlayer.start();
-                showNotification();
-            }
+        if (mPlayer == null) return;
+
+        if (mPlayer.isPlaying()) {
+            mPlayer.pause();
+            core.getNotificationManager().removePlayer();
         } else {
-            playSong(currentSong);
+            mPlayer.start();
+            showNotification();
         }
         notifyStateCallback();
     }
@@ -83,53 +85,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         }
     }
 
-    private void playNextRandomSong(){
-
-    }
-
-    private void playNextSong(){
-        int curPosition = playerQueue.indexOf(currentSong);
-
-        if (curPosition + 1 < playerQueue.size() && curPosition != -1) {
-            playSong(playerQueue.get(curPosition + 1));
-        } else {
-            releasePlayer();
-            clearNotify();
-            notifyStateCallback();
-        }
-    }
-
     @Override
     public void setShuffle(boolean v) {
         isShuffle = v;
         notifyStateCallback();
-    }
-
-    @Override
-    public void setPlayerListener(PlayerListener listener) {
-        this.playerListener = listener;
-    }
-
-    @Override
-    public void add(PlayAbleSong model) {
-        if (mPlayer == null) {
-            ArrayList<PlayAbleSong> ss = new ArrayList<PlayAbleSong>();
-            ss.add(model);
-            play(ss, 0);
-            return;
-        }
-
-        playerQueue.add(model);
-    }
-
-    @Override
-    public PlayAbleSong getCurrentSong() {
-        return currentSong;
-    }
-
-    @Override
-    public boolean isShuffle() {
-        return isShuffle;
     }
 
     @Override
@@ -144,20 +103,15 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public boolean isLoop() {
-        return mPlayer != null && mPlayer.isLooping();
-    }
+    public void addSong(PlayAbleSong model) {
+        if (mPlayer == null) {
+            ArrayList<PlayAbleSong> ss = new ArrayList<PlayAbleSong>();
+            ss.add(model);
+            play(ss, 0);
+            return;
+        }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        releasePlayer();
-        next();
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        mp.start();
-        notifyNewSong();
+        playerQueue.add(model);
     }
 
     @Override
@@ -173,6 +127,57 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public void play(int position) {
         playSong(playerQueue.get(position));
+    }
+    //       Control buttons
+
+    private void playNextRandomSong(){
+
+    }
+
+    @Override
+    public void setPlayerListener(PlayerListener listener) {
+        this.playerListener = listener;
+    }
+
+    private void playNextSong(){
+        int curPosition = playerQueue.indexOf(currentSong);
+
+        if (curPosition + 1 < playerQueue.size() && curPosition != -1) {
+            playSong(playerQueue.get(curPosition + 1));
+        } else {
+            releasePlayer();
+            clearNotify();
+            notifyStateCallback();
+        }
+    }
+
+
+    @Override
+    public PlayAbleSong getCurrentSong() {
+        return currentSong;
+    }
+
+    @Override
+    public boolean isShuffle() {
+        return isShuffle;
+    }
+
+
+    @Override
+    public boolean isLoop() {
+        return mPlayer != null && mPlayer.isLooping();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        releasePlayer();
+        next();
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        mp.start();
+        notifyNewSong(currentSong);
     }
 
     @Override
@@ -199,15 +204,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
         releasePlayer();
         currentSong = song;
-        notifyNewSong();
+        notifyNewSong(song);
         showNotification();
         if (core.getCacheManager().isSongExists(song)) {
-            playFromFile(song);
+            playFromPath(core.getCacheManager().getSongPath(song));
         } else playAsyncFromHttp(song);
-    }
-
-    private void playFromFile(PlayAbleSong song) {
-        playFromPath(core.getCacheManager().getSongPath(song));
     }
 
     private void playAsyncFromHttp(final PlayAbleSong song) {
@@ -258,8 +259,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (playerListener != null) playerListener.onActionApplied();
     }
 
-    private void notifyNewSong() {
-        if (playerListener != null) playerListener.onNewSong();
+    private void notifyNewSong(PlayAbleSong song) {
+        if (playerListener != null) playerListener.onNewSong(song);
     }
 
     @Override
@@ -281,12 +282,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
             try {
                 String songUrl = new Api().getUrlOfSong(song);
                 song.setUrl(songUrl);
-                core.getHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        playFromPath(song.getUrl());
-                    }
-                });
+                playFromPath(song.getUrl());
             } catch (Exception e) {
                 e.printStackTrace();
             }

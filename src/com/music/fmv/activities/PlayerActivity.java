@@ -194,14 +194,10 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
     }
 
     @Override
-    public void onNewSong() {
-        if (player == null) return;
-        Player.PlayerStatus st = player.getStatus();
-        if (st == null || st.getCurrentSong() == null) return;
-
-        songNameTV.setText(st.getCurrentSong().getName());
-        songArtistTV.setText(st.getCurrentSong().getArtist());
-        progressSlider.setMax(st.getCurrentSong().getDuration());
+    public void onNewSong(PlayAbleSong song) {
+        songNameTV.setText(song.getName());
+        songArtistTV.setText(song.getArtist());
+        progressSlider.setMax(song.getDuration());
         onActionApplied();
         checkDownloadButton();
     }
@@ -264,13 +260,11 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
     private PlayerManager.PostInitializationListener playerRetrieverListener = new PlayerManager.PostInitializationListener() {
         @Override
         public void onPlayerAvailable(Player p) {
-            if (p != null) {
-                player = p;
-                p.setPlayerListener(PlayerActivity.this);
-                preparePlayList(p);
-            }
+            player = p;
+            p.setPlayerListener(PlayerActivity.this);
+            preparePlayList(p);
             onActionApplied();
-            onNewSong();
+            onNewSong(p.getCurrentSong());
         }
     };
 
@@ -319,13 +313,12 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         public void onOpened() {
             if (toLeftAnimator == null) {
                 toLeftAnimator = ObjectAnimator.ofFloat(backBTN, "translationX", -backBTN.getMeasuredWidth());
-                toLeftAnimator.setDuration(200);
+                toLeftAnimator.setDuration(170);
+
+                toRightAnimator = ObjectAnimator.ofFloat(downloadBTN, "translationX", downloadBTN.getMeasuredWidth());
+                toRightAnimator.setDuration(170);
             }
 
-            if (toRightAnimator == null) {
-                toRightAnimator = ObjectAnimator.ofFloat(downloadBTN, "translationX", downloadBTN.getMeasuredWidth());
-                toLeftAnimator.setDuration(200);
-            }
 
             toLeftAnimator.start();
             toRightAnimator.start();
@@ -335,12 +328,10 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         public void onClose() {
             if (returnAnimator1 == null) {
                 returnAnimator1 = ObjectAnimator.ofFloat(backBTN, "translationX", 0);
-                returnAnimator1.setDuration(200);
-            }
+                returnAnimator1.setDuration(170);
 
-            if (returnAnimator2 == null) {
                 returnAnimator2 = ObjectAnimator.ofFloat(downloadBTN, "translationX", 0);
-                returnAnimator2.setDuration(200);
+                returnAnimator2.setDuration(170);
             }
 
             returnAnimator1.start();

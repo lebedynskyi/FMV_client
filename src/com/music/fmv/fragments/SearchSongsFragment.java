@@ -202,7 +202,7 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
             core.getPlayerManager().getPlayer(new PlayerManager.PostInitializationListener() {
                 @Override
                 public void onPlayerAvailable(Player p) {
-                    p.add(model);
+                    p.addSong(model);
                     Toast.makeText(baseActivity, String.format(getString(R.string.song_added_to_current_list), model.toString()), Toast.LENGTH_SHORT).show();
                 }
             });

@@ -14,19 +14,23 @@ public interface Player {
     public void previous();
     public void next();
     public void setShuffle(boolean value);
-    public boolean isShuffle();
     public void setLoop(boolean value);
+
+    public boolean isShuffle();
     public boolean isLoop();
+
     public void seek(int position);
     public void play(List<PlayAbleSong> songs, int position);
     public void play(int position);
-    public PlayerStatus getStatus();
+
     public void setPlayerListener(PlayerListener listener);
-    public void add(PlayAbleSong model);
+    public void addSong(PlayAbleSong model);
+
+    public PlayerStatus getStatus();
     public PlayAbleSong getCurrentSong();
 
     public interface PlayerListener {
-        public void onNewSong();
+        public void onNewSong(PlayAbleSong song);
         public void onActionApplied();
     }
 

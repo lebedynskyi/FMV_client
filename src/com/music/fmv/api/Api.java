@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
- * User: lebed
+ * User: Vitalii Lebedynskyi
  * Date: 7/14/13
  * Time: 8:54 AM
  * To change this template use File | Settings | File Templates.
@@ -34,17 +34,15 @@ public class Api {
     public static final String SEARCH_ALBUMS_COMMAND = "albums.search";
     public static final String SEARCH_SONGS_COMMAND = "songs.search";
 
-
     public List<SearchBandModel> searchBand(String searchQuery, String language, Integer page) throws Exception {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
+
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("artist", searchQuery);
         params.put("lan", language);
         params.put("version", String.valueOf(API_VERSION));
 
-        if (page != null) {
-            params.put("page", page.toString());
-        }
+        if (page != null) params.put("page", page.toString());
 
         NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(API_URL + SEARCH_BAND_COMMAND, params));
         JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
@@ -61,9 +59,8 @@ public class Api {
         params.put("lan", language);
         params.put("version", String.valueOf(API_VERSION));
 
-        if (page != null) {
-            params.put("page", page.toString());
-        }
+        if (page != null) params.put("page", page.toString());
+
 
         NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(API_URL + SEARCH_ALBUMS_COMMAND, params));
         JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
@@ -73,13 +70,12 @@ public class Api {
 
     public ArrayList<InternetSong> searchSongs(String query, Integer page) throws Exception {
         if (TextUtils.isEmpty(query)) throw new IllegalArgumentException("searchQuery cannot be empty");
+
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("song", query);
         params.put("version", String.valueOf(API_VERSION));
 
-        if (page != null) {
-            params.put("page", page.toString());
-        }
+        if (page != null) params.put("page", page.toString());
 
         NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(API_URL + SEARCH_SONGS_COMMAND, params));
         JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
