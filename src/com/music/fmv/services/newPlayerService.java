@@ -120,7 +120,7 @@ public class newPlayerService extends Service implements Player, MediaPlayer.OnC
     }
 
     @Override
-    public void play(List<PlayAbleSong> songs, int position) {
+    public void play(List<? extends PlayAbleSong> songs, int position) {
         queue.clear();
         queue.addAll(songs);
         playSong(queue.get(position));

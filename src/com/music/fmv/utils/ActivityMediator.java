@@ -34,7 +34,7 @@ public class ActivityMediator {
     }
 
     public void startMain() {
-        startActivity(MainActivity.class, new int[]{Intent.FLAG_ACTIVITY_CLEAR_TOP});
+        startActivity(MainActivity.class, new int[]{Intent.FLAG_ACTIVITY_CLEAR_TOP, Intent.FLAG_ACTIVITY_CLEAR_TASK});
     }
 
     private void startActivity(Intent intent) {
@@ -61,7 +61,7 @@ public class ActivityMediator {
             intent.putExtras(bundle);
         if (!isActivity)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (flags != null && flags.length > 0) {
+        if (flags != null) {
             for (int flag : flags) {
                 intent.addFlags(flag);
             }

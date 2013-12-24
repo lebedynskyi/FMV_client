@@ -2,6 +2,8 @@ package com.music.fmv.models;
 
 import android.text.TextUtils;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.music.fmv.db.BaseDBmodel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,9 +15,8 @@ import java.util.Date;
  */
 
 
-public abstract class PlayAbleSong extends BaseSerializableModel{
+public class PlayAbleSong extends BaseDBmodel{
     public static final SimpleDateFormat MM_SS_DATE_FORMAT = new SimpleDateFormat("mm:ss");
-
     @DatabaseField
     private String url;
     @DatabaseField

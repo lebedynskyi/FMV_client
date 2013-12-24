@@ -115,7 +115,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     @Override
-    public void play(List<PlayAbleSong> songs, int position) {
+    public void play(List<? extends PlayAbleSong> songs, int position) {
         if (songs == null || songs.size() == 0 || position >= songs.size()) {
             return;
         }

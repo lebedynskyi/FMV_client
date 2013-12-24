@@ -11,19 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 import com.fortysevendeg.swipelistview.SwipeListView;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
-import com.music.fmv.core.Core;
 import com.music.fmv.core.PlayerManager;
 import com.music.fmv.models.ModelType;
 import com.music.fmv.models.InternetSong;
 import com.music.fmv.models.PlayAbleSong;
 import com.music.fmv.core.Player;
 import com.music.fmv.tasks.SearchSongsTask;
-import com.music.fmv.utils.Log;
 import com.music.fmv.utils.ViewUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -32,18 +32,31 @@ import java.util.ArrayList;
  */
 public class SearchSongsFragment extends BaseSearchFragment{
     private SwipeListView songsListView;
-    private ArrayList<PlayAbleSong> songsInAdapter = new ArrayList<PlayAbleSong>();
+    private ArrayList<InternetSong> songsInAdapter = new ArrayList<InternetSong>();
     private SearchSongAdapter adapter;
     private boolean songTaskRunned;
     private String lastQuery;
     private int songsPageAvailable;
     private int futureSongPage;
+
     private View rotateFooter;
     private TextView emptyView;
+
+    private Object songsFromDB;
 
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        songsInAdapter.addAll(getSongsFromDB());
+    }
+
+    private List<InternetSong> getSongsFromDB() {
+        return core.getDbHelper().getSearchSongsDAO().queryForAll();
     }
 
     @Override
@@ -62,6 +75,9 @@ public class SearchSongsFragment extends BaseSearchFragment{
         songsListView.setAdapter(adapter);
         songsListView.setSwipeListViewListener(listViewListener);
         songsListView.setOnScrollListener(scrollListener);
+        if (!songsInAdapter.isEmpty()){
+            emptyView.setVisibility(View.GONE);
+        }
         return mainView;
     }
 
@@ -216,7 +232,12 @@ public class SearchSongsFragment extends BaseSearchFragment{
 
     @Override
     public void onDestroyView() {
+        core.getDbHelper().clearTable(InternetSong.class);
+        RuntimeExceptionDao<InternetSong, Integer> dao = core.getDbHelper().getSearchSongsDAO();
+        for (InternetSong s: songsInAdapter){
+            dao.createOrUpdate(s);
+        }
+
         super.onDestroyView();
-        Log.e(getClass().getSimpleName(), "OnDestroyView, need save state");
     }
 }

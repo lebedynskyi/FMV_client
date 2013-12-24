@@ -20,7 +20,7 @@ import java.sql.SQLException;
  */
 public class DBHelper extends OrmLiteSqliteOpenHelper{
     private final static int DB_VERSION = 1;
-    private final static String DB_NAME = "smart.db";
+    private final static String DB_NAME = "fms.db";
 
     private static DBHelper instance = null;
 
@@ -36,6 +36,10 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
     }
 
     private RuntimeExceptionDao<SearchQueryCache, Integer> queryCacheDAO;
+    private RuntimeExceptionDao<SearchAlbumModel, Integer> searchAlbumDAO;
+    private RuntimeExceptionDao<SearchBandModel, Integer> secrahBandDAO;
+    private RuntimeExceptionDao<InternetSong, Integer> searchSongsDAO;
+
 
     private DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -58,10 +62,40 @@ public class DBHelper extends OrmLiteSqliteOpenHelper{
 
     }
 
+    public void clearTable(Class clz) {
+        try {
+            TableUtils.clearTable(getConnectionSource(), clz);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public RuntimeExceptionDao<SearchQueryCache, Integer> getQueryCacheDAO() {
         if (queryCacheDAO == null) {
             queryCacheDAO = getRuntimeExceptionDao(SearchQueryCache.class);
         }
         return queryCacheDAO;
+    }
+
+    public RuntimeExceptionDao<SearchAlbumModel, Integer> getSearchAlbumDAO() {
+        if (searchAlbumDAO == null) {
+            searchAlbumDAO = getRuntimeExceptionDao(SearchAlbumModel.class);
+        }
+
+        return searchAlbumDAO;
+    }
+
+    public RuntimeExceptionDao<SearchBandModel, Integer> getSecrahBandDAO() {
+        if (secrahBandDAO == null) {
+            secrahBandDAO = getRuntimeExceptionDao(SearchBandModel.class);
+        }
+        return secrahBandDAO;
+    }
+
+    public RuntimeExceptionDao<InternetSong, Integer> getSearchSongsDAO() {
+        if (searchSongsDAO == null) {
+            searchSongsDAO = getRuntimeExceptionDao(InternetSong.class);
+        }
+        return searchSongsDAO;
     }
 }

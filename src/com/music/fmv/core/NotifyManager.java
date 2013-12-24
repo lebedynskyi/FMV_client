@@ -14,10 +14,9 @@ import com.music.fmv.activities.PlayerActivity;
  * Date: 7/12/13
  * Time: 5:58 PM
  */
-//TODO Refactor it
 public class NotifyManager extends Manager {
     private static final int DOWNLOAD_NOTIFY_ID = 1350;
-    private static final int PLAYER_NOTIFY_ID = 1357;
+    private static final int PLAYER_NOTIFY_ID = 1360;
 
     private NotificationManager mNotifyManager;
 

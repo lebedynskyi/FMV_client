@@ -2,6 +2,7 @@ package com.music.fmv.models;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.music.fmv.db.BaseDBmodel;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -9,11 +10,11 @@ import com.j256.ormlite.table.DatabaseTable;
  * Time: 11:00 AM
  */
 
-@DatabaseTable(tableName = "searh_query_cache")
-public class SearchQueryCache extends BaseDBModel{
-    @DatabaseField()
+@DatabaseTable
+public class SearchQueryCache extends BaseDBmodel{
+    @DatabaseField
     private String query;
-    @DatabaseField()
+    @DatabaseField
     private String queryType;
     @DatabaseField
     private long rate;
@@ -49,11 +50,5 @@ public class SearchQueryCache extends BaseDBModel{
 
     public void setQueryType(ModelType queryType) {
         this.queryType = queryType.name();
-    }
-
-
-    @Override
-    public String toString() {
-        return "id = " + getId() + ", Query = " +  query;
     }
 }

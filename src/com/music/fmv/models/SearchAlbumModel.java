@@ -3,6 +3,7 @@ package com.music.fmv.models;
 import android.text.TextUtils;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.music.fmv.db.BaseDBmodel;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -11,7 +12,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 
 @DatabaseTable
-public class SearchAlbumModel extends BaseSerializableModel {
+public class SearchAlbumModel extends BaseDBmodel {
     public static int AVAILABLE_PAGES = -1;
     @DatabaseField
     private String artistName;

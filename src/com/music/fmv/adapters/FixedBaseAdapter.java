@@ -15,13 +15,13 @@ import java.util.List;
  * Time: 1:57 PM
  */
 public abstract class FixedBaseAdapter<T> extends BaseAdapter {
-    protected List<T> mData;
+    protected List<? extends T> mData;
     protected Context context;
     protected Core core;
 
     private LayoutInflater inflater;
 
-    protected FixedBaseAdapter(List<T> mData, Context context) {
+    protected FixedBaseAdapter(List<? extends T> mData, Context context) {
         this.mData = mData;
         this.context = context;
         inflater = LayoutInflater.from(context);

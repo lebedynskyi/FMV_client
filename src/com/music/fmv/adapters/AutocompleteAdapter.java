@@ -44,12 +44,6 @@ public class AutocompleteAdapter extends FixedBaseAdapter<String>{
         return convertView;
     }
 
-    public void changeData(ArrayList<String> strings) {
-        this.mData.clear();
-        this.mData.addAll(strings);
-        notifyDataSetChanged();
-    }
-
     private class ViewHolder{
         TextView tv;
     }

@@ -2,6 +2,7 @@ package com.music.fmv.models;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.music.fmv.db.BaseDBmodel;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -10,7 +11,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 
 @DatabaseTable
-public class SearchBandModel extends BaseSerializableModel {
+public class SearchBandModel extends BaseDBmodel {
     public static int AVAILABLE_PAGES = -1;
 
     @DatabaseField

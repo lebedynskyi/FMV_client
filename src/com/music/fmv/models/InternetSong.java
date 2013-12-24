@@ -1,6 +1,7 @@
 package com.music.fmv.models;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * User: vitaliylebedinskiy
@@ -8,9 +9,10 @@ import com.j256.ormlite.field.DatabaseField;
  * Time: 4:04 PM
  */
 
+@DatabaseTable
 public class InternetSong extends PlayAbleSong {
     public static int PAGE_AVAILABLE = -1;
-    @DatabaseField
+    @DatabaseField ()
     private String id;
     @DatabaseField
     private String rate;

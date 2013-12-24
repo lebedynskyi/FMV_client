@@ -10,6 +10,7 @@ import com.music.fmv.models.PlayAbleSong;
 import com.music.fmv.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: vitaliylebedinskiy
@@ -21,7 +22,7 @@ public class SearchSongAdapter extends FixedBaseAdapter<PlayAbleSong> {
     private AdapterCallback callback;
     private SwipeListView listView;
 
-    public SearchSongAdapter(Context c, ArrayList<PlayAbleSong> list, SwipeListView listView) {
+    public SearchSongAdapter(Context c, List<? extends PlayAbleSong> list, SwipeListView listView) {
         super(list, c);
         this.listView = listView;
     }

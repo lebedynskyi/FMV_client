@@ -65,8 +65,4 @@ public class AutocompletePopupWindow extends PopupWindow implements View.OnTouch
         }
         return false;
     }
-
-    public void updateWords(ArrayList<String> strings) {
-        wordsAdapter.changeData(strings);
-    }
 }
