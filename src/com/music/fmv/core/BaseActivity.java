@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.google.analytics.tracking.android.*;
 import com.music.fmv.R;
 import com.music.fmv.network.Network;
@@ -85,6 +86,14 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
     }
 
+    public void showToast(int id){
+        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showToast(String ss){
+        Toast.makeText(this, ss, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -114,7 +123,7 @@ public abstract class BaseActivity extends ActionBarActivity {
             task.execute();
             return true;
         }
-        mCore.showToast(R.string.network_unavailable);
+        showToast(R.string.network_unavailable);
         return false;
     }
 

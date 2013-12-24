@@ -3,6 +3,7 @@ package com.music.fmv.network;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 /**
@@ -14,7 +15,7 @@ import java.util.HashMap;
  */
 public class NetworkRequest {
     public enum Method {
-        POST, GET
+        POST, GET, PUT
     }
 
     private HashMap<String, String> headers;
@@ -41,12 +42,24 @@ public class NetworkRequest {
         this.url = url;
         this.params = params;
         this.method = method;
+        this.headers = new HashMap<String, String>();
+        this.headers.put("Content-Type", "application/json");
+        this.headers.put("Accept", "application/json");
 
-        this.headers = headers;
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                this.headers.put(key, headers.get(key));
+            }
+        }
     }
 
     public void setData(String data) {
-        setData(data.getBytes());
+        try {
+            setData(data.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            setData(data.getBytes());
+        }
     }
 
     public void setData(Object data) throws IOException {
@@ -81,16 +94,20 @@ public class NetworkRequest {
         return timeOut;
     }
 
+    public void setTimeOut(int timeOut) {
+        this.timeOut = timeOut;
+    }
+
     private byte[] getBytesFromObject(Object obj) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream out = null;
-       try {
-           out = new ObjectOutputStream(bos);
-           out.writeObject(obj);
-           return bos.toByteArray();
-       }finally {
-           if (out != null)  out.close();
-           bos.close();
-       }
+        try {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(obj);
+            return bos.toByteArray();
+        } finally {
+            if (out != null) out.close();
+            bos.close();
+        }
     }
 }

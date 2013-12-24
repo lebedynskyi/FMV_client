@@ -19,12 +19,10 @@ import java.util.Set;
  * Time: 5:46 PM
  */
 public final class Core {
-    private final Set<WeakReference<IUpdateListener>> updateListeners;
-
     private static Core instance;
     private final Context app;
-    private Handler handler;
     private DBHelper dbHelper;
+    private Handler handler;
 
     private NotifyManager mNotificationManager;
     private CacheManager mCacheManager;
@@ -47,12 +45,10 @@ public final class Core {
     private Core(Context app) {
         if (app == null) throw new IllegalArgumentException("Context cannot be null");
         this.app = app;
-        handler = new Handler();
         mNotificationManager = new NotifyManager(this);
         mCacheManager = new CacheManager(this);
         mSettingsManager = new SettingsManager(this);
         downloadManager = new DownloadManager(this);
-        updateListeners = new HashSet<WeakReference<IUpdateListener>>();
         playerManager = new PlayerManager(this);
         dbHelper = DBHelper.getInstance(app);
     }
@@ -77,6 +73,18 @@ public final class Core {
         return downloadManager;
     }
 
+    public Context getContext() {
+        return app;
+    }
+
+    public DBHelper getDbHelper(){
+        return dbHelper;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
     public DisplayImageOptions getNotCachedOptions() {
         if (notCachedOptions == null) {
             notCachedOptions = new DisplayImageOptions.Builder()
@@ -90,66 +98,32 @@ public final class Core {
         return notCachedOptions;
     }
 
-    public Context getContext() {
-        return app;
-    }
-
     public void finish() {
 
     }
 
-    public void showToast(int strID) {
-        Toast.makeText(app, strID, Toast.LENGTH_SHORT).show();
-    }
 
-    public void registerUpdateListener(IUpdateListener listener) {
-        updateListeners.add(new WeakReference<IUpdateListener>(listener));
-    }
+    public DownloadManager.IDownloadListener getNotifyListener(){
+        return new DownloadManager.IDownloadListener() {
+            @Override
+            public void onDownloadStarted(String name) {
 
-    public void callUpdateUI() {
-        Iterator<WeakReference<IUpdateListener>> it = updateListeners.iterator();
-        while (it.hasNext()) {
-            WeakReference<IUpdateListener> ref = it.next();
-            final IUpdateListener l = ref.get();
-            if (l == null) {
-                it.remove();
-                continue;
-            }
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    l.needUpdate();
-                }
-            });
-        }
-    }
-
-    public void unregisterupdateListener(IUpdateListener listener) {
-        Iterator<WeakReference<IUpdateListener>> it = updateListeners.iterator();
-        while (it.hasNext()) {
-            WeakReference<IUpdateListener> ref = it.next();
-            IUpdateListener l = ref.get();
-            if (l == null) {
-                it.remove();
-                continue;
             }
 
-            if (l == listener) {
-                it.remove();
-                break;
+            @Override
+            public void onDownload(String name, int cur, int max, int percent) {
+
             }
-        }
-    }
 
-    public Handler getHandler() {
-        return handler;
-    }
+            @Override
+            public void onDownloadFinished(String name) {
 
-    public interface IUpdateListener {
-        public void needUpdate();
-    }
+            }
 
-    public DBHelper getDbHelper(){
-        return dbHelper;
+            @Override
+            public void onError(String name) {
+
+            }
+        };
     }
 }

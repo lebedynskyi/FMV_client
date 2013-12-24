@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * Date: 8/5/13
  * Time: 12:32 PM
  */
-public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpdateListener {
+public class SearchSongsFragment extends BaseSearchFragment{
     private SwipeListView songsListView;
     private ArrayList<PlayAbleSong> songsInAdapter = new ArrayList<PlayAbleSong>();
     private SearchSongAdapter adapter;
@@ -44,7 +44,6 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
     @Override
     public void onResume() {
         super.onResume();
-        core.registerUpdateListener(this);
     }
 
     @Override
@@ -211,22 +210,9 @@ public class SearchSongsFragment extends BaseSearchFragment implements Core.IUpd
         @Override
         public void downloadClicked(PlayAbleSong model) {
             songsListView.closeOpenedItems();
-            core.getDownloadManager().download(model);
+            showToast("DOWNLOAD!!!!!");
         }
     };
-
-    @Override
-    public void needUpdate() {
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        core.unregisterupdateListener(this);
-    }
 
     @Override
     public void onDestroyView() {

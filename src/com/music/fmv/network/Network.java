@@ -22,31 +22,31 @@ import java.util.HashMap;
  */
 
 public class Network {
-    public static NetworkResponse doRequest(NetworkRequest request) throws IOException{
-        URL preparedURL  = new URL(appendParamsToUrl(request.getUrl(), request.getParams()));
+    public static NetworkResponse doRequest(NetworkRequest request) throws IOException {
+        URL preparedURL = new URL(appendParamsToUrl(request.getUrl(), request.getParams()));
         HttpURLConnection connection = (HttpURLConnection) preparedURL.openConnection();
         connection.setConnectTimeout(request.getTimeOut());
-
-        if (request.getHeaders() != null){
-            for (String key : request.getHeaders().keySet()){
+        connection.setDoInput(true);
+        if (request.getHeaders() != null) {
+            for (String key : request.getHeaders().keySet()) {
                 connection.addRequestProperty(key, request.getHeaders().get(key));
             }
         }
 
         NetworkRequest.Method method = request.getMethod();
         connection.setRequestMethod(method.name());
-        if (method == NetworkRequest.Method.POST && request.getData() != null){
+        if ((method == NetworkRequest.Method.POST || method == NetworkRequest.Method.PUT) && request.getData() != null) {
+            connection.setDoOutput(true);
             BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
             outputStream.write(request.getData());
             outputStream.flush();
             outputStream.close();
         }
 
-        NetworkResponse response = new NetworkResponse(connection);
-        return response;
+        return new NetworkResponse(connection);
     }
 
-    public static String appendParamsToUrl(String baseUrl, HashMap<String, String> params){
+    public static String appendParamsToUrl(String baseUrl, HashMap<String, String> params) {
         if (params == null || params.size() == 0) return baseUrl;
 
 

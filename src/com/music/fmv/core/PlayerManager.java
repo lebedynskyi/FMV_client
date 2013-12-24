@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import com.music.fmv.services.PlayerService;
+import com.music.fmv.services.newPlayerService;
 
 /**
  * User: Vitalii Lebedynskyi
@@ -52,19 +53,19 @@ public class PlayerManager extends Manager {
     }
 
     public static class Bind extends Binder {
-        private PlayerService service;
+        private newPlayerService service;
 
-        public void setService(PlayerService service) {
+        public void setService(newPlayerService service) {
             this.service = service;
         }
 
-        public PlayerService getService() {
+        public newPlayerService getService() {
             return service;
         }
     }
 
     private void bindToPlayer() {
-        core.getContext().bindService(new Intent(core.getContext(), PlayerService.class), connection, Service.BIND_AUTO_CREATE);
+        core.getContext().bindService(new Intent(core.getContext(), newPlayerService.class), connection, Service.BIND_AUTO_CREATE);
     }
 
     public interface PostInitializationListener {

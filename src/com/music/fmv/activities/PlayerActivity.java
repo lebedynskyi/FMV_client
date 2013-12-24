@@ -6,10 +6,7 @@ import android.view.View;
 import android.widget.*;
 import com.music.fmv.R;
 import com.music.fmv.adapters.PlayerListAdapter;
-import com.music.fmv.core.BaseActivity;
-import com.music.fmv.core.Core;
-import com.music.fmv.core.Player;
-import com.music.fmv.core.PlayerManager;
+import com.music.fmv.core.*;
 import com.music.fmv.models.FileSystemSong;
 import com.music.fmv.models.PlayAbleSong;
 import com.music.fmv.views.GlowButton;
@@ -24,13 +21,9 @@ import java.util.Date;
  * Date: 8/1/13
  * Time: 10:33 AM
  */
-public class PlayerActivity extends BaseActivity implements Player.PlayerListener, Core.IUpdateListener {
+public class PlayerActivity extends BaseActivity implements Player.PlayerListener{
     public static final String FROM_NOTIFY_FLAG = "FROM_NOTIFY_FLAG";
-
-
     private static final SimpleDateFormat TIME_SD = new SimpleDateFormat("mm.ss");
-
-    private boolean progressBlocked = false;
 
     private TextView songNameTV;
     private TextView songArtistTV;
@@ -53,6 +46,7 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
     private PlayerListAdapter playListAdater;
 
     private boolean fromNotification;
+    private boolean progressBlocked;
 
     private ObjectAnimator toLeftAnimator;
     private ObjectAnimator toRightAnimator;
@@ -73,9 +67,8 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         if (refresher != null) {
             refresher.cancel();
         }
-        refresher = new RefreshTimer(1 * 60 * 1000, 500);
+        refresher = new RefreshTimer(1 * 60 * 1000, 300);
         refresher.start();
-        mCore.registerUpdateListener(this);
     }
 
     @Override
@@ -83,14 +76,13 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         super.onStop();
         if (player != null) {
             player.setPlayerListener(null);
+            player= null;
         }
 
         if (refresher != null) {
             refresher.cancel();
             refresher = null;
         }
-
-        mCore.unregisterupdateListener(this);
     }
 
     public void initViews() {
@@ -147,9 +139,7 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         downloadBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player != null){
-                    mCore.getDownloadManager().download(player.getCurrentSong());
-                }
+                showToast("DOWNLOAD!!!!!!!!!!");
             }
         });
     }
@@ -202,11 +192,6 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         checkDownloadButton();
     }
 
-    @Override
-    public void needUpdate() {
-        checkDownloadButton();
-    }
-
     private class RefreshTimer extends CountDownTimer {
         public RefreshTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -220,7 +205,7 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         @Override
         public void onFinish() {
             refresher = null;
-            refresher = new RefreshTimer(1 * 60 * 1000, 500);
+            refresher = new RefreshTimer(1 * 60 * 1000, 300);
             refresher.start();
         }
     }
@@ -313,10 +298,10 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         public void onOpened() {
             if (toLeftAnimator == null) {
                 toLeftAnimator = ObjectAnimator.ofFloat(backBTN, "translationX", -backBTN.getMeasuredWidth());
-                toLeftAnimator.setDuration(170);
+                toLeftAnimator.setDuration(150);
 
                 toRightAnimator = ObjectAnimator.ofFloat(downloadBTN, "translationX", downloadBTN.getMeasuredWidth());
-                toRightAnimator.setDuration(170);
+                toRightAnimator.setDuration(150);
             }
 
 
@@ -328,10 +313,10 @@ public class PlayerActivity extends BaseActivity implements Player.PlayerListene
         public void onClose() {
             if (returnAnimator1 == null) {
                 returnAnimator1 = ObjectAnimator.ofFloat(backBTN, "translationX", 0);
-                returnAnimator1.setDuration(170);
+                returnAnimator1.setDuration(150);
 
                 returnAnimator2 = ObjectAnimator.ofFloat(downloadBTN, "translationX", 0);
-                returnAnimator2.setDuration(170);
+                returnAnimator2.setDuration(150);
             }
 
             returnAnimator1.start();

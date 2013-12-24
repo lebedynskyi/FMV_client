@@ -14,6 +14,7 @@ import com.music.fmv.activities.PlayerActivity;
  * Date: 7/12/13
  * Time: 5:58 PM
  */
+//TODO Refactor it
 public class NotifyManager extends Manager {
     private static final int DOWNLOAD_NOTIFY_ID = 1350;
     private static final int PLAYER_NOTIFY_ID = 1357;
@@ -47,17 +48,16 @@ public class NotifyManager extends Manager {
         mNotifyManager.cancel(DOWNLOAD_NOTIFY_ID);
     }
 
-    public void notifyPlayer(String songName, String songOwner) {
+    public void notifyPlayer(String text) {
         RemoteViews view = new RemoteViews(core.getContext().getPackageName(), R.layout.simple_player_notification);
-        view.setTextViewText(R.id.song_name, songName);
-        view.setTextViewText(R.id.song_owner, songOwner);
+        view.setTextViewText(R.id.song_name, text);
         Intent playerIntent = new Intent(core.getContext(), PlayerActivity.class);
-        playerIntent.putExtra(PlayerActivity.FROM_NOTIFY_FLAG, 1);
+        playerIntent.putExtra(PlayerActivity.FROM_NOTIFY_FLAG, true);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(core.getContext());
         mBuilder.setContent(view).setSmallIcon(R.drawable.icon).setOngoing(true)
                 .setContentIntent(PendingIntent.getActivity(core.getContext(), 0, playerIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                .setTicker(songOwner + " - " + songName);
+                .setTicker(text);
         mNotifyManager.notify(PLAYER_NOTIFY_ID, mBuilder.build());
     }
 

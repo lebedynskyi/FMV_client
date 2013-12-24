@@ -2,19 +2,22 @@ package com.music.fmv.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.widget.Toast;
+
+import com.music.fmv.R;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.Player;
 import com.music.fmv.core.PlayerManager;
 import com.music.fmv.models.InternetSong;
 import com.music.fmv.models.PlayAbleSong;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,21 +26,25 @@ import java.util.Random;
  * Time: 2:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public class newPlayerService extends Service implements Player, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener{
+public class newPlayerService extends Service implements Player, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnPreparedListener{
     private final ArrayList<PlayAbleSong> queue = new ArrayList<PlayAbleSong>();
     private final ArrayList<PlayAbleSong> playedSongs = new ArrayList<PlayAbleSong>();
 
     private Handler handler;
     private Core core;
 
+    private boolean isShuffle;
+
     private PlayAbleSong currentSong;
     private PlayerListener listener;
     private MediaPlayer currentMediaPayer;
+    private PlayerUrlRetriever currentUrltask;
 
     @Override
     public IBinder onBind(Intent intent) {
         PlayerManager.Bind binder = new PlayerManager.Bind();
-//        binder.setService(this);
+        binder.setService(this);
         return binder;
     }
 
@@ -50,52 +57,78 @@ public class newPlayerService extends Service implements Player, MediaPlayer.OnC
 
     @Override
     public void pause() {
-
+        if (currentMediaPayer != null) {
+            if (currentMediaPayer.isPlaying()){
+                currentMediaPayer.pause();
+                core.getNotificationManager().removePlayer();
+            }else {
+                currentMediaPayer.start();
+                core.getNotificationManager().notifyPlayer(currentSong.toString());
+            }
+        }
     }
 
     @Override
     public void previous() {
-
+        PlayAbleSong song = null;
+        for (PlayAbleSong playedSong : playedSongs) {
+            song = playedSong;
+        }
+        playSong(song);
     }
 
     @Override
     public void next() {
+        int curPosition = queue.indexOf(currentSong);
+        if (curPosition == -1 || curPosition + 1 >= queue.size() || playedSongs.containsAll(queue)){
+            releasePlayer();
+            return;
+        }
 
+        if (isShuffle()){
+            nextRandom();
+        }else {
+            playSong(queue.get(curPosition + 1));
+        }
     }
 
     @Override
     public void setShuffle(boolean value) {
-
+        isShuffle = value;
+        if (listener != null) listener.onActionApplied();
     }
 
     @Override
     public void setLoop(boolean value) {
-
+        if (currentMediaPayer != null) currentMediaPayer.setLooping(value);
+        if (listener != null) listener.onActionApplied();
     }
 
     @Override
     public boolean isShuffle() {
-        return false;
+        return isShuffle;
     }
 
     @Override
     public boolean isLoop() {
-        return false;
+        return currentMediaPayer != null && currentMediaPayer.isLooping();
     }
 
     @Override
     public void seek(int position) {
-
+        if (currentMediaPayer != null) currentMediaPayer.seekTo(position);
     }
 
     @Override
     public void play(List<PlayAbleSong> songs, int position) {
-
+        queue.clear();
+        queue.addAll(songs);
+        playSong(queue.get(position));
     }
 
     @Override
     public void play(int position) {
-
+        playSong(queue.get(position));
     }
 
     @Override
@@ -105,12 +138,23 @@ public class newPlayerService extends Service implements Player, MediaPlayer.OnC
 
     @Override
     public void addSong(PlayAbleSong model) {
-
+        queue.add(model);
     }
 
     @Override
     public PlayerStatus getStatus() {
-        return null;
+        int duration = 0;
+        int currentPos = 0;
+        boolean isPlaying = false;
+        boolean isLoop = false;
+
+        if (currentMediaPayer != null) {
+            duration = currentMediaPayer.getDuration();
+            currentPos = currentMediaPayer.getCurrentPosition();
+            isPlaying = currentMediaPayer.isPlaying();
+            isLoop = currentMediaPayer.isLooping();
+        }
+        return new PlayerStatus(duration, currentPos, currentSong, queue, isShuffle, isLoop, isPlaying);
     }
 
     @Override
@@ -125,44 +169,75 @@ public class newPlayerService extends Service implements Player, MediaPlayer.OnC
     }
 
     @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        releasePlayer();
+        Toast.makeText(newPlayerService.this, getString(R.string.cannot_play_song) + currentSong, Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
+        currentMediaPayer = mp;
     }
 
     private void playSong(PlayAbleSong song){
-        if (TextUtils.isEmpty(song.getUrl()) && song instanceof InternetSong){
-            playFromHTTp(song);
-        }else {
-            playFromPATH(song);
+        try {
+            currentSong = song;
+            core.getNotificationManager().notifyPlayer(currentSong.toString());
+            if (TextUtils.isEmpty(song.getUrl()) && song instanceof InternetSong){
+                if (core.getCacheManager().isSongExists(song)){
+                    song.setUrl(core.getCacheManager().getSongPath(song));
+                    playFromPATH(song);
+                }else {
+                    playFromHTTp(song);
+                }
+            }else {
+                playFromPATH(song);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            releasePlayer();
         }
     }
 
     private void playFromHTTp(PlayAbleSong song){
+        if (currentUrltask != null) currentUrltask.canceledByUser();
 
+        currentUrltask = new PlayerUrlRetriever(this, song){
+            @Override
+            protected void onPostExecute(PlayAbleSong result) {
+                currentUrltask = null;
+
+                if (isCancelled()){
+                    return;
+                }
+
+                if (isError){
+                    releasePlayer();
+                    return;
+                }
+
+                playSong(result);
+            }
+        };
     }
 
-    private void playFromPATH(PlayAbleSong song){
+    private void playFromPATH(PlayAbleSong song) throws Exception{
+        if (TextUtils.isEmpty(song.getUrl())) throw new Exception("Url is empty");
 
+        MediaPlayer mp = new MediaPlayer();
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mp.setOnPreparedListener(this);
+        mp.setOnCompletionListener(this);
+        mp.setDataSource(this, Uri.parse(song.getUrl()));
+        mp.prepareAsync();
     }
 
     private void nextRandom(){
-        if (queue.isEmpty() || queue.size() == playedSongs.size()) return;
-
-        ArrayList<PlayAbleSong> temp = new ArrayList<PlayAbleSong>();
-        for (PlayAbleSong s: queue){
-            boolean needAdd = true;
-            for (PlayAbleSong s1: playedSongs){
-                if (s.equals(s1)){
-                    needAdd = false;
-                    break;
-                }
-            }
-            if (needAdd) temp.add(s);
-        }
-
-        if (temp.isEmpty()) return;
-
-        playSong(temp.get(new Random().nextInt(temp.size())));
+        ArrayList<PlayAbleSong> tempSongs = new ArrayList<PlayAbleSong>(queue);
+        tempSongs.removeAll(playedSongs);
+        playSong(tempSongs.get(new Random().nextInt(tempSongs.size())));
     }
 
     private void releasePlayer(){
@@ -171,6 +246,7 @@ public class newPlayerService extends Service implements Player, MediaPlayer.OnC
             currentMediaPayer.release();
             currentMediaPayer = null;
         }
+        currentSong = null;
         core.getNotificationManager().removePlayer();
     }
 }

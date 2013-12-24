@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.music.fmv.utils.ActivityMediator;
 import com.music.fmv.utils.ViewUtils;
 
@@ -39,6 +40,13 @@ public abstract class BaseFragment extends Fragment {
         mainView = createView(savedInstanceState);
         ViewUtils.setUpKeyBoardHider(mainView, baseActivity);
         return mainView;
+    }
+
+    public void showToast(int id){
+    }
+
+    public void showToast(String ss){
+        baseActivity.showToast(ss);
     }
 
     protected boolean runTask(AsyncTask task) {

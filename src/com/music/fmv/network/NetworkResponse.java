@@ -19,13 +19,13 @@ public class NetworkResponse {
         this.connection = connection;
     }
 
-    public String readResponse() throws IOException{
+    public String readResponse() throws IOException {
         int respCode = getResponseCode();
 
         InputStream inputStream;
-        if (respCode >= 200 && respCode < 300){
+        if (respCode >= 200 && respCode < 300) {
             inputStream = connection.getInputStream();
-        }else inputStream = connection.getErrorStream();
+        } else inputStream = connection.getErrorStream();
 
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader reader = new BufferedReader(inputStreamReader);
@@ -37,13 +37,13 @@ public class NetworkResponse {
         return responseBuilder.toString();
     }
 
-    public byte[] readData() throws IOException{
+    public byte[] readData() throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         readData(buffer);
         return buffer.toByteArray();
     }
 
-    public void readData(OutputStream outStream) throws IOException{
+    public void readData(OutputStream outStream) throws IOException {
         InputStream is = connection.getInputStream();
         byte[] data = new byte[2048];
         int nRead;
@@ -53,8 +53,8 @@ public class NetworkResponse {
         outStream.flush();
     }
 
-    private int getResponseCode() throws IOException {
-        if (responseCode == -1){
+    public int getResponseCode() throws IOException {
+        if (responseCode == -1) {
             responseCode = connection.getResponseCode();
         }
         return responseCode;

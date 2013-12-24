@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.widget.Toast;
+import com.music.fmv.R;
 import com.music.fmv.api.Api;
 import com.music.fmv.core.Core;
 import com.music.fmv.core.Player;
@@ -32,6 +34,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private PlayerListener playerListener;
     private PlayAbleSong currentSong;
     private boolean isShuffle;
+    private int errorCount;
 
     //         SERVICE methods
     @Override
@@ -51,13 +54,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public IBinder onBind(Intent intent) {
         PlayerManager.Bind binder = new PlayerManager.Bind();
-        binder.setService(this);
+//        binder.setService(this);
         return binder;
     }
-    //         SERVICE methods
 
-
-    //         Control buttons
     public void pause() {
         if (mPlayer == null) return;
 
@@ -251,7 +251,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     private void showNotification() {
         if (currentSong != null) {
-            core.getNotificationManager().notifyPlayer(currentSong.getName(), currentSong.getArtist());
+            core.getNotificationManager().notifyPlayer(currentSong.toString());
         }
     }
 
@@ -267,7 +267,13 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public boolean onError(MediaPlayer mp, int what, int extra) {
         System.err.println("+++++++++++++++++++++++++++   ERROR  ++++++++++++++++++++++++++++");
         System.err.println("mp = [" + mp + "], what = [" + what + "], extra = [" + extra + "]");
-        return false;
+
+        if (currentSong != null){
+            Toast.makeText(this, getString(R.string.cannot_play_song) + " - " + currentSong.toString(), Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, R.string.cannot_play_song, Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
     private class AsyncHttpRunner extends Thread {

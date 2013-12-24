@@ -26,6 +26,7 @@ public abstract class PlayAbleSong extends BaseSerializableModel{
     private int duration;
 
     private String niceDuration;
+    private long size;
 
     // url == null will be used getUrlForUrl and getUrlKey
     public String getUrlKey(){
@@ -105,12 +106,20 @@ public abstract class PlayAbleSong extends BaseSerializableModel{
     }
 
 
-    public String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       getNiceDuration(){
+    public String getNiceDuration(){
         if (TextUtils.isEmpty(niceDuration)) {
-            Date d = new Date(this instanceof InternetSong ? duration * 1000 : duration);
+            Date d = new Date(duration);
             niceDuration = MM_SS_DATE_FORMAT.format(d);
         }
 
         return niceDuration;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public long getSize() {
+        return size;
     }
 }

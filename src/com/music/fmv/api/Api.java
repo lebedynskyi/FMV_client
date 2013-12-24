@@ -22,15 +22,15 @@ import java.util.List;
 public class Api {
     public static final int API_VERSION = 1;
     //test and real urls
-    private static final String TEST_URL = "http://vetal.romcheg.me/";
+    private static final String TEST_URL = "http://95.85.8.199/";
     private static final String REAL_URL = "http://vetal.romcheg.me/";
 
     //this url will used for requests
     public static final String API_URL = TEST_URL;
 
     //commands for api
-    public static final String SEARCH_BAND_COMMAND = "artist.search";
-    public static final String GET_BAND_COMMAND = "artist.get";
+    public static final String SEARCH_BAND_COMMAND = "artists.search";
+    public static final String GET_BAND_COMMAND = "artists.get";
     public static final String SEARCH_ALBUMS_COMMAND = "albums.search";
     public static final String SEARCH_SONGS_COMMAND = "songs.search";
 
@@ -38,7 +38,7 @@ public class Api {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
 
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("artist", searchQuery);
+        params.put("q", searchQuery);
         params.put("lan", language);
         params.put("version", String.valueOf(API_VERSION));
 
@@ -55,7 +55,7 @@ public class Api {
         if (TextUtils.isEmpty(searchQuery)) throw new IllegalArgumentException("searchQuery cannot be empty");
 
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("album", searchQuery);
+        params.put("q", searchQuery);
         params.put("lan", language);
         params.put("version", String.valueOf(API_VERSION));
 
@@ -72,7 +72,7 @@ public class Api {
         if (TextUtils.isEmpty(query)) throw new IllegalArgumentException("searchQuery cannot be empty");
 
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("song", query);
+        params.put("q", query);
         params.put("version", String.valueOf(API_VERSION));
 
         if (page != null) params.put("page", page.toString());
@@ -84,7 +84,7 @@ public class Api {
     }
 
     public String getUrlOfSong(PlayAbleSong song) throws Exception {
-        //TODO we need to implemented sending of statistic
+        //TODO we need to implemented sending of version
         NetworkResponse httpResponse = Network.doRequest(new NetworkRequest(song.getUrlForUrl()));
         JSONObject jsonResponse = new JSONObject(httpResponse.readResponse());
         return jsonResponse.getString(song.getUrlKey());

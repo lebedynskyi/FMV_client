@@ -1,16 +1,13 @@
 package com.music.fmv.api;
 
-import android.text.TextUtils;
 import com.music.fmv.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,52 +19,29 @@ import java.util.Map;
 public class ApiUtils {
     public static final String RESPONSE_TAG = "response";
 
-    public static String encodeString(String s) {
-        if (TextUtils.isEmpty(s)) return "";
-        try {
-            return URLEncoder.encode(s, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return s;
-    }
-
-    //returns a valid url from Map
-    public static String generateUrl(Map<String, String> params) {
-        if (params.size() == 0) return "";
-
-        Iterator<String> keys = params.keySet().iterator();
-        StringBuilder urlBuilder = new StringBuilder();
-        int counter = 0;
-
-        while (keys.hasNext()) {
-            String key = keys.next();
-            urlBuilder.append(counter++ == 0 ? "?" : "&").append(key).append("=").append(encodeString(params.get(key)));
-        }
-
-        return urlBuilder.toString();
-    }
-
     public static List<SearchBandModel> parseSearchBand(JSONObject response) throws Exception {
         ArrayList<SearchBandModel> result = new ArrayList<SearchBandModel>();
-        JSONObject resp = response.optJSONObject(RESPONSE_TAG);
-        JSONArray artists = resp.optJSONArray("artists");
-        if (artists != null) {
-            for (int i = 0; i < artists.length(); i++) {
-                try {
-                    JSONObject artistData = artists.getJSONObject(i);
-                    SearchBandModel model = new SearchBandModel();
-                    model.setName(artistData.optString("name"));
-                    model.setDescr(artistData.optString("descr"));
-                    model.setUrl(artistData.optString("url"));
-                    model.setImage(artistData.optString("image"));
-                    result.add(model);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        JSONArray bands = response.optJSONArray(RESPONSE_TAG);
+        if (bands == null || bands.length() == 0){
+            SearchBandModel.AVAILABLE_PAGES = -1;
+            return result;
+        }
+
+        final int bandsLegth = bands.length();
+        for (int i = 0; i < bandsLegth; i++) {
+            try {
+                JSONObject artistData = bands.getJSONObject(i);
+                SearchBandModel model = new SearchBandModel();
+                model.setName(artistData.optString("name"));
+                model.setDescr(artistData.optString("descr"));
+                model.setUrl(artistData.optString("url"));
+                model.setImage(artistData.optString("image"));
+                result.add(model);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        SearchBandModel.AVAILABLE_PAGES = resp.optInt("pages", -1);
+        SearchBandModel.AVAILABLE_PAGES = response.optInt("pages", -1);
 
         return result;
     }
@@ -78,58 +52,61 @@ public class ApiUtils {
     }
 
     public static List<SearchAlbumModel> parseSearchAlbum(JSONObject response) throws Exception {
-        ArrayList<SearchAlbumModel> albums = new ArrayList<SearchAlbumModel>();
-        JSONObject resp = response.getJSONObject(RESPONSE_TAG);
-        JSONArray albumsArr = resp.getJSONArray("albums");
-        if (albumsArr == null) {
+        ArrayList<SearchAlbumModel> result = new ArrayList<SearchAlbumModel>();
+        JSONArray albums = response.optJSONArray(RESPONSE_TAG);
+        if (albums == null || albums.length() == 0){
             SearchAlbumModel.AVAILABLE_PAGES = -1;
-            return albums;
+            return result;
         }
 
-        for (int i = 0; i < albumsArr.length(); i++) {
+        final int albumsLength = albums.length();
+        for (int i = 0; i < albumsLength; i++) {
             try {
                 SearchAlbumModel model = new SearchAlbumModel();
-                JSONObject albumData = albumsArr.getJSONObject(i);
-                model.setAlbumName(albumData.optString("album_name"));
-                model.setAlbumUrl(albumData.optString("album_url"));
-                model.setArtistName(albumData.optString("artist_name"));
+                JSONObject albumData = albums.getJSONObject(i);
+                model.setAlbumName(albumData.optString("name"));
+                model.setAlbumUrl(albumData.optString("url"));
+                model.setArtistName(albumData.optString("artist"));
                 model.setArtistUrl(albumData.optString("artist_url"));
-                model.setBriefDescr(albumData.optString("biref"));
+                model.setBriefDescr(albumData.optString("brief"));
                 model.setImage(albumData.optString("image"));
-                albums.add(model);
+                result.add(model);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        SearchAlbumModel.AVAILABLE_PAGES = resp.optInt("pages", -1);
-        return albums;
+        SearchAlbumModel.AVAILABLE_PAGES = response.optInt("pages", -1);
+        return result;
     }
 
     public static ArrayList<InternetSong> parseSearchSongs(JSONObject response) throws Exception {
-        ArrayList<InternetSong> songs = new ArrayList<InternetSong>();
-        JSONObject resp = response.getJSONObject(RESPONSE_TAG);
-        JSONArray songsArr = resp.getJSONArray("songs");
-        if (songsArr == null) {
+        Set<InternetSong> result = new HashSet<InternetSong>();
+        JSONArray songs = response.optJSONArray(RESPONSE_TAG);
+        if (songs == null || songs.length() == 0) {
             InternetSong.PAGE_AVAILABLE = -1;
-            return songs;
+            return new ArrayList<InternetSong>(result);
         }
 
-        for (int i = 0; i < songsArr.length(); i++) {
+        final int songsLength = songs.length();
+        for (int i = 0; i < songsLength; i++) {
             InternetSong song = new InternetSong();
-            JSONObject songData = songsArr.getJSONObject(i);
+            JSONObject songData = songs.getJSONObject(i);
             try {
-                song.setId(songData.optString("id"));
-                song.setArtist(songData.optString("owner"));
-                song.setDuration(Integer.parseInt(songData.optString("duration")));
+                song.setUrlForUrl(songData.optString("url_for"));
                 song.setName(songData.optString("name"));
-                song.setRate(songData.optString("rate"));
-                songs.add(song);
+                song.setArtist(songData.optString("artist"));
+                song.setUrl(songData.optString("url"));
+                song.setRate(songData.optString("bitrate"));
+                song.setId(songData.optString("id"));
+                song.setDuration(songData.optInt("duration"));
+                song.setSize(songData.optLong("size"));
+                result.add(song);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        InternetSong.PAGE_AVAILABLE = resp.optInt("pages", -1);
-        return songs;
+        InternetSong.PAGE_AVAILABLE = response.optInt("pages", -1);
+        return new ArrayList<InternetSong>(result);
     }
 }
 

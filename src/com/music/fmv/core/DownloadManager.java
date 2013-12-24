@@ -1,100 +1,55 @@
 package com.music.fmv.core;
 
-import com.music.fmv.R;
-import com.music.fmv.models.PlayAbleSong;
+import android.os.Handler;
+import com.music.fmv.models.InternetSong;
 import com.music.fmv.models.SearchAlbumModel;
-import com.music.fmv.network.Network;
-import com.music.fmv.tasks.threads.IDownloadListener;
-import com.music.fmv.tasks.threads.SongLoader;
-import com.music.fmv.utils.FileUtils;
+import com.music.fmv.tasks.SongsDownloader;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
- * User: lebed
+ * User: Vitalii Lebedynskyi
  * Date: 7/14/13
  * Time: 8:29 AM
  * To change this template use File | Settings | File Templates.
  */
+
 public class DownloadManager extends Manager {
+    public enum ERRORS{
+        NET_UNAVAILABE, UNKNOWN, SONG_EXIST, ALBUM_EXIST
+    }
+
     DownloadManager(Core core) {
         super(core);
     }
 
     @Override
     protected void finish() {
-        loaderExecutor.getQueue().clear();
-        loaderExecutor.shutdownNow();
-        if (loaderExecutor.getQueue().isEmpty()) {
-            core.getNotificationManager().removeDownloading();
-        }
+        loader.getQueue().clear();
+        loader.shutdownNow();
+        core.getNotificationManager().removeDownloading();
     }
 
-    public void download(SearchAlbumModel album) {
-        //TODO implemented
+    public boolean download(InternetSong song, IDownloadListener listener) {
+        SongsDownloader downloader = new SongsDownloader(core.getHandler(), song);
+        downloader.setDownloadListener(listener);
+        if (loader.getQueue().contains(downloader)){
+            return false;
+        }
+        loader.execute(downloader);
+        return true;
     }
 
-    public void download(PlayAbleSong model) {
-        download(model, downloadListener);
+    public boolean download(SearchAlbumModel song, IDownloadListener listener) {
+        return false;
     }
 
-
-    private void download(PlayAbleSong model, IDownloadListener listener) {
-        if (!Network.isNetworkAvailable(core.getContext())) {
-            core.showToast(R.string.network_unavailable);
-            return;
-        }
-
-        String loadFolder = core.getSettingsManager().getSongsFolder();
-        File folder = new File(loadFolder);
-        folder.mkdirs();
-        File newSongFile = FileUtils.getAbsolutheFile(folder, model);
-        if (newSongFile.exists()) {
-            core.showToast(R.string.file_already_exists);
-            return;
-        }
-
-        SongLoader loader = new SongLoader(newSongFile, model);
-        loader.setDownloadListener(listener);
-        if (!loaderExecutor.getQueue().contains(loader)) {
-            loaderExecutor.execute(loader);
-        } else core.showToast(R.string.already_in_queue);
-    }
-
-    private IDownloadListener downloadListener = new IDownloadListener() {
-        private ArrayList<String> failedSongs = new ArrayList<String>();
-
-        @Override
-        public void onDownload(String name, int percent, int max) {
-            core.getNotificationManager().notifyDownloading(name, percent, max);
-        }
-
-        @Override
-        public void onDownloadFinished() {
-            if (loaderExecutor.getQueue().isEmpty()) {
-                if (!failedSongs.isEmpty()) {
-                    core.getNotificationManager().notifyErrorDownloading(failedSongs.toString());
-                    failedSongs.clear();
-                } else core.getNotificationManager().notifySuccessDownloading();
-            }
-            core.callUpdateUI();
-        }
-
-        @Override
-        public void onError(String name) {
-            failedSongs.add(name);
-        }
-    };
-
-    private ThreadPoolExecutor loaderExecutor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()) {
+    private ThreadPoolExecutor loader = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()) {
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
-            super.beforeExecute(t, r);
             try {
                 if (getQueue().size() > 1) {
                     Thread.sleep(5000);
@@ -102,6 +57,29 @@ public class DownloadManager extends Manager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            super.beforeExecute(t, r);
         }
     };
+
+    public interface IDownloadListener {
+        public void onDownloadStarted(String name);
+        public void onDownload(String name, int cur, int max, int percent);
+        public void onDownloadFinished(String name);
+        public void onError(String name);
+    }
+
+    public static abstract class IDownloader implements Runnable{
+        private final Handler handler;
+
+        public IDownloader(Handler handler){
+            this.handler = handler;
+        }
+
+        public Handler getHandler() {
+            return handler;
+        }
+
+        public abstract void setDownloadListener(IDownloadListener listener);
+        public abstract int hashCode();
+    }
 }
