@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DownloadManager extends Manager {
     public enum ERRORS{
-        NET_UNAVAILABE, UNKNOWN, SONG_EXIST, ALBUM_EXIST
+        NET_UNAVAILABE, UNKNOWN, FILE_EXIST, FOLDER_EXIST
     }
 
     DownloadManager(Core core) {

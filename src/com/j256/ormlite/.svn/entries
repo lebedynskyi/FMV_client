@@ -1,55 +1,0 @@
-10
-
-dir
-1217
-http://svn.webssa.com/svn/event-organizer-android/branches/Festivak2013/src/com/j256/ormlite
-http://svn.webssa.com/svn/event-organizer-android
-
-
-
-2013-10-08T11:29:51.927067Z
-1207
-vlebedynskyi
-
-
-svn:special svn:externals svn:needs-lock
-
-
-
-
-
-
-
-
-
-
-
-cc0d3040-fe7d-430a-8105-9fcd5a1a796b
-
-android
-dir
-
-dao
-dir
-
-db
-dir
-
-field
-dir
-
-logger
-dir
-
-misc
-dir
-
-stmt
-dir
-
-support
-dir
-
-table
-dir
-

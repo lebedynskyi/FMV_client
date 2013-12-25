@@ -1,7 +1,7 @@
 10
 
 dir
-221
+272
 http://svn.webssa.com/svn/brink-android/trunk/appcompat
 http://svn.webssa.com/svn/brink-android
 
@@ -23,7 +23,7 @@ svn:special svn:externals svn:needs-lock
 
 
 
-
+incomplete
 fa7c43ac-a938-48fa-ad35-a50c42b0cc6d
 
 
@@ -35,11 +35,11 @@ fa7c43ac-a938-48fa-ad35-a50c42b0cc6d
 
 .classpath
 file
+221
 
 
 
-
-2013-07-30T10:11:04.000000Z
+2013-12-25T12:04:28.000000Z
 d4f6c309ae4bb928a9cfbf964a49f863
 2013-08-16T15:06:24.412506Z
 17
@@ -72,11 +72,11 @@ dir
 
 .project
 file
+221
 
 
 
-
-2013-07-30T10:11:05.000000Z
+2013-12-25T12:04:28.000000Z
 ccac1cd82c933fb4408b354627b94523
 2013-08-16T15:06:24.412506Z
 17
@@ -106,7 +106,7 @@ vlebedynskyi
 
 AndroidManifest.xml
 file
-
+221
 
 
 
@@ -140,7 +140,7 @@ vlebedynskyi
 
 README.txt
 file
-
+221
 
 
 
@@ -174,7 +174,7 @@ vlebedynskyi
 
 appcompat.iml
 file
-
+221
 
 
 
@@ -214,11 +214,11 @@ dir
 
 project.properties
 file
+221
 
 
 
-
-2013-07-30T10:11:04.000000Z
+2013-12-25T12:04:28.000000Z
 c0fba1618c944698acea0f69be4a8cf2
 2013-08-16T15:06:24.412506Z
 17

@@ -11,8 +11,6 @@ import com.music.fmv.models.SearchAlbumModel;
 import com.music.fmv.models.SearchBandModel;
 import com.music.fmv.models.SearchQueryCache;
 
-import java.sql.SQLException;
-
 /**
  * User: Vitalii Lebedynskyi
  * Date: 10/11/13
