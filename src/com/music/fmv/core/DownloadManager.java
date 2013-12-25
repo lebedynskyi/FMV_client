@@ -34,13 +34,13 @@ public class DownloadManager extends Manager {
     }
 
     public boolean download(InternetSong song, IDownloadListener listener) {
-        SongsDownloader downloader = new SongsDownloader(core.getHandler(), song);
-        downloader.setDownloadListener(listener);
+        SongsDownloader downloader = new SongsDownloader(core, listener, song);
         if (loader.getQueue().contains(downloader)){
             return false;
+        }else {
+            loader.execute(downloader);
+            return true;
         }
-        loader.execute(downloader);
-        return true;
     }
 
     public boolean download(SearchAlbumModel song, IDownloadListener listener) {
@@ -49,34 +49,70 @@ public class DownloadManager extends Manager {
 
     private ThreadPoolExecutor loader = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()) {
         @Override
-        protected void beforeExecute(Thread t, Runnable r) {
+        protected void afterExecute(Runnable r, Throwable t) {
             try {
-                if (getQueue().size() > 1) {
-                    Thread.sleep(5000);
-                }
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            super.beforeExecute(t, r);
+            super.afterExecute(r, t);
         }
     };
 
     public interface IDownloadListener {
         public void onDownloadStarted(String name);
-        public void onDownload(String name, int cur, int max, int percent);
+        public void onDownload(String name, int cur, int max);
         public void onDownloadFinished(String name);
-        public void onError(String name);
+        public void onError(String name, ERRORS error);
     }
 
     public static abstract class IDownloader implements Runnable{
-        private final Handler handler;
+        protected final Core core;
+        private IDownloadListener listener;
 
-        public IDownloader(Handler handler){
-            this.handler = handler;
+        public IDownloader(Core handler, IDownloadListener listener){
+            this.core = handler;
+            this.listener = listener;
         }
 
-        public Handler getHandler() {
-            return handler;
+        public void notifyStart(final String text){
+            if (listener == null) return;
+            core.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onDownloadStarted(text);
+                }
+            });
+        }
+
+        public void notifyOnDownload(final String name, final int cur, final int max){
+            if (listener == null) return;
+            core.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onDownload(name, cur, max);
+                }
+            });
+        }
+
+        public void notifyFinish(final String text){
+            if (listener == null) return;
+            core.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onDownloadFinished(text);
+                }
+            });
+        }
+
+        public void notifyError(final String text, final ERRORS errors){
+            if (listener == null) return;
+            core.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onError(text, errors);
+                }
+            });
         }
 
         public abstract void setDownloadListener(IDownloadListener listener);

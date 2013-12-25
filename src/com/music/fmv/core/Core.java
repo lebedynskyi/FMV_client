@@ -51,6 +51,7 @@ public final class Core {
         downloadManager = new DownloadManager(this);
         playerManager = new PlayerManager(this);
         dbHelper = DBHelper.getInstance(app);
+        handler = new Handler();
     }
 
     public NotifyManager getNotificationManager() {
@@ -103,27 +104,27 @@ public final class Core {
     }
 
 
-    public DownloadManager.IDownloadListener getNotifyListener(){
-        return new DownloadManager.IDownloadListener() {
-            @Override
-            public void onDownloadStarted(String name) {
+    public class NotifyDownloadListener implements DownloadManager.IDownloadListener{
+        @Override
+        public void onDownloadStarted(String name) {
+            getNotificationManager().notifyDownloading(name, 0, 100);
+        }
 
-            }
+        @Override
+        public void onDownload(String name, int cur, int max) {
+            getNotificationManager().notifyDownloading(name, cur, max);
+        }
 
-            @Override
-            public void onDownload(String name, int cur, int max, int percent) {
+        @Override
+        public void onDownloadFinished(String name) {
+            getNotificationManager().removeDownloading();
+            getNotificationManager().notifySuccessDownloading();
+        }
 
-            }
-
-            @Override
-            public void onDownloadFinished(String name) {
-
-            }
-
-            @Override
-            public void onError(String name) {
-
-            }
-        };
+        @Override
+        public void onError(String name, DownloadManager.ERRORS err) {
+            getNotificationManager().removeDownloading();
+            getNotificationManager().notifyErrorDownloading(name);
+        }
     }
 }

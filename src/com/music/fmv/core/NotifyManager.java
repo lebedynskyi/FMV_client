@@ -16,6 +16,8 @@ import com.music.fmv.activities.PlayerActivity;
  */
 public class NotifyManager extends Manager {
     private static final int DOWNLOAD_NOTIFY_ID = 1350;
+    private static final int DOWNLOAD_SUCCESS_ID = 1351;
+    private static final int DOWNLOAD_ERROR_ID = 1351;
     private static final int PLAYER_NOTIFY_ID = 1360;
 
     private NotificationManager mNotifyManager;
@@ -66,7 +68,7 @@ public class NotifyManager extends Manager {
                 .setContentInfo(name).setSmallIcon(R.drawable.icon).setOngoing(false).setProgress(0, 0, false)
                 .setContentIntent(createEmptyPending())
                 .setTicker(core.getContext().getString(R.string.song_downloading_error));
-        mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
+        mNotifyManager.notify(DOWNLOAD_ERROR_ID, mBuilder.build());
     }
 
     public void notifySuccessDownloading() {
@@ -75,7 +77,7 @@ public class NotifyManager extends Manager {
                 .setOngoing(false).setProgress(0, 0, false)
                 .setContentIntent(createEmptyPending())
                 .setTicker(core.getContext().getString(R.string.downloading_finish));
-        mNotifyManager.notify(DOWNLOAD_NOTIFY_ID, mBuilder.build());
+        mNotifyManager.notify(DOWNLOAD_SUCCESS_ID, mBuilder.build());
     }
 
     private PendingIntent createEmptyPending() {

@@ -14,6 +14,7 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.music.fmv.R;
 import com.music.fmv.adapters.SearchSongAdapter;
+import com.music.fmv.core.Core;
 import com.music.fmv.core.PlayerManager;
 import com.music.fmv.models.ModelType;
 import com.music.fmv.models.InternetSong;
@@ -226,7 +227,17 @@ public class SearchSongsFragment extends BaseSearchFragment{
         @Override
         public void downloadClicked(PlayAbleSong model) {
             songsListView.closeOpenedItems();
-            showToast("DOWNLOAD!!!!!");
+            boolean isAdded = core.getDownloadManager().download((InternetSong)model, core.new NotifyDownloadListener(){
+                @Override
+                public void onDownloadFinished(String name) {
+                    super.onDownloadFinished(name);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            if (!isAdded){
+                showToast(R.string.already_in_queue);
+            }
         }
     };
 

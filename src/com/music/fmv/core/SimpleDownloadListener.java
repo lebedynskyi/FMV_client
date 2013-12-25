@@ -15,7 +15,7 @@ public class SimpleDownloadListener implements DownloadManager.IDownloadListener
     }
 
     @Override
-    public void onDownload(String name, int cur, int max, int percent) {
+    public void onDownload(String name, int cur, int max) {
 
     }
 
@@ -25,7 +25,7 @@ public class SimpleDownloadListener implements DownloadManager.IDownloadListener
     }
 
     @Override
-    public void onError(String name) {
+    public void onError(String name, DownloadManager.ERRORS error) {
 
     }
 }

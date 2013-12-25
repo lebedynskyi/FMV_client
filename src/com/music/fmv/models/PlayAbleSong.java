@@ -76,10 +76,7 @@ public class PlayAbleSong extends BaseDBmodel{
     }
 
     public String getFutureFileName() {
-        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(artist)) return "Unknown song.mp3";
-        if (TextUtils.isEmpty(name)) return artist + ".mp3";
-        if (TextUtils.isEmpty(artist)) return name + ".mp3";
-        return artist + " - " + name + ".mp3";
+        return toString() +  ".mp3";
     }
 
     @Override
@@ -101,7 +98,7 @@ public class PlayAbleSong extends BaseDBmodel{
 
     @Override
     public String toString() {
-        if (artist == null) return name == null ? "" : name;
+        if (artist == null) return name == null ? "Unknown song" : name;
         if (name == null) return artist;
         return artist + " - " + name;
     }

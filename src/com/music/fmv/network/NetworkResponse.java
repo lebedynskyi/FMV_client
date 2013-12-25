@@ -60,7 +60,11 @@ public class NetworkResponse {
         return responseCode;
     }
 
-    private InputStream getStream() throws IOException {
+    public InputStream getStream() throws IOException {
+        return connection.getInputStream();
+    }
+
+    public InputStream getErrStream() throws IOException {
         return connection.getInputStream();
     }
 }

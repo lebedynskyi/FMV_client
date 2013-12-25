@@ -16,7 +16,7 @@ public class SettingsManager extends Manager {
     private final String DEFAULT_CACHE_FOLDER    = "FMV";
     private final String DEFAULT_DOWNLOAD_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + DEFAULT_CACHE_FOLDER + "/";
     private final String DEFAULT_IMAGES_FOLDER   = DEFAULT_DOWNLOAD_FOLDER + "images/";
-    private final String DEFAULT_SONGS_FOLDER    = DEFAULT_DOWNLOAD_FOLDER + "music/";
+    private final String DEFAULT_SONGS_FOLDER    = DEFAULT_DOWNLOAD_FOLDER + "songs/";
     private final String DEFAULT_ALBUMS_FOLDER   = DEFAULT_DOWNLOAD_FOLDER + "albums/";
 
     private SharedPreferences prefs;
