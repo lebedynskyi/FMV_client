@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.music.fmv"
+          package="com.music.fms"
           android:versionCode="45"
           android:versionName="1.0.45">
     <uses-sdk android:minSdkVersion="10"/>
@@ -15,10 +15,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/icon"
-                 android:name=".core.App"
+                 android:name="com.music.fms.core.App"
                  android:theme="@style/AppCompatNoActionBar">
 
-        <activity android:name=".activities.MainActivity" android:configChanges="orientation"
+        <activity android:name="com.music.fms.activities.MainActivity" android:configChanges="orientation"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -26,16 +26,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.PlayerActivity" android:screenOrientation="nosensor"
+        <activity android:name="com.music.fms.activities.PlayerActivity" android:screenOrientation="nosensor"
                   android:launchMode="singleInstance"/>
-        <activity android:name=".activities.BandInfoActivity" android:configChanges="orientation"/>
-        <activity android:name=".activities.AlbumInfoActivity" android:configChanges="orientation"/>
-        <activity android:name=".activities.ArtistSongsActivity" android:configChanges="orientation"/>
-        <activity android:name=".activities.ArtistAlbumsActivity" android:configChanges="orientation"/>
-        <activity android:name=".activities.SettingsActivity" android:configChanges="orientation"/>
-        <activity android:name=".activities.FileChooserActivity" android:configChanges="orientation"
+        <activity android:name="com.music.fms.activities.BandInfoActivity" android:configChanges="orientation"/>
+        <activity android:name="com.music.fms.activities.AlbumInfoActivity" android:configChanges="orientation"/>
+        <activity android:name="com.music.fms.activities.ArtistSongsActivity" android:configChanges="orientation"/>
+        <activity android:name="com.music.fms.activities.ArtistAlbumsActivity" android:configChanges="orientation"/>
+        <activity android:name="com.music.fms.activities.SettingsActivity" android:configChanges="orientation"/>
+        <activity android:name="com.music.fms.activities.FileChooserActivity" android:configChanges="orientation"
                   android:theme="@style/AppCompateTheme"/>
 
-        <service android:name=".services.newPlayerService"/>
+        <service android:name="com.music.fms.services.newPlayerService"/>
     </application>
 </manifest>

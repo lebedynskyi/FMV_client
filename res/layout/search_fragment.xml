@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fmv"
+              xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fms"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -9,27 +9,28 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="50dp" android:id="@+id/top_button_container">
-        <com.music.fmv.views.GlowButton
+        <com.music.fms.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/artist_tab" android:layout_weight="1"
                 appattrs:text="@string/artist"
                 android:textColor="@color/white"/>
-        <com.music.fmv.views.GlowButton
+        <com.music.fms.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 appattrs:text="@string/albums"
                 android:id="@+id/album_tab" android:layout_weight="1"
                 android:textColor="@color/white"/>
-        <com.music.fmv.views.GlowButton
+        <com.music.fms.views.GlowButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 appattrs:text="@string/songs"
                 android:id="@+id/song_tab" android:layout_weight="1"
                 android:textColor="@color/white"/>
     </LinearLayout>
-    <com.music.fmv.widgets.RefreshableViewPager android:layout_height="match_parent"
+    <com.music.fms.widgets.RefreshableViewPager android:layout_height="match_parent"
                                            android:layout_width="match_parent"
                                            appattrs:autoRefresh="true"
+                                           appattrs:scrollable="false"
                                            android:id="@+id/search_pager"/>
 </LinearLayout>

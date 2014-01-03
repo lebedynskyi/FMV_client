@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:glow_btn="http://schemas.android.com/apk/res/com.music.fmv"
+              xmlns:glow_btn="http://schemas.android.com/apk/res/com.music.fms"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.music.fmv.views.GlowButton android:layout_width="wrap_content"
+    <com.music.fms.views.GlowButton android:layout_width="wrap_content"
           android:layout_height="50dp"
           glow_btn:text="@string/search_history_title"
           android:enabled="false"

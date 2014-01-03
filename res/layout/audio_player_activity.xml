@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fmv"
+                xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fms"
                 android:background="@drawable/bg_audio_player"
                 android:layout_width="fill_parent" android:layout_height="fill_parent">
 
@@ -37,7 +37,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" android:gravity="center_vertical|center_horizontal"
             android:layout_marginTop="55dp">
-        <com.music.fmv.views.SquareImageView android:layout_width="match_parent"
+        <com.music.fms.views.SquareImageView android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              android:id="@+id/cover_image"/>
     </LinearLayout>
@@ -66,7 +66,7 @@
                    android:layout_height="match_parent"
                    android:scaleType="center" android:layout_weight="1" android:layout_margin="10dp"/>
     </LinearLayout>
-    <com.music.fmv.widgets.PlayerSliding
+    <com.music.fms.widgets.PlayerSliding
             android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -84,13 +84,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@drawable/black_top">
-            <com.music.fmv.views.GlowButton android:layout_width="100dp"
+            <com.music.fms.views.GlowButton android:layout_width="100dp"
                                             android:layout_height="match_parent"
                                             appattrs:text="@string/back"
                                             appattrs:text_gravity="left"
                                             appattrs:leftDrawable="@drawable/back_button_selector"
                                             android:id="@+id/back_btn"/>
-            <com.music.fmv.views.GlowButton android:layout_width="match_parent"
+            <com.music.fms.views.GlowButton android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             appattrs:text="@string/show_playlist"
                                             android:id="@+id/show_playlist_btn" android:layout_toRightOf="@+id/back_btn"
@@ -104,5 +104,5 @@
                     android:background="@drawable/black_background_selector" android:textColor="@color/white"
                     android:textSize="18sp"/>
         </RelativeLayout>
-    </com.music.fmv.widgets.PlayerSliding>
+    </com.music.fms.widgets.PlayerSliding>
 </RelativeLayout>

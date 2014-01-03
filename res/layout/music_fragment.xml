@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fmv"
+              xmlns:appattrs="http://schemas.android.com/apk/res/com.music.fms"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -13,14 +13,15 @@
         <view android:layout_width="match_parent"
               android:layout_height="match_parent"
               appattrs:text="@string/all_music"
-              class="com.music.fmv.views.GlowButton" android:id="@+id/native_music_tab" android:layout_weight="1"/>
+              class="com.music.fms.views.GlowButton" android:id="@+id/native_music_tab" android:layout_weight="1"/>
         <view android:layout_width="match_parent"
               appattrs:text="@string/downloaded_music"
               android:layout_height="match_parent"
-              class="com.music.fmv.views.GlowButton" android:id="@+id/loaded_music_tab" android:layout_weight="1"/>
+              class="com.music.fms.views.GlowButton" android:id="@+id/loaded_music_tab" android:layout_weight="1"/>
     </LinearLayout>
-    <com.music.fmv.widgets.RefreshableViewPager
+    <com.music.fms.widgets.RefreshableViewPager
             android:layout_height="match_parent"
+            appattrs:scrollable="false"
             android:layout_width="match_parent"
             android:id="@+id/music_pager"
             appattrs:autoRefresh="true"/>
