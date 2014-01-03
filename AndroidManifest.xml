@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-<<<<<<< HEAD
           package="com.music.fms"
-          android:versionCode="45"
-          android:versionName="1.0.45">
-=======
-          package="com.music.fmv"
           android:versionCode="114"
           android:versionName="1.14">
->>>>>>> 69e90a97634b65d21594a0cfcc29f2635de0f705
     <uses-sdk android:minSdkVersion="10"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>

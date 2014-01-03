@@ -98,7 +98,7 @@ public class ApiUtils {
                 song.setUrl(songData.optString("url"));
                 song.setRate(songData.optString("bitrate"));
                 song.setId(songData.optString("id"));
-                song.setDuration(songData.optInt("length") * 1000);
+                song.setDuration(songData.optInt("length"));
                 song.setSize(songData.optLong("size"));
                 result.add(song);
             } catch (Exception e) {
